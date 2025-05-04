@@ -17,6 +17,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-logo: var(--font-crashbow);
   --color-primary: var(--material-900);
   --color-secondary: var(--secondary);
   --color-material-800: var(--material-800);
