@@ -20,8 +20,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 			categories: query?.categories?.split(',') ?? undefined,
 			manufacturers: query?.manufacturers?.split(',') ?? undefined,
 			priceRange: query?.priceRange?.split(',') ?? undefined,
-			limit: 15,
-			offset: (Number(query.page ?? 1 ) - 1) * 15,
+			limit: 25,
+			offset: (Number(query.page ?? 1 ) - 1) * 25,
 		})) ?? [];
 
 	con.release();

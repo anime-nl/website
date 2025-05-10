@@ -1,7 +1,10 @@
 'use client';
+import Cart from '@/types/cart';
 import Item from '@/types/item';
 import { Button } from '@heroui/button';
+import { NumberInput } from '@heroui/number-input';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ItemInfo(props: {
@@ -10,6 +13,42 @@ export default function ItemInfo(props: {
 	specifications: string;
 }) {
 	const [selectedImage, setSelectedImage] = useState<number>(props.item.mainImageIndex ?? 0);
+	const [selectedCount, setSelectedCount] = useState<number>(1);
+
+	const router = useRouter();
+
+	const onAddToCart = () => {
+		let cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": [], "amount": []}') as Cart;
+
+		let cartItem: number = -1
+
+		cart.items.forEach((item, i) => {
+			if (item.id == props.item.id) {
+				cartItem = i
+			}
+		})
+
+		// If pre-order and already ordered, don't add another
+		if (cartItem >= 0) {
+			if (props.item.preOrder) {
+				alert("Dit item zit al in jouw winkelwagen")
+				return;
+			}
+
+			if (cart.amount[cartItem] + selectedCount > props.item.stock) {
+				alert("Er zijn meer producten geselecteerd dan dat er op voorraad zijn.")
+				return;
+			}
+
+			cart.amount[cartItem] += selectedCount;
+		} else {
+			cart.items.push(props.item)
+			cart.amount.push(selectedCount);
+		}
+
+		localStorage.setItem('cart', JSON.stringify(cart));
+		router.push('/cart');
+	}
 
 	return (
 		<div className="grid grid-cols-2 grid-flow-col w-full h-full m-16">
@@ -49,6 +88,25 @@ export default function ItemInfo(props: {
 				</span>
 				<div dangerouslySetInnerHTML={{ __html: props.description }}></div>
 				<div className="ml-6 mb-6 h-full" dangerouslySetInnerHTML={{ __html: props.specifications }}></div>
+				{
+					props.item.preOrder
+						? <p className='my-auto text-orange-400'>Pre-order eindigt op {props.item.preOrderCloseDate?.toLocaleDateString()}</p>
+						: props.item.stock == 0
+							? <p className='my-auto text-red-500'>Uitverkocht</p>
+							: <p className='my-auto text-green-500'>{props.item.stock} op voorraad</p>
+				}
+
+				<span className='flex justify-center gap-4 my-2'>
+					<NumberInput
+						className='w-32'
+						minValue={1}
+						maxValue={props.item.preOrder ? 1 : props.item.stock}
+						defaultValue={1}
+						value={selectedCount}
+						onValueChange={setSelectedCount}
+						/>
+					<Button onPress={onAddToCart} className='bg-blue-500 text-xl my-auto' variant='solid'><p>Toevoegen</p></Button>
+				</span>
 				<hr />
 				<div className="grid grid-cols-2 grid-flow-row gap-4 w-full h-full m-16">
 					{props.item.category ? (

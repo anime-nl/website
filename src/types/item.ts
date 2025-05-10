@@ -12,7 +12,7 @@ export default interface Item {
 	imageCount: number;
 	mainImageIndex: number | null;
 	preOrder: boolean;
-	releaseDate: string | null;
-	preOrderCloseDate: string | null;
+	releaseDate: Date | null;
+	preOrderCloseDate: Date | null;
 	janCode: string;
 }

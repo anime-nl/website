@@ -1,5 +1,4 @@
 import { Providers } from '@/app/providers';
-import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import './globals.css';
@@ -7,6 +6,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
 import { headers } from 'next/headers';
+import Image from 'next/image';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -34,12 +34,12 @@ const nav: { name: string; route: string }[] = [
 		route: '/',
 	},
 	{
-		name: 'search',
-		route: '/search',
+		name: 'over ons',
+		route: '/about?default=1',
 	},
 	{
-		name: 'about us',
-		route: '/about',
+		name: 'contact',
+		route: '/about?default=7',
 	},
 ];
 
@@ -86,12 +86,14 @@ export default async function RootLayout({
 						</NavbarContent>
 						<NavbarContent justify="end">
 							<NavbarItem className="hidden lg:flex">
-								<Link href="/login" className="text-foreground">
-									Login
+								<Link href="/cart" className="text-foreground relative h-8 w-8">
+									<Image
+										alt='cart'
+										className='invert'
+										src='./cart.svg'
+										fill={true}
+										/>
 								</Link>
-							</NavbarItem>
-							<NavbarItem>
-								<Button href="/login?signup=true">Sign Up</Button>
 							</NavbarItem>
 						</NavbarContent>
 					</Navbar>
@@ -100,11 +102,10 @@ export default async function RootLayout({
 					<div className="grid grid-cols-5 grid-flow-row px-[30%] py-8 bg-black/25">
 						<div className="flex flex-col gap-4 text-end">
 							<h1 className="font-bold text-2xl">Klantenservice</h1>
-							<p>Retourneren</p>
-							<p>Problemen met een product</p>
-							<p>Veelgestelde Vragen</p>
-							<p>Zakelijke Klanten</p>
-							<p>Contact</p>
+							<p><Link href='/about?default=5' className='text-foreground'>Retourneren</Link></p>
+							<p><Link href='/about?default=8' className='text-foreground'>Problemen met een product</Link></p>
+							<p><Link href='/about' className='text-foreground'>Veelgestelde Vragen</Link></p>
+							<p><Link href='/about?default=7' className='text-foreground'>Contact</Link></p>
 						</div>
 						<span className="w-0 border-2 border-white/15 mx-auto"></span>
 						<div className="flex flex-col gap-4 text-center">
