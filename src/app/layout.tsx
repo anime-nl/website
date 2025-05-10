@@ -114,7 +114,7 @@ export default async function RootLayout({
 								Anime NL
 							</p>
 							<p>KVK 97160865</p>
-							<p>VAT xxx</p>
+							<p>VAT NL005252326B52</p>
 						</div>
 						<span className="w-0 border-2 border-white/15 mx-auto"></span>
 						<div className="flex flex-col gap-4 text-start">

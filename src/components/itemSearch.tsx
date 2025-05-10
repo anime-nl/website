@@ -14,14 +14,15 @@ export default function ItemSearch(props: { series: string[]; categories: string
 	const [selectedProductStatus, setSelectedProductStatus] = useState<SharedSelection>(
 		new Set(['Pre-order', 'Op voorraad']),
 	);
-	const [selectedSeries, setSelectedSeries] = useState<SharedSelection>(new Set());
-	const [selectedCategories, setSelectedCategories] = useState<SharedSelection>(new Set());
-	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(new Set());
+	const [selectedSeries, setSelectedSeries] = useState<SharedSelection>(new Set(searchParams.get('series')?.split(',')) ?? new Set());
+	const [selectedCategories, setSelectedCategories] = useState<SharedSelection>(new Set(searchParams.get('categories')?.split(',')) ?? new Set());
+	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(new Set(searchParams.get('manufacturers')?.split(',')) ?? new Set());
 	const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') ?? '');
+	const [priceRange, setPriceRange] = useState<number[]>(searchParams.get('priceRange')?.split(",").map(_ => Number(_)) ?? [0,500]);
 	const queryTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
 	const updateQueryParam = useCallback(
-		(paramName: string, value: string | string[]) => {
+		(paramName: string, value: string | any[]) => {
 			if (queryTimeout.current) {
 				clearTimeout(queryTimeout.current);
 			}
@@ -59,11 +60,35 @@ export default function ItemSearch(props: { series: string[]; categories: string
 
 	const onSeriesChanged = useCallback(
 		(keys: SharedSelection) => {
-			updateQueryParam('series', Array.from(keys).join(","));
+			updateQueryParam('series', Array.from(keys));
 			setSelectedSeries(keys);
 		},
 		[updateQueryParam],
 	);
+
+	const onManufacturerChanged = useCallback(
+		(keys: SharedSelection) => {
+			updateQueryParam('manufacturers', Array.from(keys));
+			setSelectedManufacturers(keys);
+		},
+		[updateQueryParam]
+	)
+
+	const onCategoryChanged = useCallback(
+		(keys: SharedSelection) => {
+			updateQueryParam('categories', Array.from(keys));
+			setSelectedCategories(keys);
+		},
+		[updateQueryParam]
+	)
+
+	const onPriceRangeChanged = useCallback(
+		(price: number[]) => {
+			updateQueryParam('priceRange', price);
+			setPriceRange(price);
+		},
+		[updateQueryParam]
+	)
 
 	return (
 		<Accordion variant="splitted" defaultExpandedKeys={['Search']} selectionMode="multiple">
@@ -99,6 +124,8 @@ export default function ItemSearch(props: { series: string[]; categories: string
 					maxValue={500}
 					minValue={0}
 					step={10}
+					value={priceRange}
+					onChange={(_) => onPriceRangeChanged(_ as number[])}
 				/>
 			</AccordionItem>
 			<AccordionItem key="Categories" aria-label="Categorie" title="Categorie">
@@ -107,7 +134,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 					selectedKeys={selectedCategories}
 					selectionMode="multiple"
 					variant="flat"
-					onSelectionChange={setSelectedCategories}
+					onSelectionChange={onCategoryChanged}
 				>
 					{props.categories.map((category) => {
 						return <ListboxItem key={category}>{category}</ListboxItem>;
@@ -139,7 +166,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 					selectedKeys={selectedManufacturers}
 					selectionMode="multiple"
 					variant="flat"
-					onSelectionChange={setSelectedManufacturers}
+					onSelectionChange={onManufacturerChanged}
 					virtualization={{
 						maxListboxHeight: 400,
 						itemHeight: 40,

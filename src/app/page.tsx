@@ -3,7 +3,7 @@ import ItemSearch from '@/components/itemSearch';
 import Database from '@/database/connector';
 import Item from '@/types/item';
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string, series?: string, categories?: string, manufacturers?: string }> }) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string, series?: string, categories?: string, manufacturers?: string, priceRange?: string }> }) {
 	const query = await searchParams;
 	const con = await Database.getConnection();
 
@@ -17,7 +17,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 			series: query?.series?.split(',') ?? undefined,
 			categories: query?.categories?.split(',') ?? undefined,
 			manufacturers: query?.manufacturers?.split(',') ?? undefined,
-			limit: 20,
+			priceRange: query?.priceRange?.split(',') ?? undefined,
+			limit: 15,
 			offset: 0,
 		})) ?? [];
 

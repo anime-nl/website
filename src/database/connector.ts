@@ -40,33 +40,47 @@ export default class Database {
 			series?: string[];
 			categories?: string[];
 			manufacturers?: string[];
-		} = { limit: 20, offset: 0 },
+			priceRange?: string[] | number[];
+		} = { limit: 50, offset: 0 },
 	): Promise<Item[] | undefined> {
 		let nameString = '%';
+		let priceRange = [0, 500];
 
 		if (options.textMatch) nameString = `%${decodeURI(options.textMatch)}%`;
 
 		if (options.series) {
-			options.series = options.series.map((serie, i) => {
+			options.series = options.series.map((serie) => {
 				return decodeURI(serie);
 			});
+		} else {
+			options.series = await this.getSeries(con) ?? []
 		}
 
 		if (options.categories) {
-			options.categories = options.categories.map((category, i) => {
+			options.categories = options.categories.map((category) => {
 				return decodeURI(category)
 			});
+		} else {
+			options.categories = await this.getCategories(con) ?? []
 		}
 
 		if (options.manufacturers) {
-			options.manufacturers = options.manufacturers.map((manufacturer, i) => {
+			options.manufacturers = options.manufacturers.map((manufacturer) => {
 				return decodeURI(manufacturer)
 			});
+		} else {
+			options.manufacturers = await this.getManufacturers(con) ?? []
+		}
+
+		if (options.priceRange) {
+			priceRange = options.priceRange.map((price) => {
+				return Number(price)
+			})
 		}
 
 		const [results] = await con.query<RowDataPacket[]>(
-			`select i.* from items i where (i.name like ? or i.description like ? or i.specifications like ? or i.series like ?) ${options.series ? 'and i.series in (?) ' : ''} ${options.categories ? 'and i.category in (?) ' : ''} ${options.manufacturers ? 'and i.manufacturer in (?) ' : ''} limit 10 offset 0`,
-			[nameString, nameString, nameString, nameString, options.series, options.categories, options.manufacturers],
+			`select i.* from items i where (i.name like ? or i.description like ? or i.specifications like ? or i.series like ?) and i.series in (?) and i.category in (?) and i.manufacturer in (?) and (i.price > ? and i.price < ?) limit ? offset ?`,
+			[nameString, nameString, nameString, nameString, options.series, options.categories, options.manufacturers, priceRange[0], priceRange[1], options.limit, options.offset],
 		);
 
 		// Convert to basic types
