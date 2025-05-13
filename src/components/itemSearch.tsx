@@ -5,7 +5,7 @@ import { Listbox, ListboxItem } from '@heroui/listbox';
 import { Slider } from '@heroui/slider';
 import { SharedSelection } from '@heroui/system';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useRef, useState } from 'react';
+import { Key, useCallback, useRef, useState } from 'react';
 
 export default function ItemSearch(props: { series: string[]; categories: string[]; manufacturers: string[] }) {
 	const router = useRouter();
@@ -22,7 +22,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 	const queryTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
 	const updateQueryParam = useCallback(
-		(paramName: string, value: string | any[]) => {
+		(paramName: string, value: string | number[] | Key[]) => {
 			if (queryTimeout.current) {
 				clearTimeout(queryTimeout.current);
 			}

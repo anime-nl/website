@@ -20,7 +20,7 @@ export default function Paginator(props: {page: number, lastPage: boolean}) {
 			}
 			router.push(`?${currentParams.toString()}`);
 		},
-		[router, searchParams],
+		[router, searchParams, props.page],
 	);
 
 	return (

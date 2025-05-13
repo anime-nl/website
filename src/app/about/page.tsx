@@ -17,7 +17,7 @@ export default function AboutPage() {
 					</AccordionItem>
 					<AccordionItem key="2" aria-label="Waar kan ik mijn bestellingen vinden?" title="Waar kan ik mijn bestellingen vinden?" className='font-bold'>
 						<hr className='text-white/15 mb-2' />
-						<p className='font-light'>Wij maken geen gebruik van accounts, om een lijst van al jouw bestellingen te kunnen vinden zul je dus door jouw mail moeten zoeken. Wel kun je op onze site de status van een bepaalde bestellingen bekijken door naar de "Mijn Bestellingen" pagina te gaan en daar het ordernummer en jouw postcode in te voeren.</p>
+						<p className='font-light'>Wij maken geen gebruik van accounts, om een lijst van al jouw bestellingen te kunnen vinden zul je dus door jouw mail moeten zoeken. Wel kun je op onze site de status van een bepaalde bestellingen bekijken door naar de &quot;Mijn Bestellingen&quot; pagina te gaan en daar het ordernummer en jouw postcode in te voeren.</p>
 					</AccordionItem>
 					<AccordionItem key="3" aria-label="Mijn pre-order staat al een tijd op 'In afwachting van levering', wat betekend dit?" title="Mijn pre-order staat al een tijd op 'In afwachting van levering', wat betekend dit?" className='font-bold'>
 						<hr className='text-white/15 mb-2' />
@@ -35,7 +35,7 @@ export default function AboutPage() {
 							<li>Is jouw order meer dan 500 euro waard? Dan wordt er nog een extra 10% van de totaalprijs (exclusief BTW) in rekening gebracht.</li>
 						</div>
 						<h2 className='text-lg underline mt-2'>Mijn order is al verzonden</h2>
-						<p className='font-light'>Check de instrucies onder het kopje "Ik wil mijn order retour sturen, hoe doe ik dit?"</p>
+						<p className='font-light'>Check de instrucies onder het kopje &quot;Ik wil mijn order retour sturen, hoe doe ik dit?&quot;. Je mag natuurlijk ook gewoon het pakket weigeren bij bezorgen.</p>
 					</AccordionItem>
 					<AccordionItem key="5" aria-label="Ik wil mijn order retour sturen, hoe doe ik dit?" title="Ik wil mijn order retour sturen, hoe doe ik dit?" className='font-bold'>
 						<hr className='text-white/15 mb-2' />
@@ -57,7 +57,7 @@ export default function AboutPage() {
 					</AccordionItem>
 					<AccordionItem key="8" aria-label="Ik heb problemen met een product" title="Ik heb problemen met een product" className='font-bold'>
 						<hr className='text-white/15 mb-2' />
-						<p className='font-light'>Zeer vervelend om te horen! Graag ontvangen wij een beschrijven van het probleem samen met wat foto's of een video van het probleem op <Link href='mailto:info@animenl.nl?subject=Probleem%20met%20product'>info@animenl.nl</Link></p>
+						<p className='font-light'>Zeer vervelend om te horen! Graag ontvangen wij een beschrijven van het probleem samen met wat foto&apos;s of een video van het probleem op <Link href='mailto:info@animenl.nl?subject=Probleem%20met%20product'>info@animenl.nl</Link></p>
 					</AccordionItem>
 				</Accordion>
 			</main>

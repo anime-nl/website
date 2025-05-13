@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 	con.release();
 
 	const cols = 5;
-	let gridItems: Item[][] = Array.from({ length: cols }, () => []);
+	const gridItems: Item[][] = Array.from({ length: cols }, () => []);
 	items.forEach((item, i) => {
 		gridItems[i % cols].push(item);
 	});

@@ -18,7 +18,7 @@ export default function ItemInfo(props: {
 	const router = useRouter();
 
 	const onAddToCart = () => {
-		let cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": [], "amount": []}') as Cart;
+		const cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": [], "amount": []}') as Cart;
 
 		let cartItem: number = -1
 
