@@ -17,33 +17,33 @@ export default function CartPage() {
 					</h1>
 					{cart.items.map((item, i) => {
 						return (
-							<Card key={item.id} className="w-full">
+							<Card key={item.name} className="w-full">
 								<CardBody>
 									<div className="flex justify-between">
 										<div className="relative w-32 mx-8">
 											<Image
-												src={`https://cdn.animenl.nl/images/${item.id}/${item.mainImageIndex}.webp`}
-												alt={item.id.toFixed(0)}
+												src={`https://erpnext.animenl.nl/${item.image}`}
+												alt={item.name}
 												fill={true}
 												className="object-contain"
 											/>
 										</div>
 										<div className="w-full my-8">
 											<h1 className="font-bold text-2xl">{item.name}</h1>
-											{item.discountPercentage != 0 ? (
+											{item.max_discount != 0 ? (
 												<span className="flex gap-4">
-													<p className="font-thin text-xl line-through">€{item.price}</p>
+													<p className="font-thin text-xl line-through">€{item.standard_rate}</p>
 													<p className="font-thin text-xl text-red-500">
-														€{(item.price * (1 - item.discountPercentage / 100)).toFixed(2)}
+														€{(item.standard_rate * (1 - item.max_discount / 100)).toFixed(2)}
 													</p>
 												</span>
 											) : (
-												<p className="font-thin text-xl">€{item.price}</p>
+												<p className="font-thin text-xl">€{item.standard_rate}</p>
 											)}
 											<div
 												className="my-2 mr-2 h-0.5 w-full bg-gradient-to-r from-foreground to-90% to-transparent"/>
 											<span className="flex gap-4">
-												{item.preOrder ? (
+												{item.custom_is_pre_order ? (
 													<Chip color="primary">
 														<p className="font-bold">Pre-order</p>
 													</Chip>
@@ -58,7 +58,7 @@ export default function CartPage() {
 											<NumberInput
 												className="w-32"
 												minValue={1}
-												maxValue={item.preOrder ? 1 : cart.amount[i]}
+												maxValue={item.custom_is_pre_order ? 1 : cart.amount[i]}
 												defaultValue={1}
 											/>
 										</div>

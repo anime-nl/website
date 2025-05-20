@@ -28,19 +28,16 @@ export default function InfiniteScroller(props: {
 		localStorage.setItem('scroll', '0');
 	}, [currentPage]);
 
-	const loadMoreItems = async () => {
-		currentParams.set('page', (currentPage + 1).toFixed(0));
-		localStorage.setItem('scroll', window.scrollY.toString());
-
-		// window.location.href = `/?${currentParams.toString()}`;
-		router.push(`?${currentParams.toString()}`);
-	};
 
 	useEffect(() => {
 		if (inView && currentPage * 25 <= props.items[4].length * 5) {
-			loadMoreItems();
+			currentParams.set('page', (currentPage + 1).toFixed(0));
+			localStorage.setItem('scroll', window.scrollY.toString());
+
+			// window.location.href = `/?${currentParams.toString()}`;
+			router.push(`?${currentParams.toString()}`);
 		}
-	}, [inView, currentPage, loadMoreItems, props.items]);
+	}, [inView, currentPage, props.items, currentParams, router]);
 
 	return (
 		<>
