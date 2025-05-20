@@ -240,8 +240,6 @@ export default class ErpNextHelper {
 			return item;
 		});
 
-		console.log(json);
-
 		return json.data;
 	}
 

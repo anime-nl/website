@@ -40,7 +40,7 @@ export default function InfiniteScroller(props: {
 		if (inView && currentPage * 25 <= props.items[4].length * 5) {
 			loadMoreItems();
 		}
-	}, [inView]);
+	}, [inView, currentPage, loadMoreItems, props.items]);
 
 	return (
 		<>

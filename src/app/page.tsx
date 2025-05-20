@@ -60,7 +60,7 @@ export default async function Home({searchParams}: {
 	}
 
 	if (query.priceRange) {
-		let priceRange = query.priceRange.split(',');
+		const priceRange = query.priceRange.split(',');
 		filter.push({
 			key: 'standard_rate',
 			operator: '>=',
