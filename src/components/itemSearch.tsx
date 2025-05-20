@@ -12,13 +12,24 @@ export default function ItemSearch(props: { series: string[]; categories: string
 	const searchParams = useSearchParams();
 
 	const [selectedProductStatus, setSelectedProductStatus] = useState<SharedSelection>(
-		new Set(['Pre-order', 'Op voorraad']),
+		new Set(['Pre-order', 'Op voorraad'])
 	);
-	const [selectedSeries, setSelectedSeries] = useState<SharedSelection>(new Set(searchParams.get('series')?.split(',')) ?? new Set());
-	const [selectedCategories, setSelectedCategories] = useState<SharedSelection>(new Set(searchParams.get('categories')?.split(',')) ?? new Set());
-	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(new Set(searchParams.get('manufacturers')?.split(',')) ?? new Set());
+	const [selectedSeries, setSelectedSeries] = useState<SharedSelection>(
+		new Set(searchParams.get('series')?.split(',')) ?? new Set()
+	);
+	const [selectedCategories, setSelectedCategories] = useState<SharedSelection>(
+		new Set(searchParams.get('categories')?.split(',')) ?? new Set()
+	);
+	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(
+		new Set(searchParams.get('manufacturers')?.split(',')) ?? new Set()
+	);
 	const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') ?? '');
-	const [priceRange, setPriceRange] = useState<number[]>(searchParams.get('priceRange')?.split(",").map(_ => Number(_)) ?? [0,500]);
+	const [priceRange, setPriceRange] = useState<number[]>(
+		searchParams
+			.get('priceRange')
+			?.split(',')
+			.map((_) => Number(_)) ?? [0, 500]
+	);
 	const queryTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
 	const updateQueryParam = useCallback(
@@ -47,7 +58,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 				router.push(`?${currentParams.toString()}`);
 			}, 500);
 		},
-		[router, searchParams],
+		[router, searchParams]
 	);
 
 	const onSearchTermChanged = useCallback(
@@ -55,7 +66,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 			updateQueryParam('search', value);
 			setSearchTerm(value);
 		},
-		[updateQueryParam],
+		[updateQueryParam]
 	);
 
 	const onSeriesChanged = useCallback(
@@ -63,7 +74,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 			updateQueryParam('series', Array.from(keys));
 			setSelectedSeries(keys);
 		},
-		[updateQueryParam],
+		[updateQueryParam]
 	);
 
 	const onManufacturerChanged = useCallback(
@@ -72,7 +83,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 			setSelectedManufacturers(keys);
 		},
 		[updateQueryParam]
-	)
+	);
 
 	const onCategoryChanged = useCallback(
 		(keys: SharedSelection) => {
@@ -80,7 +91,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 			setSelectedCategories(keys);
 		},
 		[updateQueryParam]
-	)
+	);
 
 	const onPriceRangeChanged = useCallback(
 		(price: number[]) => {
@@ -88,7 +99,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 			setPriceRange(price);
 		},
 		[updateQueryParam]
-	)
+	);
 
 	return (
 		<Accordion variant="splitted" defaultExpandedKeys={['Search']} selectionMode="multiple">
@@ -119,7 +130,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 				<Slider
 					className="max-w-md"
 					defaultValue={[0, 500]}
-					formatOptions={{ style: 'currency', currency: 'EUR' }}
+					formatOptions={{style: 'currency', currency: 'EUR'}}
 					label=" "
 					maxValue={500}
 					minValue={0}
@@ -151,7 +162,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 					onSelectionChange={onSeriesChanged}
 					virtualization={{
 						maxListboxHeight: 400,
-						itemHeight: 40,
+						itemHeight: 40
 					}}
 				>
 					{props.series.map((serie) => {
@@ -169,7 +180,7 @@ export default function ItemSearch(props: { series: string[]; categories: string
 					onSelectionChange={onManufacturerChanged}
 					virtualization={{
 						maxListboxHeight: 400,
-						itemHeight: 40,
+						itemHeight: 40
 					}}
 				>
 					{props.manufacturers.map((manufacturer) => {

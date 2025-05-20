@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'cdn.animenl.nl',
-			},
-		],
-	},
+				hostname: 'erpnext.animenl.nl'
+			}
+		]
+	}
 };
 
 export default nextConfig;

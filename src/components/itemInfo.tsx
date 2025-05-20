@@ -7,12 +7,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function ItemInfo(props: {
-	item: Item & { stock: number };
-	description: string;
-	specifications: string;
-}) {
-	const [selectedImage, setSelectedImage] = useState<number>(props.item.mainImageIndex ?? 0);
+export default function ItemInfo(props: { item: Item; images: string[] }) {
+	const [selectedImage, setSelectedImage] = useState<number>(0);
 	const [selectedCount, setSelectedCount] = useState<number>(1);
 
 	const router = useRouter();
@@ -20,35 +16,35 @@ export default function ItemInfo(props: {
 	const onAddToCart = () => {
 		const cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": [], "amount": []}') as Cart;
 
-		let cartItem: number = -1
+		let cartItem: number = -1;
 
 		cart.items.forEach((item, i) => {
-			if (item.id == props.item.id) {
-				cartItem = i
+			if (item.name == props.item.name) {
+				cartItem = i;
 			}
-		})
+		});
 
 		// If pre-order and already ordered, don't add another
 		if (cartItem >= 0) {
-			if (props.item.preOrder) {
-				alert("Dit item zit al in jouw winkelwagen")
+			if (props.item.custom_is_pre_order) {
+				alert('Dit item zit al in jouw winkelwagen');
 				return;
 			}
 
-			if (cart.amount[cartItem] + selectedCount > props.item.stock) {
-				alert("Er zijn meer producten geselecteerd dan dat er op voorraad zijn.")
+			if (cart.amount[cartItem] + selectedCount > props.item.opening_stock) {
+				alert('Er zijn meer producten geselecteerd dan dat er op voorraad zijn.');
 				return;
 			}
 
 			cart.amount[cartItem] += selectedCount;
 		} else {
-			cart.items.push(props.item)
+			cart.items.push(props.item);
 			cart.amount.push(selectedCount);
 		}
 
 		localStorage.setItem('cart', JSON.stringify(cart));
 		router.push('/cart');
-	}
+	};
 
 	return (
 		<div className="grid grid-cols-2 grid-flow-col w-full h-full m-16">
@@ -56,20 +52,21 @@ export default function ItemInfo(props: {
 				<div className="relative w-full h-10/12">
 					<Image
 						alt={'image'}
-						src={`https://cdn.animenl.nl/images/${props.item.id}/${selectedImage}.webp`}
+						src={`https://erpnext.animenl.nl/${props.images[selectedImage]}`}
 						fill
 						className="object-contain"
 					/>
 				</div>
-				<hr className="text-white/10" />
-				<div className="flex flex-row justify-center gap-8 w-full h-1/6 overflow-x-scroll scrollbar-thin scrollbar-thumb-secondary scrollbar-track-background scrollbar-thumb-rounded-full">
-					{[...Array(props.item.imageCount)].map((_, index) => {
+				<hr className="text-white/10"/>
+				<div
+					className="flex flex-row justify-center gap-8 w-full h-1/6 overflow-x-scroll scrollbar-thin scrollbar-thumb-secondary scrollbar-track-background scrollbar-thumb-rounded-full">
+					{props.images.map((image, index) => {
 						return (
 							<div key={index} className="w-16 h-full py-2">
 								<Button className="h-full" onPress={() => setSelectedImage(index)}>
 									<Image
 										alt={'image'}
-										src={`https://cdn.animenl.nl/images/${props.item.id}/${index}.webp`}
+										src={`https://erpnext.animenl.nl/${image}`}
 										fill
 										className="object-cover"
 									/>
@@ -80,53 +77,57 @@ export default function ItemInfo(props: {
 				</div>
 			</div>
 			<div className="w-full h-[50vh] flex flex-col gap-2">
-				<h1 className="text-4xl">{props.item.name}</h1>
-				<hr />
+				<h1 className="text-4xl">{props.item.item_name}</h1>
+				<hr/>
 				<span className="flex gap-2">
-					<h1 className="text-lg">€{props.item.price}</h1>
+					<h1 className="text-lg">€{props.item.standard_rate.toFixed(2)}</h1>
 					<p className="text-foreground/50 text-sm my-auto">(inc. VAT)</p>
 				</span>
-				<div dangerouslySetInnerHTML={{ __html: props.description }}></div>
-				<div className="ml-6 mb-6 h-full" dangerouslySetInnerHTML={{ __html: props.specifications }}></div>
-				{
-					props.item.preOrder
-						? <p className='my-auto text-orange-400'>Pre-order eindigt op {props.item.preOrderCloseDate?.toLocaleDateString()}</p>
-						: props.item.stock == 0
-							? <p className='my-auto text-red-500'>Uitverkocht</p>
-							: <p className='my-auto text-green-500'>{props.item.stock} op voorraad</p>
-				}
+				<div className="ml-6 mb-6 h-full" dangerouslySetInnerHTML={{__html: props.item.description}}></div>
+				{props.item.custom_is_pre_order ? (
+					<p className="my-auto text-orange-400">
+						Pre-order eindigt op {props.item.custom_release_date?.toLocaleDateString()}
+					</p>
+				) : props.item.opening_stock == 0 ? (
+					<p className="my-auto text-red-500">Uitverkocht</p>
+				) : (
+					<p className="my-auto text-green-500">{props.item.opening_stock} op voorraad</p>
+				)}
 
-				<span className='flex justify-center gap-4 my-2'>
+				<span className="flex justify-center gap-4 my-2">
 					<NumberInput
-						className='w-32'
+						className="w-32"
 						minValue={1}
-						maxValue={props.item.preOrder ? 1 : props.item.stock}
+						maxValue={props.item.custom_is_pre_order ? 1 : props.item.opening_stock}
 						defaultValue={1}
 						value={selectedCount}
 						onValueChange={setSelectedCount}
-						/>
-					<Button onPress={onAddToCart} className='bg-blue-500 text-xl my-auto' variant='solid'><p>Toevoegen</p></Button>
+					/>
+					<Button onPress={onAddToCart} className="bg-blue-500 text-xl my-auto" variant="solid">
+						<p>Toevoegen</p>
+					</Button>
 				</span>
-				<hr />
+				<hr/>
 				<div className="grid grid-cols-2 grid-flow-row gap-4 w-full h-full m-16">
-					{props.item.category ? (
+					{props.item.item_group ? (
 						<>
 							<p className="my-auto">Categorie</p>
-							<Button className="w-fit my-auto" onPress={() => {}}>
-								{props.item.category}
+							<Button className="w-fit my-auto" onPress={() => {
+							}}>
+								{props.item.item_group}
 							</Button>
 						</>
 					) : null}
-					{props.item.series ? (
+					{props.item.custom_source ? (
 						<>
 							<p className="my-auto">Serie</p>
-							<Button className="w-fit my-auto">{props.item.series}</Button>
+							<Button className="w-fit my-auto">{props.item.custom_source}</Button>
 						</>
 					) : null}
-					{props.item.manufacturer ? (
+					{props.item.brand ? (
 						<>
 							<p className="my-auto">Fabrikant</p>
-							<Button className="w-fit my-auto">{props.item.manufacturer}</Button>
+							<Button className="w-fit my-auto">{props.item.brand}</Button>
 						</>
 					) : null}
 				</div>

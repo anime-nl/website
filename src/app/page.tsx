@@ -1,33 +1,80 @@
-import ItemCard from '@/components/itemCard';
+import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
+import InfiniteScroller from '@/components/infiniteScroller';
 import ItemSearch from '@/components/itemSearch';
-import Paginator from '@/components/paginator';
-import Database from '@/database/connector';
 import Item from '@/types/item';
-import { Link } from '@heroui/link';
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string, series?: string, categories?: string, manufacturers?: string, priceRange?: string, page?: string }> }) {
+const cols = 5;
+
+export default async function Home({searchParams}: {
+	searchParams: Promise<{
+		search?: string;
+		series?: string;
+		categories?: string;
+		manufacturers?: string;
+		priceRange?: string;
+		page?: string;
+	}>;
+}) {
 	const query = await searchParams;
-	const con = await Database.getConnection();
 
-	const series = (await Database.getSeries(con)) ?? [];
-	const categories = (await Database.getCategories(con)) ?? [];
-	const manufacturers = (await Database.getManufacturers(con)) ?? [];
+	const series = (await ErpNextHelper.getSources()) ?? [];
+	const categories = (await ErpNextHelper.getItemGroups()) ?? [];
+	const manufacturers = (await ErpNextHelper.getItemBrands()) ?? [];
 
-	const items =
-		(await Database.getSearchedItems(con, {
-			textMatch: query?.search ?? undefined,
-			series: query?.series?.split(',') ?? undefined,
-			categories: query?.categories?.split(',') ?? undefined,
-			manufacturers: query?.manufacturers?.split(',') ?? undefined,
-			priceRange: query?.priceRange?.split(',') ?? undefined,
-			limit: 25,
-			offset: (Number(query.page ?? 1 ) - 1) * 25,
-		})) ?? [];
+	const filter: {
+		key: string;
+		operator: string;
+		value: string;
+	}[] = [];
 
-	con.release();
+	if (query.search) {
+		filter.push({
+			key: 'item_name',
+			operator: 'like',
+			value: `%${query.search}%`
+		});
+	}
 
-	const cols = 5;
-	const gridItems: Item[][] = Array.from({ length: cols }, () => []);
+	if (query.series) {
+		filter.push({
+			key: 'custom_source',
+			operator: 'in',
+			value: query.series
+		});
+	}
+
+	if (query.categories) {
+		filter.push({
+			key: 'item_group',
+			operator: 'in',
+			value: query.categories
+		});
+	}
+
+	if (query.manufacturers) {
+		filter.push({
+			key: 'brand',
+			operator: 'in',
+			value: query.manufacturers
+		});
+	}
+
+	if (query.priceRange) {
+		let priceRange = query.priceRange.split(',');
+		filter.push({
+			key: 'standard_rate',
+			operator: '>=',
+			value: priceRange[0]
+		}, {
+			key: 'standard_rate',
+			operator: '<=',
+			value: priceRange[1]
+		});
+	}
+
+	const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 * (Number(query.page ?? 1)), 0);
+
+	const gridItems: Item[][] = Array.from({length: cols}, () => []);
 	items.forEach((item, i) => {
 		gridItems[i % cols].push(item);
 	});
@@ -41,34 +88,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 					Anime NL
 				</h1>
 				<p className="text-xl underline">Jouw connectie tot de japanse otaku markt</p>
-				<hr className="text-white/15 w-full" />
+				<hr className="text-white/15 w-full"/>
 				<div className="flex w-full gap-4">
 					<div className="w-fit">
-						<ItemSearch series={series} categories={categories} manufacturers={manufacturers} />
+						<ItemSearch series={series} categories={categories} manufacturers={manufacturers}/>
 					</div>
-					<div className='w-full'>
-						<div className="grid grid-cols-5 gap-8 w-full">
-							{
-								items.length > 0
-								? gridItems.map((itemCol, i) => {
-										return (
-											<div key={i} className="flex flex-col gap-4 w-full">
-												{itemCol.map((item) => {
-													return <ItemCard key={item.id} item={item} />;
-												})}
-											</div>
-										);
-									})
-								: <div className="col-span-5 flex flex-col gap-4 w-full">
-									<h1 className='text-3xl w-fit mx-auto font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text'>Niet gevonden waar je naar zocht?</h1>
-									<p className='mx-auto'>Email ons op <Link href='mailto:info@animenl.nl?subject=Vraag%20beschikbaarheid%20artikel' target='_blank'>info@animenl.nl</Link></p>
-								</div>
-							}
+					<div className="w-full">
+						<div id="item-cols" className="grid grid-cols-5 gap-8 w-full">
+							<InfiniteScroller items={gridItems} filter={filter}/>
 						</div>
-						<hr className='my-4 w-full' />
-						<Paginator page={Number(query.page ?? 1)} lastPage={items.length < 1} />
 					</div>
-
 				</div>
 			</main>
 		</div>
