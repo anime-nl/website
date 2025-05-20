@@ -4,7 +4,7 @@ import ItemCard from '@/components/itemCard';
 import Item from '@/types/item';
 import { Link } from '@heroui/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 export default function InfiniteScroller(props: {
@@ -16,7 +16,10 @@ export default function InfiniteScroller(props: {
 }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const currentParams = new URLSearchParams(searchParams.toString());
+
+	const currentParams = useMemo(() => {
+		return new URLSearchParams(searchParams.toString());
+	}, []);
 	const currentPage = Number(currentParams.get('page') ?? 1);
 	const {ref, inView} = useInView();
 
