@@ -20,7 +20,7 @@ export default function InfiniteScroller(props: {
 
 	const currentParams = useMemo(() => {
 		return new URLSearchParams(searchParams.toString());
-	}, []); // react-hooks/exhaustive-deps
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 	const currentPage = Number(currentParams.get('page') ?? 1);
 	const {ref, inView} = useInView();
 

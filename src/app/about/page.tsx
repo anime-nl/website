@@ -14,12 +14,12 @@ export default function AboutPage() {
 					<AccordionItem key="1" aria-label="Wij zijn wij" title="Wie zijn wij" className="font-bold">
 						<hr className="text-white/15 mb-2"/>
 						<p className="font-light">
-							Wij zijn een klein bedrijfje gebaseerd in de regio Eindhoven. Wij hebben een droge,
-							verwarmde opslagruimte in Deurne waaruit wij al onze items versturen. Wij hebben dit bedrijf
+							Wij zijn een klein bedrijfje gebaseerd in de regio Eindhoven. Wij hebben mooie opslagruimte
+							in Beek en Donk waaruit wij al onze items versturen. Wij hebben dit bedrijf
 							opgestart uit onze passie voor de Japanse Anime cultuur en om meer mensen in de
 							verzamelhobby te krijgen. Al onze items worden direct geimporteerd vanuit Japan waar
 							mogelijk, en wij zijn ook bereid om items te importeren die misschien niet op onze website
-							staan. Bij een klein bedrijf is natuurlijk veel meer mogelijk dan bij een grote corporatie.
+							staan.
 						</p>
 					</AccordionItem>
 					<AccordionItem

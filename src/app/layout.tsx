@@ -131,8 +131,11 @@ export default async function RootLayout({
 				<span className="w-0 border-2 border-white/15 mx-auto"></span>
 				<div className="flex flex-col gap-4 text-start">
 					<h1 className="font-bold text-2xl">Onze Winkel</h1>
-					<p>Over ons</p>
-					<p>Merken</p>
+					<p>
+						<Link href="/about?default=1">
+							Over ons
+						</Link>
+					</p>
 					<p>Sitemap</p>
 				</div>
 			</div>
