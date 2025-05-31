@@ -11,7 +11,8 @@ export default interface Cart {
 		custom_release_date: Date;
 		max_discount: number;
 	}[];
-	shipping?: {
+	shipping: {
+		method: number;
 		carrier: string;
 		price: number;
 	};

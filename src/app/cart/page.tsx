@@ -9,18 +9,22 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function CartPage() {
-	const [cart, setCart] = useState<Cart>({items: []});
-	const [shippingMethod, setShippingMethod] = useState<number>(1);
+	const [cart, setCart] = useState<Cart>({
+		items: [],
+		shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
+	});
 
 	useEffect(() => {
-		setCart(JSON.parse(localStorage.getItem('cart') ?? '{"items": []}') as Cart);
+		if (localStorage.getItem('cart'))
+			setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
 	}, []);
 
 	const updateCart = (id: string, value: number) => {
 		if (value == 0) {
 			// Remove item from cart
 			const newCart = {
-				items: cart.items.filter((item) => item.name != id)
+				items: cart.items.filter((item) => item.name != id),
+				shipping: cart.shipping
 			};
 
 			localStorage.setItem('cart', JSON.stringify(newCart));
@@ -39,6 +43,19 @@ export default function CartPage() {
 		setCart(cart);
 	};
 
+	const updateShippingMethod = (method: number, carrier: string, price: number) => {
+		const newcart = {
+			items: cart.items,
+			shipping: {
+				method: method,
+				carrier: carrier,
+				price: price
+			}
+		};
+		localStorage.setItem('cart', JSON.stringify(newcart));
+		setCart(newcart);
+	};
+
 	let cartValue = {
 		total: 0,
 		btw: 0,
@@ -51,13 +68,13 @@ export default function CartPage() {
 		cartValue = {
 			total: total,
 			btw: total * 0.21,
-			shipping: shippingMethod == 0
+			shipping: cart.shipping?.method == 0
 				? 10.35
-				: shippingMethod == 1
+				: cart.shipping?.method == 1
 					? 9.85
-					: shippingMethod == 2
+					: cart.shipping?.method == 2
 						? 6.45
-						: shippingMethod == 3
+						: cart.shipping?.method == 3
 							? 5.45
 							: 0
 		};
@@ -140,9 +157,9 @@ export default function CartPage() {
 					<hr/>
 					<div className="grid grid-cols-4 justify-between w-full text-center mx-auto gap-4">
 						<button
-							onClick={() => setShippingMethod(0)}
+							onClick={() => updateShippingMethod(0, 'PostNL Huisadres', 10.35)}
 						>
-							<Card aria-selected={shippingMethod == 0}
+							<Card aria-selected={cart.shipping.method == 0}
 							      className="border-2 border-transparent aria-selected:border-primary">
 								<CardBody>
 									<div className="mx-auto w-32 h-32 relative mb-2">
@@ -161,9 +178,9 @@ export default function CartPage() {
 						</button>
 
 						<button
-							onClick={() => setShippingMethod(1)}
+							onClick={() => updateShippingMethod(1, 'PostNL Afhaalpunt', 9.85)}
 						>
-							<Card aria-selected={shippingMethod == 1}
+							<Card aria-selected={cart.shipping.method == 1}
 							      className="border-2 border-transparent aria-selected:border-primary">
 								<CardBody>
 									<div className="mx-auto w-32 h-32 relative mb-2">
@@ -181,8 +198,8 @@ export default function CartPage() {
 							</Card>
 						</button>
 
-						<button onClick={() => setShippingMethod(2)}>
-							<Card aria-selected={shippingMethod == 2}
+						<button onClick={() => updateShippingMethod(2, 'DHL Huisadres', 6.45)}>
+							<Card aria-selected={cart.shipping.method == 2}
 							      className="border-2 border-transparent aria-selected:border-primary">
 								<CardBody>
 									<div className="mx-auto w-48 h-32 relative mb-2">
@@ -201,9 +218,9 @@ export default function CartPage() {
 						</button>
 
 						<button
-							onClick={() => setShippingMethod(3)}
+							onClick={() => updateShippingMethod(3, 'DHL Afhaalpunt', 5.45)}
 						>
-							<Card aria-selected={shippingMethod == 3}
+							<Card aria-selected={cart.shipping.method == 3}
 							      className="border-2 border-transparent aria-selected:border-primary">
 								<CardBody>
 									<div className="mx-auto w-48 h-32 relative mb-2">

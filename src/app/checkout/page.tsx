@@ -8,10 +8,14 @@ import Image from 'next/image';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function CheckoutPage() {
-	const [cart, setCart] = useState<Cart>({items: []});
+	const [cart, setCart] = useState<Cart>({
+		items: [],
+		shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
+	});
 
 	useEffect(() => {
-		setCart(JSON.parse(localStorage.getItem('cart') ?? '{"items": []}') as Cart);
+		if (localStorage.getItem('cart'))
+			setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
 	}, []);
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -35,17 +39,26 @@ export default function CheckoutPage() {
 							<TableColumn>AANTAL</TableColumn>
 						</TableHeader>
 						<TableBody>
-							{cart.items.map((item) => {
-								return (
-									<TableRow key={item.name}>
-										<TableCell>{item.name}</TableCell>
-										<TableCell>{item.item_name}</TableCell>
-										<TableCell>{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}</TableCell>
-										<TableCell>€{item.standard_rate}</TableCell>
-										<TableCell>{item.quantity}</TableCell>
-									</TableRow>
-								);
-							})}
+							<>
+								{cart.items.map((item) => {
+									return (
+										<TableRow key={item.name}>
+											<TableCell>{item.name}</TableCell>
+											<TableCell>{item.item_name}</TableCell>
+											<TableCell>{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}</TableCell>
+											<TableCell>€{item.standard_rate}</TableCell>
+											<TableCell>{item.quantity}</TableCell>
+										</TableRow>
+									);
+								})}
+								<TableRow key="shipping">
+									<TableCell>Verzendkosten</TableCell>
+									<TableCell>{cart.shipping.carrier}</TableCell>
+									<TableCell> </TableCell>
+									<TableCell>€{cart.shipping.price}</TableCell>
+									<TableCell>1</TableCell>
+								</TableRow>
+							</>
 						</TableBody>
 					</Table>
 					<div>
@@ -63,7 +76,7 @@ export default function CheckoutPage() {
 							<Input
 								className="col-span-2"
 								name="middleName"
-								placeholder="Toevoegingen"
+								placeholder="Tussenvoegsel"
 								type="text"
 							/>
 							<Input
