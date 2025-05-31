@@ -14,7 +14,13 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 	const router = useRouter();
 
 	const onAddToCart = () => {
-		const cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": []}') as Cart;
+
+		if (!localStorage.getItem('cart'))
+			localStorage.setItem('cart', JSON.stringify({
+				items: [],
+				shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
+			}));
+		const cart = JSON.parse(localStorage.getItem('cart')!) as Cart;
 
 		let cartItem: number = -1;
 
