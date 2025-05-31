@@ -233,8 +233,10 @@ export default function CartPage() {
 						<hr/>
 						<h2 className="row-span-2 text-xl font-bold">Totaal:</h2>
 						<h2 className="row-span-2 text-xl font-bold">€{(cartValue.total + cartValue.shipping).toFixed(2)}</h2>
-						<Button color="primary" className="w-full col-span-2 my-2 ml-auto"><p
-							className="text-3xl">Betalen</p></Button>
+						<Link href="/checkout" className="w-full col-span-2 my-2 mt-2">
+							<Button color="primary" className="w-full"><p
+								className="text-3xl">Betalen</p></Button>
+						</Link>
 					</div>
 				</div>
 			</main>
