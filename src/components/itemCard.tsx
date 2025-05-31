@@ -4,9 +4,7 @@ import { Card, CardBody, CardFooter } from '@heroui/card';
 import { Image } from '@heroui/image';
 import { useRouter } from 'next/navigation';
 
-export default function ItemCard(props: {
-	item: Item
-}) {
+export default function ItemCard(props: { item: Item }) {
 	const router = useRouter();
 
 	return (

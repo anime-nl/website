@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
 			{
 				protocol: 'https',
 				hostname: 'erpnext.animenl.nl'
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.postnl.nl'
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.dhlexpress.nl'
 			}
 		]
 	}

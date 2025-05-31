@@ -12,7 +12,6 @@ export default function Paginator(props: { page: number; lastPage: boolean }) {
 		(amount: number) => {
 			const currentParams = new URLSearchParams(searchParams.toString());
 
-
 			if (amount) {
 				currentParams.set('page', (props.page + amount).toFixed(0));
 			} else {

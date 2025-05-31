@@ -14,7 +14,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 	const router = useRouter();
 
 	const onAddToCart = () => {
-		const cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": [], "amount": []}') as Cart;
+		const cart = JSON.parse(localStorage.getItem('cart') ?? '{"items": []}') as Cart;
 
 		let cartItem: number = -1;
 
@@ -26,20 +26,20 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 
 		// If pre-order and already ordered, don't add another
 		if (cartItem >= 0) {
-			if (props.item.custom_is_pre_order) {
-				alert('Dit item zit al in jouw winkelwagen');
-				return;
-			}
-
-			if (cart.amount[cartItem] + selectedCount > props.item.opening_stock) {
-				alert('Er zijn meer producten geselecteerd dan dat er op voorraad zijn.');
-				return;
-			}
-
-			cart.amount[cartItem] += selectedCount;
+			alert('Dit item zit al in jouw winkelwagen');
 		} else {
-			cart.items.push(props.item);
-			cart.amount.push(selectedCount);
+			cart.items.push({
+				name: props.item.name,
+				item_name: props.item.item_name,
+				standard_rate: props.item.standard_rate,
+				images: props.images,
+				quantity: selectedCount,
+				custom_current_stock: props.item.custom_current_stock,
+				stock_uom: props.item.stock_uom,
+				custom_is_preorder: props.item.custom_is_pre_order,
+				custom_release_date: props.item.custom_release_date,
+				max_discount: props.item.max_discount
+			});
 		}
 
 		localStorage.setItem('cart', JSON.stringify(cart));
@@ -88,17 +88,17 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<p className="my-auto text-orange-400">
 						Pre-order eindigt op {props.item.custom_release_date?.toLocaleDateString()}
 					</p>
-				) : props.item.opening_stock == 0 ? (
+				) : props.item.custom_current_stock == 0 ? (
 					<p className="my-auto text-red-500">Uitverkocht</p>
 				) : (
-					<p className="my-auto text-green-500">{props.item.opening_stock} op voorraad</p>
+					<p className="my-auto text-green-500">{props.item.custom_current_stock} op voorraad</p>
 				)}
 
 				<span className="flex justify-center gap-4 my-2">
 					<NumberInput
 						className="w-32"
 						minValue={1}
-						maxValue={props.item.custom_is_pre_order ? 1 : props.item.opening_stock}
+						maxValue={props.item.custom_is_pre_order ? 1 : props.item.custom_current_stock}
 						defaultValue={1}
 						value={selectedCount}
 						onValueChange={setSelectedCount}

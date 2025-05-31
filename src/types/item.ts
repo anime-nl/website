@@ -12,6 +12,7 @@ export default interface Item {
 	item_group: string;
 	stock_uom: string;
 	custom_release_date: Date;
+	custom_current_stock: number;
 	disabled: number;
 	allow_alternative_item: number;
 	is_stock_item: number;

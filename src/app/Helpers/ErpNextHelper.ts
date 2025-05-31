@@ -5,14 +5,14 @@ export default class ErpNextHelper {
 		return {
 			'Authorization': `token ${process.env.API_KEY}:${process.env.API_SECRET}`,
 			'Accept': 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		};
 	}
 
 	static async getCharacters(): Promise<string[] | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character`, {
 			method: 'GET',
-			headers: this.getHeaders()
+			headers: this.getHeaders(),
 		});
 		if (!data.ok) return;
 
@@ -28,7 +28,7 @@ export default class ErpNextHelper {
 	static async getSources(): Promise<string[] | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source`, {
 			method: 'GET',
-			headers: this.getHeaders()
+			headers: this.getHeaders(),
 		});
 		if (!data.ok) return;
 
@@ -44,7 +44,7 @@ export default class ErpNextHelper {
 	static async getItemById(id: string): Promise<Item | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Item/${id}`, {
 			method: 'GET',
-			headers: this.getHeaders()
+			headers: this.getHeaders(),
 		});
 		if (!data.ok) return;
 
@@ -52,23 +52,28 @@ export default class ErpNextHelper {
 			data: Item;
 		} = await data.json();
 
-		json.data.standard_rate = await this.getPriceById(json.data.name) ?? json.data.standard_rate;
+		json.data.standard_rate = (await this.getPriceById(json.data.name)) ?? json.data.standard_rate;
 
 		return json.data;
 	}
 
 	static async getPriceById(id: string): Promise<number | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Item Price/${id}`, {
-			method: 'GET',
-			headers: this.getHeaders()
-		});
+		const data = await fetch(
+			`${process.env.ERPNEXT_URL}/resource/Item Price?fields=["price_list_rate"]&filters=[["item_code","=","${id}"]]`,
+			{
+				method: 'GET',
+				headers: this.getHeaders(),
+			},
+		);
 		if (!data.ok) return;
 
 		const json: {
-			data: { price_list_rate: number };
+			data: { price_list_rate: number }[];
 		} = await data.json();
 
-		return json.data.price_list_rate;
+		console.log(json);
+
+		return json.data[0].price_list_rate;
 	}
 
 	static async getImagesForItem(id: string): Promise<string[] | undefined> {
@@ -76,8 +81,8 @@ export default class ErpNextHelper {
 			`${process.env.ERPNEXT_URL}/resource/File?fields=["file_url"]&filters=[["attached_to_name", "=", "${id}"]]`,
 			{
 				method: 'GET',
-				headers: this.getHeaders()
-			}
+				headers: this.getHeaders(),
+			},
 		);
 
 		if (!data.ok) return;
@@ -96,8 +101,8 @@ export default class ErpNextHelper {
 			`${process.env.ERPNEXT_URL}/resource/Item Group?filters=[["parent_item_group", "=", "products"]]`,
 			{
 				method: 'GET',
-				headers: this.getHeaders()
-			}
+				headers: this.getHeaders(),
+			},
 		);
 
 		if (!data.ok) return;
@@ -114,7 +119,7 @@ export default class ErpNextHelper {
 	static async getItemBrands(): Promise<string[] | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Brand`, {
 			method: 'GET',
-			headers: this.getHeaders()
+			headers: this.getHeaders(),
 		});
 
 		if (!data.ok) return;
@@ -135,14 +140,13 @@ export default class ErpNextHelper {
 			value: string;
 		}[],
 		limit: number,
-		offset: number
-	): Promise<Item[]
-	> {
-		const filters: string[][] = query.map((filter: {
-			key: string;
-			operator: string;
-			value: string;
-		}) => [filter.key, filter.operator, filter.value]);
+		offset: number,
+	): Promise<Item[]> {
+		const filters: string[][] = query.map((filter: { key: string; operator: string; value: string }) => [
+			filter.key,
+			filter.operator,
+			filter.value,
+		]);
 
 		const fields: string[] = [
 			'name',
@@ -216,15 +220,15 @@ export default class ErpNextHelper {
 			'is_sub_contracted_item',
 			'customer_code',
 			'total_projected_qty',
-			'doctype'
+			'doctype',
 		];
 
 		const data = await fetch(
 			`${process.env.ERPNEXT_URL}/resource/Item?fields=["${fields.join('","')}"]&filters=[${filters.map((filter) => `["${filter.join('","')}"]`)}]&limit_start=${offset}&limit_page_length=${limit}`,
 			{
 				method: 'GET',
-				headers: this.getHeaders()
-			}
+				headers: this.getHeaders(),
+			},
 		);
 
 		if (!data.ok) return [];
@@ -233,29 +237,45 @@ export default class ErpNextHelper {
 			data: Item[];
 		} = await data.json();
 
-		const prices = await this.getPricesByQuery(json.data.map((item) => item.name));
+		const prices = await this.getPricesByQuery(
+			json.data.map((item) => item.name),
+			limit,
+			offset,
+		);
 
 		json.data = json.data.map((item) => {
-			item.standard_rate = prices.find((_) => _.item_code == item.item_code)?.price_list_rate ?? item.standard_rate;
+			item.standard_rate =
+				prices.find((_) => _.item_code == item.item_code)?.price_list_rate ?? item.standard_rate;
 			return item;
 		});
 
 		return json.data;
 	}
 
-	static async getPricesByQuery(ids: string[]): Promise<{ item_code: string, price_list_rate: number }[]> {
+	static async getPricesByQuery(
+		ids: string[],
+		limit: number,
+		offset: number,
+	): Promise<
+		{
+			item_code: string;
+			price_list_rate: number;
+		}[]
+	> {
 		const data = await fetch(
-			`${process.env.ERPNEXT_URL}/resource/Item Price?fields=["item_code", "price_list_rate"]&filters=[["item_code", "in", "${ids.join(',')}"]]`,
+			`${process.env.ERPNEXT_URL}/resource/Item Price?fields=["item_code", "price_list_rate"]&filters=[["item_code", "in", "${ids.join(',')}"]]&limit_start=${offset}&limit_page_length=${limit}`,
 			{
 				method: 'GET',
-				headers: this.getHeaders()
-			}
+				headers: this.getHeaders(),
+			},
 		);
 		if (!data.ok) return [];
 
 		const json: {
-			data: { item_code: string, price_list_rate: number }[];
+			data: { item_code: string; price_list_rate: number }[];
 		} = await data.json();
+
+		console.log(json.data.length);
 
 		return json.data;
 	}

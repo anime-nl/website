@@ -8,18 +8,19 @@ import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 export default function InfiniteScroller(props: {
-	items: Item[][], filter: {
+	items: Item[][];
+	filter: {
 		key: string;
 		operator: string;
 		value: string;
-	}[]
+	}[];
 }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
 	const currentParams = useMemo(() => {
 		return new URLSearchParams(searchParams.toString());
-	}, []);
+	}, []); // react-hooks/exhaustive-deps
 	const currentPage = Number(currentParams.get('page') ?? 1);
 	const {ref, inView} = useInView();
 
@@ -30,7 +31,6 @@ export default function InfiniteScroller(props: {
 
 		localStorage.setItem('scroll', '0');
 	}, [currentPage]);
-
 
 	useEffect(() => {
 		if (inView && currentPage * 25 <= props.items[4].length * 5) {
@@ -50,8 +50,7 @@ export default function InfiniteScroller(props: {
 						{itemCol.map((item, i) => {
 							return (
 								<div key={item.name} className="w-full">
-									{(itemCol.length - 2 == i && iCol == 0) ?
-										<div ref={ref}></div> : undefined}
+									{itemCol.length - 2 == i && iCol == 0 ? <div ref={ref}></div> : undefined}
 									<ItemCard item={item}/>
 								</div>
 							);
@@ -65,10 +64,7 @@ export default function InfiniteScroller(props: {
 				</h1>
 				<p className="mx-auto">
 					Stuur een email naar{' '}
-					<Link
-						href="mailto:info@animenl.nl?subject=Vraag%20beschikbaarheid%20artikel"
-						target="_blank"
-					>
+					<Link href="mailto:info@animenl.nl?subject=Vraag%20beschikbaarheid%20artikel" target="_blank">
 						info@animenl.nl
 					</Link>
 					, dan kijken wij wat we voor je kunnen betekenen
