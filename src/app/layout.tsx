@@ -25,7 +25,11 @@ const crashbow = localFont({
 
 export const metadata: Metadata = {
 	title: 'Anime NL',
-	description: 'Jouw connectie tot de japanse otaku markt'
+	description: 'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
+	icons: {
+		icon: 'https://animenl.nl/android-chrome-512x512.png',
+		apple: 'https://animenl.nl/apple-touch-icon.png'
+	}
 };
 
 const nav: { name: string; route: string }[] = [
