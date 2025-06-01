@@ -41,7 +41,7 @@ const nav: { name: string; route: string }[] = [
 		route: '/about'
 	},
 	{
-		name: 'Order status',
+		name: 'Mijn bestellingen',
 		route: '/order'
 	}
 ];

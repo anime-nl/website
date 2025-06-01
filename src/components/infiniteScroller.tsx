@@ -29,7 +29,7 @@ export default function InfiniteScroller(props: {
 
 		window.scroll(0, scroll);
 
-		localStorage.setItem('scroll', '0');
+		// localStorage.setItem('scroll', '0');
 	}, [currentPage]);
 
 	useEffect(() => {

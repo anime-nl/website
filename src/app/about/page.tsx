@@ -33,7 +33,7 @@ export default function AboutPage() {
 							Wij maken geen gebruik van accounts, om een lijst van al jouw bestellingen te kunnen vinden
 							zul je dus door jouw mail moeten zoeken. Wel kun je op onze site de status van een bepaalde
 							bestellingen bekijken door naar de &quot;Mijn Bestellingen&quot; pagina te gaan en daar het
-							ordernummer en jouw postcode in te voeren.
+							ordernummer in te voeren.
 						</p>
 					</AccordionItem>
 					<AccordionItem

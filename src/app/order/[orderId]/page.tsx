@@ -1,12 +1,17 @@
 import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
+import ClearCart from '@/components/clearCart';
 import ItemTable from '@/components/ItemTable';
 import { Card, CardBody } from '@heroui/card';
 import { Link } from '@heroui/link';
 import createMollieClient from '@mollie/api-client';
 
 
-export default async function PaymentSuccessPage({params}: { params: Promise<{ orderId: string }> }) {
+export default async function PaymentSuccessPage({params, searchParams}: {
+	params: Promise<{ orderId: string }>,
+	searchParams: Promise<{ clear?: boolean }>
+}) {
 	const {orderId} = await params;
+	const {clear} = await searchParams;
 
 	const order = await ErpNextHelper.getOrderById(orderId);
 
@@ -74,6 +79,7 @@ export default async function PaymentSuccessPage({params}: { params: Promise<{ o
 	return (
 		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
+				<ClearCart shouldClear={clear ?? false}/>
 				<div className="flex flex-col gap-8 w-2/3 mx-auto">
 					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 						Order
@@ -100,8 +106,10 @@ export default async function PaymentSuccessPage({params}: { params: Promise<{ o
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
 								<h1 className="font-bold text-3xl mx-auto">Status Betaling</h1>
-								<Link href={payment._links.status.href} target="_blank"> {/* @ts-ignore */}
-									<p className="text-primary mx-auto">{paymentStatus}</p>
+								<Link className="aria-disabled:text-foreground/70"
+								      aria-disabled={payment._links?.status?.href == null}
+								      href={payment._links?.status?.href ?? null} target="_blank"> {/* @ts-ignore */}
+									<p className="mx-auto">{paymentStatus}</p>
 								</Link>
 							</CardBody>
 						</Card>
