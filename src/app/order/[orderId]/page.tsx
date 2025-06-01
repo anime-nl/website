@@ -107,8 +107,10 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 							<CardBody className="gap-4">
 								<h1 className="font-bold text-3xl mx-auto">Status Betaling</h1>
 								<Link className="aria-disabled:text-foreground/70"
-								      aria-disabled={payment._links?.status?.href == null}
-								      href={payment._links?.status?.href ?? null} target="_blank"> {/* @ts-ignore */}
+									/* @ts-expect-error TS2339 */
+									  aria-disabled={payment._links?.status?.href == null}
+									/* @ts-expect-error TS2339 */
+									  href={payment._links?.status?.href ?? null} target="_blank">
 									<p className="mx-auto">{paymentStatus}</p>
 								</Link>
 							</CardBody>

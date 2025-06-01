@@ -16,7 +16,7 @@ const errorHTML = () => {
 	);
 };
 
-export default async function PaymentPage({searchParams}: { searchParams: { data: string } }) {
+export default async function PaymentPage({searchParams}: { searchParams: Promise<{ data: string }> }) {
 	const {data} = await searchParams;
 	const mollieClient = createMollieClient({apiKey: process.env.MOLLIE_KEY as string});
 
@@ -32,7 +32,7 @@ export default async function PaymentPage({searchParams}: { searchParams: { data
 			}
 			return {item: item, qty: cartItem.qty};
 		}));
-	} catch (error) {
+	} catch {
 		return errorHTML();
 	}
 

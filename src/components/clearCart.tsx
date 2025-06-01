@@ -8,7 +8,7 @@ export default function ClearCart(props: { shouldClear: boolean }) {
 		if (props.shouldClear) {
 			localStorage.removeItem('cart');
 		}
-	}, []);
+	}, [props.shouldClear]);
 
 	return (<></>);
 }

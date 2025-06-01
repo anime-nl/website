@@ -34,7 +34,8 @@ export default function CheckoutPage() {
 			form: form,
 			cart: [] as { name: string, qty: number }[],
 			shipping: cart.shipping.method,
-			method: e.nativeEvent['submitter'].value // @ts-ignore
+			// @ts-expect-error TS7053
+			method: e.nativeEvent['submitter'].value
 		};
 
 		cart.items.forEach((item) => {

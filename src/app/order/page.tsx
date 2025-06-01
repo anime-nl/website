@@ -6,7 +6,7 @@ import { Input } from '@heroui/input';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
-export default function orderPage() {
+export default function OrderPage() {
 	const router = useRouter();
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
