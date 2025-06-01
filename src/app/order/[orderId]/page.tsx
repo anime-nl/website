@@ -1,0 +1,148 @@
+import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
+import ItemTable from '@/components/ItemTable';
+import { Card, CardBody } from '@heroui/card';
+import { Link } from '@heroui/link';
+import createMollieClient from '@mollie/api-client';
+
+
+export default async function PaymentSuccessPage({params}: { params: Promise<{ orderId: string }> }) {
+	const {orderId} = await params;
+
+	const order = await ErpNextHelper.getOrderById(orderId);
+
+	if (!order) {
+		return (
+			<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+				<main className="flex flex-col gap-16 items-center h-full w-full">
+					<h1>We konden jouw order niet vinden</h1>
+					<p>Probeer het later opniew of stuur een email naar <Link
+						href="mailto:info@animenl.nl?subject=Order%20niet%20gevonden">info@animenl.nl</Link></p>
+				</main>
+			</div>
+		);
+	}
+
+	const mollieClient = createMollieClient({apiKey: process.env.MOLLIE_KEY as string});
+
+	const payment = await mollieClient.payments.get(order.payment_id);
+
+	let paymentStatus = payment.status.toString();
+	switch (payment.status) {
+		case 'expired':
+			paymentStatus = 'Verlopen';
+			break;
+
+		case 'authorized':
+			paymentStatus = 'Geauthorizeerd';
+			break;
+
+		case 'canceled':
+			paymentStatus = 'Geannuleerd';
+			break;
+
+		case 'failed':
+			paymentStatus = 'Gefaald';
+			break;
+
+		case 'pending':
+			paymentStatus = 'In Behandeling';
+			break;
+
+		case 'open':
+			paymentStatus = 'Open';
+			break;
+
+		case 'paid':
+			paymentStatus = 'Betaald';
+			break;
+	}
+
+	const items = await Promise.all(order.items.map(async (item) => {
+		const actualItem = await ErpNextHelper.getItemById(item.item_code);
+		if (!actualItem)
+			throw new Error('Item not found');
+
+		return actualItem;
+	}));
+
+	const trackingUrl = order.shipping == '1' || order.shipping == '2'
+		? `https://jouw.postnl.nl/track-and-trace/${order.shipment_tracking_code}-NL-${order.postal_code.replace(/ /g, '').toUpperCase()}`
+		: `https://www.dhl.com/nl-nl/home/traceren.html?tracking-id=${order.shipment_tracking_code}&submit=1`;
+
+	console.log(payment._links);
+
+	return (
+		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+			<main className="flex flex-col gap-16 justify-center h-full w-full">
+				<div className="flex flex-col gap-8 w-2/3 mx-auto">
+					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+						Order
+					</h1>
+					<div className="w-2/3 mx-auto grid grid-cols-3 gap-4">
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Order Nummer</h1>
+								<p className="text-foreground/70 mx-auto">{orderId}</p>
+							</CardBody>
+						</Card>
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Totaal bedrag</h1>
+								<p className="text-foreground/70 mx-auto">{`${payment.amount.value} ${payment.amount.currency}`}</p>
+							</CardBody>
+						</Card>
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Status Betaling</h1>
+								<Link href={payment._links.status.href} target="_blank"> {/* @ts-ignore */}
+									<p className="text-primary mx-auto">{paymentStatus}</p>
+								</Link>
+							</CardBody>
+						</Card>
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Track and Trace</h1>
+								{order.shipment_tracking_code
+									? <Link href={trackingUrl} target="_blank">
+										<p className="text-primary mx-auto">{order.shipment_tracking_code}</p>
+									</Link>
+									: <p className="text-foreground/70 mx-auto">Nog niet verstuurd</p>
+								}
+
+							</CardBody>
+						</Card>
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Aantal items</h1>
+								<p className="text-foreground/70 mx-auto">{order.items.length}</p>
+							</CardBody>
+						</Card>
+						<Card
+							isHoverable={true}
+							className="border-2 border-transparent aria-selected:border-primary">
+							<CardBody className="gap-4">
+								<h1 className="font-bold text-3xl mx-auto">Bestel Datum</h1>
+								<p className="text-foreground/70 mx-auto">{new Date(order.creation).toLocaleString()}</p>
+							</CardBody>
+						</Card>
+						<ItemTable items={items} order={order}/>
+						<h1 className="text-2xl font-bold col-span-3">Heb je vragen of problemen met de order?</h1>
+						<p className="col-span-3">Stuur een email naar <Link
+							href="mailto:info@animenl.nl?subject=Problemen met mijn order">info@animenl.nl</Link>,
+							Wij proberen binnen 24 uur te reageren</p>
+					</div>
+				</div>
+			</main>
+		</div>
+	);
+}

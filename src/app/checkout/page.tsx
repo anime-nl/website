@@ -5,9 +5,12 @@ import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function CheckoutPage() {
+	const router = useRouter();
+
 	const [cart, setCart] = useState<Cart>({
 		items: [],
 		shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
@@ -20,7 +23,26 @@ export default function CheckoutPage() {
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		alert('Not Yet Implemented');
+		const form = Object.fromEntries(new FormData(e.currentTarget).entries());
+
+		if (cart.items.length == 0) {
+			alert('Je hebt geen items in je winkelwagen');
+			return false;
+		}
+
+		const data = {
+			form: form,
+			cart: [] as { name: string, qty: number }[],
+			shipping: cart.shipping.method,
+			method: e.nativeEvent['submitter'].value // @ts-ignore
+		};
+
+		cart.items.forEach((item) => {
+			data.cart.push({name: item.name, qty: item.quantity});
+		});
+
+
+		router.push(`/payment?data=${btoa(JSON.stringify(data))}`);
 	};
 
 	return (
@@ -28,7 +50,7 @@ export default function CheckoutPage() {
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
 				<div className="flex flex-col gap-8 w-2/3 mx-auto">
 					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-						Checkout
+						Betalen
 					</h1>
 					<Table aria-label="Order" className="w-2/3 mx-auto">
 						<TableHeader>
@@ -62,7 +84,7 @@ export default function CheckoutPage() {
 						</TableBody>
 					</Table>
 					<div>
-						<Form className="w-2/3 mx-auto grid grid-cols-6" validationBehavior="aria"
+						<Form className="w-2/3 mx-auto grid grid-cols-6"
 						      onSubmit={onSubmit}>
 							<label className="col-span-6">Persoonlijke gegevens</label>
 							<Input
@@ -143,6 +165,7 @@ export default function CheckoutPage() {
 								name="postalCode"
 								placeholder="Postcode"
 								type="text"
+								errorMessage="Postcode is verplicht"
 							/>
 							<Input
 								className="col-span-2"
@@ -159,6 +182,8 @@ export default function CheckoutPage() {
 
 							<label className="col-span-6 mt-4 text-2xl font-bold">Betaal met</label>
 							<button
+								name="method"
+								value="ideal"
 								className="col-span-2"
 								type="submit"
 							>
@@ -180,6 +205,8 @@ export default function CheckoutPage() {
 								</Card>
 							</button>
 							<button
+								name="method"
+								value="banktransfer"
 								className="col-span-2"
 								type="submit"
 							>
@@ -202,6 +229,8 @@ export default function CheckoutPage() {
 							</button>
 
 							<button
+								name="method"
+								value="wise"
 								className="col-span-2"
 								type="submit"
 							>

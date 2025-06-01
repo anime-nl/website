@@ -5,7 +5,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
-import { headers } from 'next/headers';
 import Image from 'next/image';
 
 const geistSans = Geist({
@@ -34,16 +33,16 @@ export const metadata: Metadata = {
 
 const nav: { name: string; route: string }[] = [
 	{
-		name: 'home',
+		name: 'Home',
 		route: '/'
 	},
 	{
-		name: 'over ons',
-		route: '/about?default=1'
+		name: 'Over ons',
+		route: '/about'
 	},
 	{
-		name: 'contact',
-		route: '/about?default=7'
+		name: 'Order status',
+		route: '/order'
 	}
 ];
 
@@ -52,8 +51,6 @@ export default async function RootLayout({
                                          }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const headerList = await headers();
-	const pathname = headerList.get('x-current-path') ?? '/';
 	return (
 		<html
 			lang="en"
@@ -73,14 +70,12 @@ export default async function RootLayout({
 				</NavbarBrand>
 				<NavbarContent className="hidden sm:flex gap-4" justify="center">
 					{nav.map((item, i) => {
-						const isActive = pathname == item.route;
 						return (
-							<NavbarItem key={i} isActive={isActive ? true : undefined}>
+							<NavbarItem key={i} isActive={true}>
 								<Link
-									aria-current={isActive ? 'page' : undefined}
 									color="foreground"
 									href={item.route}
-									className={isActive ? 'bg-white/10 px-2 py-1 rounded-lg' : undefined}
+									className={'px-2 py-1 font-thin'}
 								>
 									{item.name}
 								</Link>
@@ -136,11 +131,13 @@ export default async function RootLayout({
 				<div className="flex flex-col gap-4 text-start">
 					<h1 className="font-bold text-2xl">Onze Winkel</h1>
 					<p>
-						<Link href="/about?default=1">
+						<Link href="/about?default=1" className="text-foreground">
 							Over ons
 						</Link>
 					</p>
-					<p>Sitemap</p>
+					<p><Link href="/sitemap.xml" className="text-foreground">
+						Sitemap
+					</Link></p>
 				</div>
 			</div>
 		</Providers>

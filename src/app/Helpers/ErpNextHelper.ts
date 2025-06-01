@@ -1,4 +1,6 @@
 import Item from '@/types/item';
+import { Order } from '@/types/Order';
+import OrderData from '@/types/orderData';
 
 export default class ErpNextHelper {
 	private static getHeaders() {
@@ -271,6 +273,79 @@ export default class ErpNextHelper {
 
 		const json: {
 			data: { item_code: string; price_list_rate: number }[];
+		} = await data.json();
+
+		return json.data;
+	}
+
+	static async createOrder(cartData: OrderData): Promise<string | undefined> {
+		const data = await fetch(
+			`${process.env.ERPNEXT_URL}/resource/Order`,
+			{
+				method: 'POST',
+				headers: this.getHeaders(),
+				body: JSON.stringify({
+					first_name: cartData.form.firstName,
+					middle_name: cartData.form.middleName,
+					last_name: cartData.form.lastName,
+					email: cartData.form.email,
+					phone: cartData.form.phone,
+					street_name: cartData.form.street,
+					street_number: cartData.form.houseNumber,
+					postal_code: cartData.form.postalCode,
+					city: cartData.form.city,
+					country: cartData.form.country,
+					notes: cartData.form.notes,
+					shipping: cartData.shipping,
+					payment_id: 'None',
+					items: cartData.cart.map((item) => {
+						return {
+							item_code: item.name,
+							schedule_date: new Date().toISOString().split('T')[0],
+							qty: item.qty,
+							uom: 'Unit',
+							conversion_factor: 1
+						};
+					})
+				})
+			}
+		);
+		if (!data.ok) return undefined;
+
+
+		const json: {
+			data: {
+				name: string;
+			}
+		} = await data.json();
+
+		return json.data.name;
+	}
+
+	static async updatePaymentId(orderId: string, paymentId: string): Promise<boolean> {
+		const data = await fetch(
+			`${process.env.ERPNEXT_URL}/resource/Order/${orderId}`,
+			{
+				method: 'PUT',
+				headers: this.getHeaders(),
+				body: JSON.stringify({
+					payment_id: paymentId
+				})
+			}
+		);
+
+		return data.ok;
+	}
+
+	static async getOrderById(orderId: string): Promise<Order | undefined> {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Order/${orderId}`, {
+			method: 'GET',
+			headers: this.getHeaders()
+		});
+		if (!data.ok) return;
+
+		const json: {
+			data: Order;
 		} = await data.json();
 
 		return json.data;

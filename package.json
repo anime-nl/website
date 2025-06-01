@@ -25,6 +25,7 @@
 		"@heroui/system": "^2.4.15",
 		"@heroui/table": "^2.2.18",
 		"@heroui/theme": "^2.4.15",
+		"@mollie/api-client": "^4.3.2",
 		"framer-motion": "^12.10.0",
 		"mysql2": "^3.14.1",
 		"next": "15.3.1",
