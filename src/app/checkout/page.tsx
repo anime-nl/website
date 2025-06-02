@@ -47,13 +47,13 @@ export default function CheckoutPage() {
 	};
 
 	return (
-		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+		<div className="dark mx-4 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
-				<div className="flex flex-col gap-8 w-2/3 mx-auto">
-					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+				<div className="flex flex-col gap-8 w-full mx-auto">
+					<h1 className="mx-auto text-2xl sm:text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 						Betalen
 					</h1>
-					<Table aria-label="Order" className="w-2/3 mx-auto">
+					<Table aria-label="Order" className="w-full sm:w-2/3 mx-auto">
 						<TableHeader>
 							<TableColumn>ITEM NR</TableColumn>
 							<TableColumn>NAAM</TableColumn>
@@ -66,11 +66,13 @@ export default function CheckoutPage() {
 								{cart.items.map((item) => {
 									return (
 										<TableRow key={item.name}>
-											<TableCell>{item.name}</TableCell>
-											<TableCell>{item.item_name}</TableCell>
-											<TableCell>{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}</TableCell>
-											<TableCell>€{item.standard_rate}</TableCell>
-											<TableCell>{item.quantity}</TableCell>
+											<TableCell><p className="text-nowrap">{item.name}</p></TableCell>
+											<TableCell><p className="text-nowrap">{item.item_name}</p></TableCell>
+											<TableCell><p
+												className="text-nowrap">{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}</p>
+											</TableCell>
+											<TableCell><p className="text-nowrap">€{item.standard_rate}</p></TableCell>
+											<TableCell><p className="text-nowrap">{item.quantity}</p></TableCell>
 										</TableRow>
 									);
 								})}
@@ -85,11 +87,11 @@ export default function CheckoutPage() {
 						</TableBody>
 					</Table>
 					<div>
-						<Form className="w-2/3 mx-auto grid grid-cols-6"
+						<Form className="w-2/3 mx-auto flex sm:grid sm:grid-cols-6"
 						      onSubmit={onSubmit}>
-							<label className="col-span-6">Persoonlijke gegevens</label>
+							<label className="sm:col-span-6">Persoonlijke gegevens</label>
 							<Input
-								className="col-span-2"
+								className="sm:col-span-2"
 								isRequired={true}
 								name="firstName"
 								placeholder="Voornaam"
@@ -97,13 +99,13 @@ export default function CheckoutPage() {
 								errorMessage="Voornaam is verplicht"
 							/>
 							<Input
-								className="col-span-2"
+								className="sm:col-span-2"
 								name="middleName"
 								placeholder="Tussenvoegsel"
 								type="text"
 							/>
 							<Input
-								className="col-span-2"
+								className="sm:col-span-2"
 								isRequired={true}
 								name="lastName"
 								placeholder="Achternaam"
@@ -111,7 +113,7 @@ export default function CheckoutPage() {
 								errorMessage="Achternaam is verplicht"
 							/>
 							<Input
-								className="col-span-3"
+								className="sm:col-span-3"
 								isRequired={true}
 								name="email"
 								placeholder="Email"
@@ -119,7 +121,7 @@ export default function CheckoutPage() {
 								errorMessage="Email is verplicht"
 							/>
 							<Input
-								className="col-span-3"
+								className="sm:col-span-3"
 								name="phone"
 								placeholder="Phone"
 								type="tel"
@@ -135,10 +137,9 @@ export default function CheckoutPage() {
 								}}
 							/>
 
-							<label className="col-span-3 mt-4">Adres</label>
-							<label className="col-span-3 mt-4">Opmerkingen</label>
+							<label className="sm:col-span-3 mt-4">Adres</label>
 							<Input
-								className="col-span-2"
+								className="sm:col-span-2"
 								isRequired={true}
 								name="street"
 								placeholder="Straatnaam"
@@ -146,22 +147,15 @@ export default function CheckoutPage() {
 								errorMessage="Straatnaam is verplicht"
 							/>
 							<Input
-								className="col-span-1"
+								className="sm:col-span-1"
 								isRequired={true}
 								name="houseNumber"
 								placeholder="Huisnummer"
 								type="tel"
 								errorMessage="Huisnummer is verplicht"
 							/>
-							<Textarea
-								className="col-span-3 row-span-3 h-full"
-								name="notes"
-								rows={6}
-								disableAutosize={true}
-								placeholder="Opmerkingen over de order? Laat ze hier achter"
-							/>
 							<Input
-								className="col-span-1"
+								className="sm:col-span-1"
 								isRequired={true}
 								name="postalCode"
 								placeholder="Postcode"
@@ -169,23 +163,32 @@ export default function CheckoutPage() {
 								errorMessage="Postcode is verplicht"
 							/>
 							<Input
-								className="col-span-2"
+								className="sm:col-span-2"
 								name="city"
 								placeholder="Stad"
 								type="text"
 							/>
 							<Input
-								className="col-span-3"
+								className="sm:col-span-3"
 								name="country"
 								placeholder="Land"
 								type="text"
 							/>
 
-							<label className="col-span-6 mt-4 text-2xl font-bold">Betaal met</label>
+							<label className="sm:col-span-3 sm:row-start-4 sm:col-start-4 mt-4">Opmerkingen</label>
+							<Textarea
+								className="sm:col-span-3 sm:row-start-5 sm:col-start-4 row-span-3 h-full"
+								name="notes"
+								rows={6}
+								disableAutosize={true}
+								placeholder="Opmerkingen over de order? Laat ze hier achter"
+							/>
+
+							<label className="sm:col-span-6 mt-4 text-2xl font-bold">Betaal met</label>
 							<button
 								name="method"
 								value="ideal"
-								className="col-span-2"
+								className="col-span-2 w-full"
 								type="submit"
 							>
 								<Card
@@ -208,7 +211,7 @@ export default function CheckoutPage() {
 							<button
 								name="method"
 								value="banktransfer"
-								className="col-span-2"
+								className="sm:col-span-2 w-full"
 								type="submit"
 							>
 								<Card
@@ -232,7 +235,7 @@ export default function CheckoutPage() {
 							<button
 								name="method"
 								value="wise"
-								className="col-span-2"
+								className="sm:col-span-2 w-full"
 								type="submit"
 							>
 								<Card
