@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 
 export default function ItemTable(props: { items: Item[], order: Order }) {
 	return (
-		<Table aria-label="Order" className="col-span-3">
+		<Table aria-label="Order" className="col-span-2 sm:col-span-3">
 			<TableHeader>
 				<TableColumn>ITEM NR</TableColumn>
 				<TableColumn>NAAM</TableColumn>
@@ -19,11 +19,15 @@ export default function ItemTable(props: { items: Item[], order: Order }) {
 					{props.items.map((item) => {
 						return (
 							<TableRow key={item.name}>
-								<TableCell>{item.name}</TableCell>
-								<TableCell>{item.item_name}</TableCell>
-								<TableCell>{item.custom_is_pre_order ? 'Pre-order' : 'Op vooraad'}</TableCell>
-								<TableCell>€{item.standard_rate}</TableCell>
-								<TableCell>{props.order.items.find((_) => _.name == item.name)?.qty || 1}</TableCell>
+								<TableCell><p className="text-nowrap">{item.name}</p></TableCell>
+								<TableCell><p className="text-nowrap">{item.item_name}</p></TableCell>
+								<TableCell><p
+									className="text-nowrap">{item.custom_is_pre_order ? 'Pre-order' : 'Op vooraad'}</p>
+								</TableCell>
+								<TableCell><p className="text-nowrap">€{item.standard_rate}</p></TableCell>
+								<TableCell><p
+									className="text-nowrap">{props.order.items.find((_) => _.name == item.name)?.qty || 1}</p>
+								</TableCell>
 							</TableRow>
 						);
 					})}
