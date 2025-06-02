@@ -227,7 +227,7 @@ export default function CheckoutPage() {
 												style={{pointerEvents: 'none'}}
 											/>
 										</div>
-										<h1 className="font-bold text-3xl">Bank Transfer</h1>
+										<h1 className="font-bold text-3xl">Bank Overboeking</h1>
 									</CardBody>
 									<CardFooter className="text-foreground/70 justify-end">+ €0.25</CardFooter>
 								</Card>
@@ -235,7 +235,7 @@ export default function CheckoutPage() {
 
 							<button
 								name="method"
-								value="wise"
+								value="bancontact"
 								className="sm:col-span-2 w-full"
 								type="submit"
 							>
@@ -245,15 +245,15 @@ export default function CheckoutPage() {
 									<CardBody>
 										<div className="mx-auto w-48 h-32 relative mb-2">
 											<Image
-												alt="wise-logo"
-												src="/wise.png"
+												alt="bancontact-logo"
+												src="/bancontact.svg"
 												fill
 												style={{pointerEvents: 'none'}}
 											/>
 										</div>
-										<h1 className="font-bold text-3xl">Wise</h1>
+										<h1 className="font-bold text-3xl">Bancontact</h1>
 									</CardBody>
-									<CardFooter className="text-foreground/70 justify-end">Gratis</CardFooter>
+									<CardFooter className="text-foreground/70 justify-end">+ €0.39</CardFooter>
 								</Card>
 							</button>
 						</Form>
