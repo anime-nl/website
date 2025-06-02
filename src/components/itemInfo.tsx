@@ -4,6 +4,7 @@ import Item from '@/types/item';
 import { Button } from '@heroui/button';
 import { Card, CardBody, CardFooter } from '@heroui/card';
 import { NumberInput } from '@heroui/number-input';
+import { addToast } from '@heroui/toast';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -33,21 +34,28 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 
 		// If pre-order and already ordered, don't add another
 		if (cartItem >= 0) {
-			alert('Dit item zit al in jouw winkelwagen');
-		} else {
-			cart.items.push({
-				name: props.item.name,
-				item_name: props.item.item_name,
-				standard_rate: props.item.standard_rate,
-				images: props.images,
-				quantity: selectedCount,
-				custom_current_stock: props.item.custom_current_stock,
-				stock_uom: props.item.stock_uom,
-				custom_is_preorder: props.item.custom_is_pre_order,
-				custom_release_date: props.item.custom_release_date,
-				max_discount: props.item.max_discount
+			addToast({
+				title: 'Hey!',
+				description: 'Dit product zit al in jouw winkelwagen',
+				color: 'warning',
+				variant: 'solid',
+				timeout: 3000
 			});
+			return;
 		}
+
+		cart.items.push({
+			name: props.item.name,
+			item_name: props.item.item_name,
+			standard_rate: props.item.standard_rate,
+			images: props.images,
+			quantity: selectedCount,
+			custom_current_stock: props.item.custom_current_stock,
+			stock_uom: props.item.stock_uom,
+			custom_is_preorder: props.item.custom_is_pre_order,
+			custom_release_date: props.item.custom_release_date,
+			max_discount: props.item.max_discount
+		});
 
 		localStorage.setItem('cart', JSON.stringify(cart));
 		router.push('/cart');

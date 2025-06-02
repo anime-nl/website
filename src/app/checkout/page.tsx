@@ -4,6 +4,7 @@ import { Card, CardBody, CardFooter } from '@heroui/card';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table';
+import { addToast } from '@heroui/toast';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
@@ -26,7 +27,13 @@ export default function CheckoutPage() {
 		const form = Object.fromEntries(new FormData(e.currentTarget).entries());
 
 		if (cart.items.length == 0) {
-			alert('Je hebt geen items in je winkelwagen');
+			addToast({
+				title: 'Uh Oh',
+				description: 'Je hebt geen items in je winkelwagen',
+				color: 'danger',
+				variant: 'solid',
+				timeout: 3000
+			});
 			return false;
 		}
 
