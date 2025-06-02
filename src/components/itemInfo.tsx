@@ -145,7 +145,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Serie</p>
 						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-
+							router.push(`/?series=${props.item.custom_source}`);
 						}}><p
 							className="text-wrap py-2">
 							{props.item.custom_source}</p></Button>
@@ -153,7 +153,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Fabrikant</p>
 						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-
+							router.push(`/?manufacturers=${props.item.brand}`);
 						}}><p
 							className="text-wrap py-2">{props.item.brand}</p></Button>
 					</div>
