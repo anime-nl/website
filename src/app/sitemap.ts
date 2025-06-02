@@ -9,6 +9,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			priority: 1
 		},
 		{
+			url: 'https://animenl.nl/order',
+			lastModified: new Date(),
+			changeFrequency: 'yearly',
+			priority: 0.7
+		},
+		{
 			url: 'https://animenl.nl/about',
 			lastModified: new Date(),
 			changeFrequency: 'yearly',
