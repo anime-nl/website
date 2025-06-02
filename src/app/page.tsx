@@ -13,6 +13,7 @@ export default async function Home({
 		series?: string;
 		categories?: string;
 		manufacturers?: string;
+		characters?: string;
 		priceRange?: string;
 		page?: string;
 	}>;
@@ -22,6 +23,7 @@ export default async function Home({
 	const series = (await ErpNextHelper.getSources()) ?? [];
 	const categories = (await ErpNextHelper.getItemGroups()) ?? [];
 	const manufacturers = (await ErpNextHelper.getItemBrands()) ?? [];
+	const characters = (await ErpNextHelper.getCharacters()) ?? [];
 
 	const filter: {
 		key: string;
@@ -61,6 +63,14 @@ export default async function Home({
 		});
 	}
 
+	if (query.characters) {
+		filter.push({
+			key: 'custom_character',
+			operator: 'in',
+			value: query.characters
+		});
+	}
+
 	if (query.priceRange) {
 		const priceRange = query.priceRange.split(',');
 		filter.push(
@@ -95,7 +105,8 @@ export default async function Home({
 				<hr className="text-white/15 w-full"/>
 				<div className="flex flex-col sm:flex-row w-full gap-4">
 					<div className="w-fit mx-auto">
-						<ItemSearch series={series} categories={categories} manufacturers={manufacturers}/>
+						<ItemSearch series={series} categories={categories} manufacturers={manufacturers}
+						            characters={characters}/>
 					</div>
 					<hr className="block sm:hidden text-foreground/20"/>
 					<div className="w-full">
