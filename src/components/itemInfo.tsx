@@ -110,7 +110,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 				<div className="ml-6 mb-6 h-full" dangerouslySetInnerHTML={{__html: props.item.description}}></div>
 				{props.item.custom_is_pre_order ? (
 					<p className="my-auto text-orange-400">
-						Pre-order eindigt op {props.item.custom_release_date?.toLocaleDateString()}
+						Pre-order eindigt op {new Date(props.item.custom_release_date).toLocaleDateString()}
 					</p>
 				) : props.item.custom_current_stock == 0 ? (
 					<p className="my-auto text-red-500">Uitverkocht</p>

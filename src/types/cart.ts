@@ -8,7 +8,7 @@ export default interface Cart {
 		custom_current_stock: number;
 		stock_uom: string;
 		custom_is_preorder: number;
-		custom_release_date: Date;
+		custom_release_date: string;
 		max_discount: number;
 	}[];
 	shipping: {

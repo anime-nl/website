@@ -11,7 +11,7 @@ export default class ErpNextHelper {
 		};
 	}
 
-	static async getCharacters(): Promise<string[] | undefined> {
+	/*static async getCharacters(): Promise<string[] | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character`, {
 			method: 'GET',
 			headers: this.getHeaders()
@@ -25,7 +25,7 @@ export default class ErpNextHelper {
 		} = await data.json();
 
 		return json.data.map((character: { name: string }) => character.name);
-	}
+	}*/
 
 	static async getSources(): Promise<string[] | undefined> {
 		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source`, {
