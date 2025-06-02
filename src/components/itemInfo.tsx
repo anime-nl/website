@@ -3,8 +3,8 @@ import Cart from '@/types/cart';
 import Item from '@/types/item';
 import { Button } from '@heroui/button';
 import { Card, CardBody, CardFooter } from '@heroui/card';
-import { Image } from '@heroui/image';
 import { NumberInput } from '@heroui/number-input';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -70,24 +70,28 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 	return (
 		<div
 			className="grid grid-cols-1 sm:grid-cols-2 grid-flow-row sm:grid-flow-col gap-4 sm:gap-0 w-full h-full sm:m-16">
-			<Card className="mx-auto w-full" isPressable={false}>
-				<CardBody className="w-full sm:w-2/3 mx-auto flex flex-col gap-4">
-					<div className="mx-auto flex gap-4">
-						<Button onPress={() => switchImage(-1)} variant="bordered"
-						        className="my-auto">&lt;</Button>
-						<Button onPress={() => switchImage(1)} variant="bordered" className="my-auto">&gt;</Button>
-					</div>
-					<div className="mx-auto">
-						<Image
-							alt={'image'}
-							src={`https://erpnext.animenl.nl/${props.images[selectedImage]}`}
-						/>
-					</div>
-				</CardBody>
-				<CardFooter>
-					<p className="text-foreground/30 w-full text-end">Aantal foto's: {props.images.length}</p>
-				</CardFooter>
-			</Card>
+			<div className="mx-auto w-full">
+				<Card className="h-[50vh] sm:h-full">
+					<CardBody className="w-full h-full sm:w-2/3 mx-auto flex flex-col gap-4">
+						<div className="mx-auto flex gap-4">
+							<Button onPress={() => switchImage(-1)} variant="bordered"
+							        className="my-auto">&lt;</Button>
+							<Button onPress={() => switchImage(1)} variant="bordered" className="my-auto">&gt;</Button>
+						</div>
+						<div className="mx-auto relative h-full w-full">
+							<Image
+								alt={'image'}
+								src={`https://erpnext.animenl.nl/${props.images[selectedImage]}`}
+								fill
+								className="object-contain"
+							/>
+						</div>
+					</CardBody>
+					<CardFooter>
+						<p className="text-foreground/30 w-full text-end">Aantal foto's: {props.images.length}</p>
+					</CardFooter>
+				</Card>
+			</div>
 			<div className="w-full h-fit flex flex-col gap-2 sm:px-8">
 				<h1 className="text-2xl sm:text-4xl">{props.item.item_name}</h1>
 				<hr/>
@@ -125,19 +129,24 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Categorie</p>
 						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
+							router.push(`/?categories=${props.item.item_group}`);
 						}}>
 							<p className="text-wrap py-2">{props.item.item_group}</p>
 						</Button>
 					</div>
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Serie</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto"><p
+						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
+
+						}}><p
 							className="text-wrap py-2">
 							{props.item.custom_source}</p></Button>
 					</div>
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Fabrikant</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto"><p
+						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
+
+						}}><p
 							className="text-wrap py-2">{props.item.brand}</p></Button>
 					</div>
 				</div>
