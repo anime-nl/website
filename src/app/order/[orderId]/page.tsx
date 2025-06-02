@@ -74,7 +74,7 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 		? `https://jouw.postnl.nl/track-and-trace/${order.shipment_tracking_code}-NL-${order.postal_code.replace(/ /g, '').toUpperCase()}`
 		: `https://www.dhl.com/nl-nl/home/traceren.html?tracking-id=${order.shipment_tracking_code}&submit=1`;
 
-	console.log(payment._links);
+	const paymentUrl = payment.getStatusUrl() ?? payment.getCheckoutUrl() ?? null;
 
 	return (
 		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
@@ -110,7 +110,7 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 									/* @ts-expect-error TS2339 */
 									  aria-disabled={payment._links?.status?.href == null}
 									/* @ts-expect-error TS2339 */
-									  href={payment._links?.status?.href ?? null} target="_blank">
+									  href={paymentUrl} target="_blank">
 									<p className="mx-auto">{paymentStatus}</p>
 								</Link>
 							</CardBody>
