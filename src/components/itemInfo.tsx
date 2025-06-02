@@ -88,7 +88,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 						</div>
 					</CardBody>
 					<CardFooter>
-						<p className="text-foreground/30 w-full text-end">Aantal foto's: {props.images.length}</p>
+						<p className="text-foreground/30 w-full text-end">Aantal foto&apos;s: {props.images.length}</p>
 					</CardFooter>
 				</Card>
 			</div>
