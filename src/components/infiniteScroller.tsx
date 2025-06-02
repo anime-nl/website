@@ -25,17 +25,15 @@ export default function InfiniteScroller(props: {
 	const {ref, inView} = useInView();
 
 	useEffect(() => {
-		const scroll = Number(localStorage.getItem('scroll') ?? 0);
+		const scroll = Number(sessionStorage.getItem('scroll') ?? 0);
 
 		window.scroll(0, scroll);
-
-		// localStorage.setItem('scroll', '0');
 	}, [currentPage]);
 
 	useEffect(() => {
 		if (inView && currentPage * 25 <= props.items[4].length * 5) {
 			currentParams.set('page', (currentPage + 1).toFixed(0));
-			localStorage.setItem('scroll', window.scrollY.toString());
+			sessionStorage.setItem('scroll', window.scrollY.toString());
 
 			// window.location.href = `/?${currentParams.toString()}`;
 			router.push(`?${currentParams.toString()}`);
