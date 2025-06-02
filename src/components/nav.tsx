@@ -55,7 +55,7 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 					</Link>
 				</NavbarItem>
 			</NavbarContent>
-			<NavbarMenu className="mt-4">
+			<NavbarMenu className="pt-4">
 				{props.nav.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>
 						<Link
