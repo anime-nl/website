@@ -7,7 +7,12 @@ import { SharedSelection } from '@heroui/system';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Key, useCallback, useRef, useState } from 'react';
 
-export default function ItemSearch(props: { series: string[]; categories: string[]; manufacturers: string[] }) {
+export default function ItemSearch(props: {
+	series: string[];
+	categories: string[];
+	manufacturers: string[],
+	characters: string[]
+}) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
@@ -22,6 +27,9 @@ export default function ItemSearch(props: { series: string[]; categories: string
 	);
 	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(
 		new Set(searchParams.get('manufacturers')?.split(',')) ?? new Set()
+	);
+	const [selectedCharacters, setSelectedCharacters] = useState<SharedSelection>(
+		new Set(searchParams.get('characters')?.split(',')) ?? new Set()
 	);
 	const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') ?? '');
 	const [priceRange, setPriceRange] = useState<number[]>(
@@ -81,6 +89,14 @@ export default function ItemSearch(props: { series: string[]; categories: string
 		(keys: SharedSelection) => {
 			updateQueryParam('manufacturers', Array.from(keys));
 			setSelectedManufacturers(keys);
+		},
+		[updateQueryParam]
+	);
+
+	const onCharactersChanged = useCallback(
+		(keys: SharedSelection) => {
+			updateQueryParam('characters', Array.from(keys));
+			setSelectedCharacters(keys);
 		},
 		[updateQueryParam]
 	);
@@ -167,6 +183,24 @@ export default function ItemSearch(props: { series: string[]; categories: string
 				>
 					{props.series.map((serie) => {
 						return <ListboxItem key={serie}>{serie}</ListboxItem>;
+					})}
+				</Listbox>
+			</AccordionItem>
+			<AccordionItem key="Characters" aria-label="Character" title="Character">
+				<Listbox
+					isVirtualized
+					aria-label="Character"
+					selectedKeys={selectedCharacters}
+					selectionMode="multiple"
+					variant="flat"
+					onSelectionChange={onCharactersChanged}
+					virtualization={{
+						maxListboxHeight: 400,
+						itemHeight: 40
+					}}
+				>
+					{props.characters.map((character) => {
+						return <ListboxItem key={character}>{character}</ListboxItem>;
 					})}
 				</Listbox>
 			</AccordionItem>

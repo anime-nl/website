@@ -110,10 +110,10 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 				<div className="ml-6 mb-6 h-full" dangerouslySetInnerHTML={{__html: props.item.description}}></div>
 				{props.item.custom_is_pre_order ? (
 					<p className="my-auto text-orange-400">
-						Pre-order eindigt op {props.item.custom_release_date?.toLocaleDateString()}
+						Pre-order eindigt op {new Date(props.item.custom_release_date).toLocaleDateString()}
 					</p>
 				) : props.item.custom_current_stock == 0 ? (
-					<p className="my-auto text-red-500">Uitverkocht</p>
+					<p className="my-auto text-orange-500">Binnen 7 werkdagen op voorraad</p>
 				) : (
 					<p className="my-auto text-green-500">{props.item.custom_current_stock} op voorraad</p>
 				)}
@@ -122,7 +122,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<NumberInput
 						className="w-32"
 						minValue={1}
-						maxValue={props.item.custom_is_pre_order ? 1 : props.item.custom_current_stock}
+						maxValue={props.item.custom_is_pre_order ? 1 : 50}
 						defaultValue={1}
 						value={selectedCount}
 						onValueChange={setSelectedCount}
@@ -143,9 +143,17 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 						</Button>
 					</div>
 					<div className="flex gap-4">
+						<p className="my-auto w-1/2 text-center">Character</p>
+						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
+							router.push(`/?characters=${props.item.custom_source}`);
+						}}><p
+							className="text-wrap py-2">
+							{props.item.custom_character}</p></Button>
+					</div>
+					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Serie</p>
 						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-
+							router.push(`/?series=${props.item.custom_source}`);
 						}}><p
 							className="text-wrap py-2">
 							{props.item.custom_source}</p></Button>
@@ -153,7 +161,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Fabrikant</p>
 						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-
+							router.push(`/?manufacturers=${props.item.brand}`);
 						}}><p
 							className="text-wrap py-2">{props.item.brand}</p></Button>
 					</div>

@@ -5,7 +5,6 @@ import { Card, CardBody, CardFooter } from '@heroui/card';
 import { Chip } from '@heroui/chip';
 import { Link } from '@heroui/link';
 import { NumberInput } from '@heroui/number-input';
-import { addToast } from '@heroui/toast';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -34,16 +33,6 @@ export default function CartPage() {
 		}
 
 		const index = cart.items.findIndex((item) => item.name == id);
-
-		if (value > cart.items[index].custom_current_stock) {
-			addToast({
-				title: 'Uh Oh',
-				description: 'Niet genoeg voorraad aanwezig voor deze actie',
-				color: 'danger',
-				variant: 'solid',
-				timeout: 3000
-			});
-		}
 
 		cart.items[index].quantity = value;
 		localStorage.setItem('cart', JSON.stringify(cart));
@@ -138,11 +127,13 @@ export default function CartPage() {
 														<Chip color="primary">
 															<p className="font-bold">Pre-order</p>
 														</Chip>
-													) : (
+													) : item.custom_current_stock > 0 ? (
 														<Chip color="success">
 															<p className="font-bold">Op Voorraad</p>
 														</Chip>
-													)}
+													) : <Chip color="warning">
+														<p className="font-bold">Binnen 7 dagen op voorraad</p>
+													</Chip>}
 												</span>
 										</div>
 										<div className="h-fit my-auto">
@@ -150,7 +141,7 @@ export default function CartPage() {
 												className="w-32"
 												minValue={0}
 												maxValue={
-													item.custom_is_preorder ? 1 : cart.items[i].custom_current_stock
+													item.custom_is_preorder ? 1 : 50
 												}
 												defaultValue={item.quantity}
 												onValueChange={(value) => updateCart(item.name, value)}
