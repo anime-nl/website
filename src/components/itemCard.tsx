@@ -13,7 +13,10 @@ export default function ItemCard(props: { item: Item }) {
 			isPressable
 			isHoverable
 			shadow="sm"
-			onPress={() => router.push(`/item/${props.item.name}`)}
+			onPress={() => {
+				sessionStorage.setItem('scroll', window.scrollY.toString());
+				router.push(`/item/${props.item.name}`);
+			}}
 			className="w-full h-fit"
 		>
 			<CardBody className="overflow-visible p-0 relative">
