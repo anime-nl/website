@@ -6,8 +6,8 @@ import Item from '@/types/item';
 const cols = 5;
 
 export default async function Home({
-	searchParams,
-}: {
+	                                   searchParams
+                                   }: {
 	searchParams: Promise<{
 		search?: string;
 		series?: string;
@@ -33,7 +33,7 @@ export default async function Home({
 		filter.push({
 			key: 'item_name',
 			operator: 'like',
-			value: `%${query.search}%`,
+			value: `%${query.search}%`
 		});
 	}
 
@@ -41,7 +41,7 @@ export default async function Home({
 		filter.push({
 			key: 'custom_source',
 			operator: 'in',
-			value: query.series,
+			value: query.series
 		});
 	}
 
@@ -49,7 +49,7 @@ export default async function Home({
 		filter.push({
 			key: 'item_group',
 			operator: 'in',
-			value: query.categories,
+			value: query.categories
 		});
 	}
 
@@ -57,7 +57,7 @@ export default async function Home({
 		filter.push({
 			key: 'brand',
 			operator: 'in',
-			value: query.manufacturers,
+			value: query.manufacturers
 		});
 	}
 
@@ -67,40 +67,40 @@ export default async function Home({
 			{
 				key: 'standard_rate',
 				operator: '>=',
-				value: priceRange[0],
+				value: priceRange[0]
 			},
 			{
 				key: 'standard_rate',
 				operator: '<=',
-				value: priceRange[1],
-			},
+				value: priceRange[1]
+			}
 		);
 	}
 
 	const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 * Number(query.page ?? 1), 0);
 
-	const gridItems: Item[][] = Array.from({ length: cols }, () => []);
+	const gridItems: Item[][] = Array.from({length: cols}, () => []);
 	items.forEach((item, i) => {
 		gridItems[i % cols].push(item);
 	});
 
 	return (
-		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-16 items-center h-full w-full">
+		<div className="dark mx-8 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+			<main className="flex flex-col gap-4 sm:gap-16 items-center h-full w-full">
 				<h1
-					className={`font-[family-name:var(--font-crashbow)] text-9xl bg-gradient-to-r w-fit px-6 py-4 from-primary to-secondary text-transparent bg-clip-text`}
+					className={`font-[family-name:var(--font-crashbow)] text-4xl sm:text-9xl bg-gradient-to-r w-fit px-6 py-4 from-primary to-secondary text-transparent bg-clip-text`}
 				>
 					Anime NL
 				</h1>
-				<p className="text-xl underline">Jouw connectie tot de japanse otaku markt</p>
-				<hr className="text-white/15 w-full" />
-				<div className="flex w-full gap-4">
-					<div className="w-fit">
-						<ItemSearch series={series} categories={categories} manufacturers={manufacturers} />
+				<hr className="text-white/15 w-full"/>
+				<div className="flex flex-col sm:flex-row w-full gap-4">
+					<div className="w-fit mx-auto">
+						<ItemSearch series={series} categories={categories} manufacturers={manufacturers}/>
 					</div>
+					<hr className="block sm:hidden text-foreground/20"/>
 					<div className="w-full">
-						<div id="item-cols" className="grid grid-cols-5 gap-8 w-full">
-							<InfiniteScroller items={gridItems} filter={filter} />
+						<div id="item-cols" className="grid grid-cols-1 sm:grid-cols-5 gap-0 sm:gap-8 w-full">
+							<InfiniteScroller items={gridItems} filter={filter}/>
 						</div>
 					</div>
 				</div>

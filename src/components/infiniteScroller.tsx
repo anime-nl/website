@@ -46,7 +46,8 @@ export default function InfiniteScroller(props: {
 		<>
 			{props.items.map((itemCol, iCol) => {
 				return (
-					<div key={iCol} className="flex flex-col gap-4 w-full">
+					<div key={iCol}
+					     className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
 						{itemCol.map((item, i) => {
 							return (
 								<div key={item.name} className="w-full">
@@ -58,8 +59,8 @@ export default function InfiniteScroller(props: {
 					</div>
 				);
 			})}
-			<div className="col-span-5 flex flex-col gap-4 w-full">
-				<h1 className="text-3xl w-fit mx-auto font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
+			<div className="sm:col-span-5 flex flex-col gap-4 w-full mt-4 sm:mt-0">
+				<h1 className="text-center text-2xl w-fit mx-auto font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
 					Niet gevonden waar je naar zocht?
 				</h1>
 				<p className="mx-auto">
