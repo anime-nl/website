@@ -1,0 +1,90 @@
+'use client';
+
+import { Link } from '@heroui/link';
+import {
+	Navbar,
+	NavbarBrand,
+	NavbarContent,
+	NavbarItem,
+	NavbarMenu,
+	NavbarMenuItem,
+	NavbarMenuToggle
+} from '@heroui/navbar';
+import Image from 'next/image';
+import { useState } from 'react';
+
+export default function Nav(props: { nav: { name: string; route: string }[] }) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	return (
+		<Navbar className="pt-2 shadow-xl bg-black/50" onMenuOpenChange={setIsMenuOpen}>
+			<NavbarContent>
+				<NavbarMenuToggle
+					aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+					className="sm:hidden"
+				/>
+				<NavbarBrand>
+					<Link href="/" className="text-foreground">
+						<p
+							className={`font-[family-name:var(--font-crashbow)] text-lg sm:text-2xl bg-gradient-to-r w-fit px-6 py-4 from-primary to-secondary text-transparent bg-clip-text`}
+						>
+							Anime NL
+						</p>
+					</Link>
+				</NavbarBrand>
+			</NavbarContent>
+			<NavbarContent className="hidden sm:flex gap-4" justify="center">
+				{props.nav.map((item, i) => {
+					return (
+						<NavbarItem key={i} isActive={true}>
+							<Link
+								color="foreground"
+								href={item.route}
+								className={'px-2 py-1 font-thin'}
+							>
+								{item.name}
+							</Link>
+						</NavbarItem>
+					);
+				})}
+			</NavbarContent>
+			<NavbarContent justify="end">
+				<NavbarItem className="hidden lg:flex">
+					<Link href="/cart" className="text-foreground relative h-8 w-8">
+						<Image alt="cart" className="invert" src="./cart.svg" fill={true}/>
+					</Link>
+				</NavbarItem>
+			</NavbarContent>
+			<NavbarMenu className="mt-4">
+				{props.nav.map((item, index) => (
+					<NavbarMenuItem key={`${item}-${index}`}>
+						<Link
+							className="w-full"
+							color={
+								'foreground'
+							}
+							href={item.route}
+							size="lg"
+						>
+							{item.name}
+						</Link>
+						<hr className="text-foreground/10"/>
+					</NavbarMenuItem>
+				))}
+				<NavbarMenuItem key="winkelwagen">
+					<Link
+						className="w-full"
+						color={
+							'foreground'
+						}
+						href="/cart"
+						size="lg"
+					>
+						Winkelwagen
+					</Link>
+					<hr className="text-foreground/10"/>
+				</NavbarMenuItem>
+			</NavbarMenu>
+		</Navbar>
+	);
+}

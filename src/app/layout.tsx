@@ -1,11 +1,10 @@
 import { Providers } from '@/app/providers';
+import Nav from '@/components/nav';
 import { Link } from '@heroui/link';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
-import Image from 'next/image';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -58,44 +57,14 @@ export default async function RootLayout({
 		>
 		<body className={`${geistSans.variable} ${geistMono.variable} ${crashbow.variable} antialiased`}>
 		<Providers>
-			<Navbar className="pt-2 shadow-xl bg-black/50">
-				<NavbarBrand>
-					<Link href="/" className="text-foreground">
-						<p
-							className={`font-[family-name:var(--font-crashbow)] text-2xl bg-gradient-to-r w-fit px-6 py-4 from-primary to-secondary text-transparent bg-clip-text`}
-						>
-							Anime NL
-						</p>
-					</Link>
-				</NavbarBrand>
-				<NavbarContent className="hidden sm:flex gap-4" justify="center">
-					{nav.map((item, i) => {
-						return (
-							<NavbarItem key={i} isActive={true}>
-								<Link
-									color="foreground"
-									href={item.route}
-									className={'px-2 py-1 font-thin'}
-								>
-									{item.name}
-								</Link>
-							</NavbarItem>
-						);
-					})}
-				</NavbarContent>
-				<NavbarContent justify="end">
-					<NavbarItem className="hidden lg:flex">
-						<Link href="/cart" className="text-foreground relative h-8 w-8">
-							<Image alt="cart" className="invert" src="./cart.svg" fill={true}/>
-						</Link>
-					</NavbarItem>
-				</NavbarContent>
-			</Navbar>
+			<Nav nav={nav}/>
 			{children}
 			<hr className="text-white/15 mt-8"/>
-			<div className="grid grid-cols-5 grid-flow-row px-[30%] py-8 bg-black/25">
-				<div className="flex flex-col gap-4 text-end">
+			<div
+				className="grid grid-rows-3 sm:grid-rows-1 sm:grid-cols-5 sm:grid-flow-row px-0 sm:px-[30%] py-4 sm:py-8 bg-black/25 h-fit gap-8 sm:gap-0">
+				<div className="flex flex-col gap-4 sm:text-end text-center row-start-2 sm:col-start-1 sm:row-start-1">
 					<h1 className="font-bold text-2xl">Klantenservice</h1>
+					<hr className="w-2/3 mx-auto visible sm:invisible"/>
 					<p>
 						<Link href="/about?default=5" className="text-foreground">
 							Retourneren
@@ -117,8 +86,9 @@ export default async function RootLayout({
 						</Link>
 					</p>
 				</div>
-				<span className="w-0 border-2 border-white/15 mx-auto"></span>
-				<div className="flex flex-col gap-4 text-center">
+				<span
+					className="w-0 border-2 border-white/15 mx-auto hidden sm:block row-start-4 sm:col-start-2 sm:row-start-1"></span>
+				<div className="flex flex-col gap-4 text-center row-start-1 sm:col-start-3 sm:row-start-1">
 					<p
 						className={`font-[family-name:var(--font-crashbow)] text-4xl bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text`}
 					>
@@ -127,9 +97,12 @@ export default async function RootLayout({
 					<p>KVK 97160865</p>
 					<p>VAT NL005252326B52</p>
 				</div>
-				<span className="w-0 border-2 border-white/15 mx-auto"></span>
-				<div className="flex flex-col gap-4 text-start">
+				<span
+					className="w-0 border-2 border-white/15 mx-auto hidden sm:block row-start-5 sm:col-start-4 sm:row-start-1"></span>
+				<div
+					className="flex flex-col gap-4 sm:text-start text-center row-start-3 sm:col-start-5 sm:row-start-1">
 					<h1 className="font-bold text-2xl">Onze Winkel</h1>
+					<hr className="w-2/3 mx-auto visible sm:invisible"/>
 					<p>
 						<Link href="/about?default=1" className="text-foreground">
 							Over ons
