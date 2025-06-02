@@ -164,6 +164,7 @@ export default function CheckoutPage() {
 							/>
 							<Input
 								className="sm:col-span-2"
+								isRequired={true}
 								name="city"
 								placeholder="Stad"
 								type="text"
