@@ -5,6 +5,7 @@ import { Card, CardBody, CardFooter } from '@heroui/card';
 import { Chip } from '@heroui/chip';
 import { Link } from '@heroui/link';
 import { NumberInput } from '@heroui/number-input';
+import { addToast } from '@heroui/toast';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -35,7 +36,13 @@ export default function CartPage() {
 		const index = cart.items.findIndex((item) => item.name == id);
 
 		if (value > cart.items[index].custom_current_stock) {
-			alert('Niet genoeg voorraad voor dit aantal');
+			addToast({
+				title: 'Uh Oh',
+				description: 'Niet genoeg voorraad aanwezig voor deze actie',
+				color: 'danger',
+				variant: 'solid',
+				timeout: 3000
+			});
 		}
 
 		cart.items[index].quantity = value;
