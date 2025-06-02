@@ -113,7 +113,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 						Pre-order eindigt op {new Date(props.item.custom_release_date).toLocaleDateString()}
 					</p>
 				) : props.item.custom_current_stock == 0 ? (
-					<p className="my-auto text-red-500">Uitverkocht</p>
+					<p className="my-auto text-orange-500">Binnen 7 werkdagen op voorraad</p>
 				) : (
 					<p className="my-auto text-green-500">{props.item.custom_current_stock} op voorraad</p>
 				)}
@@ -122,7 +122,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 					<NumberInput
 						className="w-32"
 						minValue={1}
-						maxValue={props.item.custom_is_pre_order ? 1 : props.item.custom_current_stock}
+						maxValue={props.item.custom_is_pre_order ? 1 : 50}
 						defaultValue={1}
 						value={selectedCount}
 						onValueChange={setSelectedCount}
