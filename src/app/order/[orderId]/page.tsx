@@ -74,43 +74,46 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 		? `https://jouw.postnl.nl/track-and-trace/${order.shipment_tracking_code}-NL-${order.postal_code.replace(/ /g, '').toUpperCase()}`
 		: `https://www.dhl.com/nl-nl/home/traceren.html?tracking-id=${order.shipment_tracking_code}&submit=1`;
 
-	console.log(payment._links);
+	const paymentUrl = payment.getStatusUrl() ?? payment.getCheckoutUrl() ?? null;
 
 	return (
-		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+		<div className="dark mx-4 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
 				<ClearCart shouldClear={clear ?? false}/>
-				<div className="flex flex-col gap-8 w-2/3 mx-auto">
-					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+				<div className="flex flex-col gap-8 w-full mx-auto">
+					<h1 className="mx-auto text-2xl sm:text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 						Order
 					</h1>
-					<div className="w-2/3 mx-auto grid grid-cols-3 gap-4">
+					<div className="w-full sm:w-2/3 mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
 						<Card
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Order Nummer</h1>
-								<p className="text-foreground/70 mx-auto">{orderId}</p>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Order
+									Nummer</h1>
+								<p className="text-foreground/70 mx-auto w-full text-center">{orderId}</p>
 							</CardBody>
 						</Card>
 						<Card
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Totaal bedrag</h1>
-								<p className="text-foreground/70 mx-auto">{`${payment.amount.value} ${payment.amount.currency}`}</p>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Totaal
+									bedrag</h1>
+								<p className="text-foreground/70 w-full text-center">{`${payment.amount.value} ${payment.amount.currency}`}</p>
 							</CardBody>
 						</Card>
 						<Card
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Status Betaling</h1>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Status
+									Betaling</h1>
 								<Link className="aria-disabled:text-foreground/70"
 									/* @ts-expect-error TS2339 */
 									  aria-disabled={payment._links?.status?.href == null}
 									/* @ts-expect-error TS2339 */
-									  href={payment._links?.status?.href ?? null} target="_blank">
+									  href={paymentUrl} target="_blank">
 									<p className="mx-auto">{paymentStatus}</p>
 								</Link>
 							</CardBody>
@@ -119,12 +122,14 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Track and Trace</h1>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Track and
+									Trace</h1>
 								{order.shipment_tracking_code
 									? <Link href={trackingUrl} target="_blank">
 										<p className="text-primary mx-auto">{order.shipment_tracking_code}</p>
 									</Link>
-									: <p className="text-foreground/70 mx-auto">Nog niet verstuurd</p>
+									:
+									<p className="text-foreground/70 mx-auto w-full text-center">Nog niet verstuurd</p>
 								}
 
 							</CardBody>
@@ -133,21 +138,25 @@ export default async function PaymentSuccessPage({params, searchParams}: {
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Aantal items</h1>
-								<p className="text-foreground/70 mx-auto">{order.items.length}</p>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Aantal
+									items</h1>
+								<p className="text-foreground/70 mx-auto w-full text-center">{order.items.length}</p>
 							</CardBody>
 						</Card>
 						<Card
 							isHoverable={true}
 							className="border-2 border-transparent aria-selected:border-primary">
 							<CardBody className="gap-4">
-								<h1 className="font-bold text-3xl mx-auto">Bestel Datum</h1>
-								<p className="text-foreground/70 mx-auto">{new Date(order.creation).toLocaleString()}</p>
+								<h1 className="font-bold text-2xl sm:text-3xl mx-auto w-full text-center">Bestel
+									Datum</h1>
+								<p className="text-foreground/70 mx-auto w-full text-center">{new Date(order.creation).toLocaleString()}</p>
 							</CardBody>
 						</Card>
 						<ItemTable items={items} order={order}/>
-						<h1 className="text-2xl font-bold col-span-3">Heb je vragen of problemen met de order?</h1>
-						<p className="col-span-3">Stuur een email naar <Link
+						<h1 className="text-2xl font-bold col-span-2 sm:col-span-3 text-center">Heb je vragen of
+							problemen met de
+							order?</h1>
+						<p className="col-span-2 sm:col-span-3 text-center">Stuur een email naar <Link
 							href="mailto:info@animenl.nl?subject=Problemen met mijn order">info@animenl.nl</Link>,
 							Wij proberen binnen 24 uur te reageren</p>
 					</div>

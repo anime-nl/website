@@ -19,7 +19,7 @@ export default async function ItemPage({params}: { params: Promise<{ itemId: str
 	const images = await ErpNextHelper.getImagesForItem(itemId);
 
 	return (
-		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+		<div className="dark mx-8 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 items-center h-full w-full">
 				<ItemInfo item={item} images={images?.sort() ?? []}/>
 			</main>

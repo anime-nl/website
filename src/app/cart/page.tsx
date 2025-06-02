@@ -81,18 +81,18 @@ export default function CartPage() {
 	}
 
 	return (
-		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
+		<div className="dark mx-4 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
 				<div className="flex flex-col gap-8 w-2/3 mx-auto">
-					<h1 className="mx-auto text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+					<h1 className="mx-auto text-2xl sm:text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 						Winkelwagen
 					</h1>
 					{cart.items.map((item, i) => {
 						return (
 							<Card key={item.name} className="w-full">
 								<CardBody>
-									<div className="flex justify-between">
-										<div className="relative w-32 mx-8">
+									<div className="flex flex-col sm:flex-row justify-between">
+										<div className="relative w-32 h-64 sm:h-auto mx-auto sm:mx-8">
 											<Image
 												src={`https://erpnext.animenl.nl/${item.images[0]}`}
 												alt={item.name}
@@ -103,7 +103,7 @@ export default function CartPage() {
 										</div>
 										<div className="w-full my-8">
 											<Link color={'foreground'} href={`/item/${item.name}`}>
-												<h1 className="font-bold text-2xl">{item.item_name}</h1>
+												<h1 className="font-bold text-lg sm:text-2xl">{item.item_name}</h1>
 											</Link>
 											{item.max_discount != 0 ? (
 												<span className="flex gap-4">
@@ -155,7 +155,8 @@ export default function CartPage() {
 						);
 					})}
 					<hr/>
-					<div className="grid grid-cols-4 justify-between w-full text-center mx-auto gap-4">
+					<div
+						className="grid grid-rows-4 sm:grid-rows-1 sm:grid-cols-4 justify-between w-full text-center mx-auto gap-4">
 						<button
 							onClick={() => updateShippingMethod(0, 'PostNL Huisadres', 10.35)}
 						>
