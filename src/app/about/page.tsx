@@ -14,11 +14,13 @@ export default function AboutPage() {
 
 function About() {
 	const searchParams = useSearchParams();
-	
+
 	return (
 		<div className="dark mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-16 justify-center h-full w-full">
-				<h1 className="text-4xl mx-auto font-bold">Veelgestelde Vragen</h1>
+				<h1 className="mx-auto text-center text-2xl sm:text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+					Veelgestelde Vragen
+				</h1>
 				<Accordion variant="splitted" defaultExpandedKeys={(searchParams.get('default') ?? '1').split(',')}>
 					<AccordionItem key="1" aria-label="Wij zijn wij" title="Wie zijn wij" className="font-bold">
 						<hr className="text-white/15 mb-2"/>

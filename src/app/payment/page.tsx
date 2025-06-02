@@ -65,7 +65,7 @@ export default async function PaymentPage({searchParams}: { searchParams: Promis
 			value: amount,
 			currency: 'EUR'
 		},
-		description: 'test',
+		description: `Order ${id}`,
 		redirectUrl: `${process.env.MOLLIE_REDIRECT_URL}/${id}?clear=true`,
 		billingAddress: {
 			givenName: cartData.form.firstName,
