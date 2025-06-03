@@ -1,4 +1,4 @@
-import MollieWebhook from '@/types/mollieWebhook';
+//import MollieWebhook from '@/types/mollieWebhook';
 import * as crypto from 'node:crypto';
 
 export async function POST(req: Request) {
@@ -17,20 +17,18 @@ export async function POST(req: Request) {
 	// Generate hashing object
 	const hmac = crypto.createHmac('sha256', process.env.MOLLIE_WEBHOOK_SECRET);
 
-	// Read body
-	const bodyReader = req.body?.getReader();
+	// Read JSON body
+	const body = await req.json();
 
 	// Generate hash
-	hmac.update((await bodyReader?.read())?.toString() ?? '');
-	console.log((await bodyReader?.read())?.toString());
+	hmac.update(JSON.stringify(body));
+	console.log(JSON.stringify(body));
 
-	// Release body reader
-	bodyReader?.releaseLock();
-
+	//////
 	console.log(process.env.MOLLIE_WEBHOOK_SECRET);
-	console.log(req.headers.get('X-Mollie-Signature'));
+	console.log(req.headers.get('X-Mollie-Signature')!);
 	console.log(hmac.digest('hex'));
-	console.log(req.headers.get('X-Mollie-Signature') != hmac.digest('hex'));
+	console.log(req.headers.get('X-Mollie-Signature')!.replace('sha256=', '') != hmac.digest('hex'));
 
 	// Check if hex values match
 	if (req.headers.get('X-Mollie-Signature') != hmac.digest('hex')) {
@@ -39,10 +37,8 @@ export async function POST(req: Request) {
 		});
 	}
 
-	console.log(await req.json());
-	const data: MollieWebhook = await req.json() as MollieWebhook;
-
 	return new Response('', {
 		status: 200
 	});
 }
+
