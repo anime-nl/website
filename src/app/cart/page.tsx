@@ -83,7 +83,7 @@ export default function CartPage() {
 					<h1 className="mx-auto text-2xl sm:text-6xl border-b-2 border-white/15 p-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 						Winkelwagen
 					</h1>
-					{cart.items.map((item, i) => {
+					{cart.items.map((item) => {
 						return (
 							<Card key={item.name} className="w-full">
 								<CardBody>
