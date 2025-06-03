@@ -1,3 +1,4 @@
+import MollieWebhook from '@/types/mollieWebhook';
 import * as crypto from 'node:crypto';
 
 export async function POST(req: Request) {
@@ -34,12 +35,12 @@ export async function POST(req: Request) {
 	// Check if hex values match
 	if (req.headers.get('X-Mollie-Signature') != hmac.digest('hex')) {
 		return new Response('', {
-			status: 200
+			status: 401
 		});
 	}
 
-	const data = await req.json();
-	console.log(data);
+	console.log(await req.json());
+	const data: MollieWebhook = await req.json() as MollieWebhook;
 
 	return new Response('', {
 		status: 200
