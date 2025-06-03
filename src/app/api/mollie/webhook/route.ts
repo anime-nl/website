@@ -18,20 +18,14 @@ export async function POST(req: Request) {
 	const hmac = crypto.createHmac('sha256', process.env.MOLLIE_WEBHOOK_SECRET);
 
 	// Read JSON body
-	const body = await req.json();
+	const bodyReader = req.body?.getReader();
+	const body = await bodyReader?.read();
 
 	// Generate hash
-	hmac.update(JSON.stringify(body));
-	console.log(JSON.stringify(body));
-
-	//////
-	console.log(process.env.MOLLIE_WEBHOOK_SECRET);
-	console.log(req.headers.get('X-Mollie-Signature')!);
-	console.log(hmac.digest('hex'));
-	console.log(req.headers.get('X-Mollie-Signature')!.replace('sha256=', '') != hmac.digest('hex'));
+	hmac.update(body?.value ?? '');
 
 	// Check if hex values match
-	if (req.headers.get('X-Mollie-Signature') != hmac.digest('hex')) {
+	if (req.headers.get('X-Mollie-Signature')!.replace('sha256=', '') != hmac.digest('hex')) {
 		return new Response('', {
 			status: 401
 		});
@@ -41,4 +35,3 @@ export async function POST(req: Request) {
 		status: 200
 	});
 }
-
