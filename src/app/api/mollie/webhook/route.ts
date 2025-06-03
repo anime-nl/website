@@ -1,3 +1,4 @@
+import MollieWebhook from '@/types/mollieWebhook';
 import * as crypto from 'node:crypto';
 
 export async function POST(req: Request) {
