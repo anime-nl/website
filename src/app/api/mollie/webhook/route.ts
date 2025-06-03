@@ -20,8 +20,8 @@ export async function POST(req: Request) {
 	const bodyReader = req.body?.getReader();
 
 	// Generate hash
-	hmac.update(bodyReader?.read().toString() ?? '');
-	console.log(bodyReader?.read().toString());
+	hmac.update((await bodyReader?.read())?.toString() ?? '');
+	console.log((await bodyReader?.read())?.toString());
 
 	// Release body reader
 	bodyReader?.releaseLock();
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 	// Check if hex values match
 	if (req.headers.get('X-Mollie-Signature') != hmac.digest('hex')) {
 		return new Response('', {
-			status: 401
+			status: 200
 		});
 	}
 
