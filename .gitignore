@@ -39,4 +39,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-!/eslint-results.sarif
+/eslint-results.sarif
