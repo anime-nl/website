@@ -19,10 +19,7 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 	return (
 		<Navbar className="pt-2 shadow-xl bg-black/50" onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent>
-				<NavbarMenuToggle
-					aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-					className="sm:hidden"
-				/>
+				<NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden"/>
 				<NavbarBrand>
 					<Link href="/" className="text-foreground">
 						<p
@@ -37,11 +34,7 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 				{props.nav.map((item, i) => {
 					return (
 						<NavbarItem key={i} isActive={true}>
-							<Link
-								color="foreground"
-								href={item.route}
-								className={'px-2 py-1 font-thin'}
-							>
+							<Link color="foreground" href={item.route} className={'px-2 py-1 font-thin'}>
 								{item.name}
 							</Link>
 						</NavbarItem>
@@ -58,28 +51,14 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 			<NavbarMenu className="pt-4">
 				{props.nav.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>
-						<Link
-							className="w-full"
-							color={
-								'foreground'
-							}
-							href={item.route}
-							size="lg"
-						>
+						<Link className="w-full" color={'foreground'} href={item.route} size="lg">
 							{item.name}
 						</Link>
 						<hr className="text-foreground/10"/>
 					</NavbarMenuItem>
 				))}
 				<NavbarMenuItem key="winkelwagen">
-					<Link
-						className="w-full"
-						color={
-							'foreground'
-						}
-						href="/cart"
-						size="lg"
-					>
+					<Link className="w-full" color={'foreground'} href="/cart" size="lg">
 						Winkelwagen
 					</Link>
 					<hr className="text-foreground/10"/>

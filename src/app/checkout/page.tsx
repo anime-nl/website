@@ -18,8 +18,7 @@ export default function CheckoutPage() {
 	});
 
 	useEffect(() => {
-		if (localStorage.getItem('cart'))
-			setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
+		if (localStorage.getItem('cart')) setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
 	}, []);
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -39,7 +38,7 @@ export default function CheckoutPage() {
 
 		const data = {
 			form: form,
-			cart: [] as { name: string, qty: number }[],
+			cart: [] as { name: string; qty: number }[],
 			shipping: cart.shipping.method,
 			// @ts-expect-error TS7053
 			method: e.nativeEvent['submitter'].value
@@ -48,7 +47,6 @@ export default function CheckoutPage() {
 		cart.items.forEach((item) => {
 			data.cart.push({name: item.name, qty: item.quantity});
 		});
-
 
 		router.push(`/payment?data=${btoa(JSON.stringify(data))}`);
 	};
@@ -73,13 +71,23 @@ export default function CheckoutPage() {
 								{cart.items.map((item) => {
 									return (
 										<TableRow key={item.name}>
-											<TableCell><p className="text-nowrap">{item.name}</p></TableCell>
-											<TableCell><p className="text-nowrap">{item.item_name}</p></TableCell>
-											<TableCell><p
-												className="text-nowrap">{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}</p>
+											<TableCell>
+												<p className="text-nowrap">{item.name}</p>
 											</TableCell>
-											<TableCell><p className="text-nowrap">€{item.standard_rate}</p></TableCell>
-											<TableCell><p className="text-nowrap">{item.quantity}</p></TableCell>
+											<TableCell>
+												<p className="text-nowrap">{item.item_name}</p>
+											</TableCell>
+											<TableCell>
+												<p className="text-nowrap">
+													{item.custom_is_preorder ? 'Pre-order' : 'Op vooraad'}
+												</p>
+											</TableCell>
+											<TableCell>
+												<p className="text-nowrap">€{item.standard_rate}</p>
+											</TableCell>
+											<TableCell>
+												<p className="text-nowrap">{item.quantity}</p>
+											</TableCell>
 										</TableRow>
 									);
 								})}
@@ -94,8 +102,7 @@ export default function CheckoutPage() {
 						</TableBody>
 					</Table>
 					<div>
-						<Form className="w-2/3 mx-auto flex sm:grid sm:grid-cols-6"
-						      onSubmit={onSubmit}>
+						<Form className="w-2/3 mx-auto flex sm:grid sm:grid-cols-6" onSubmit={onSubmit}>
 							<label className="sm:col-span-6">Persoonlijke gegevens</label>
 							<Input
 								className="sm:col-span-2"
@@ -136,11 +143,14 @@ export default function CheckoutPage() {
 								validate={(val) => {
 									if (val.length == 0) return null;
 
-									if (/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(val.replace(/\s/g, '')))
+									if (
+										/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(
+											val.replace(/\s/g, '')
+										)
+									)
 										return null;
 
 									return 'Voor a.u.b. een geldig telefoon nummer in';
-
 								}}
 							/>
 
@@ -176,12 +186,7 @@ export default function CheckoutPage() {
 								placeholder="Stad"
 								type="text"
 							/>
-							<Input
-								className="sm:col-span-3"
-								name="country"
-								placeholder="Land"
-								type="text"
-							/>
+							<Input className="sm:col-span-3" name="country" placeholder="Land" type="text"/>
 
 							<label className="sm:col-span-3 sm:row-start-4 sm:col-start-4 mt-4">Opmerkingen</label>
 							<Textarea
@@ -193,15 +198,11 @@ export default function CheckoutPage() {
 							/>
 
 							<label className="sm:col-span-6 mt-4 text-2xl font-bold">Betaal met</label>
-							<button
-								name="method"
-								value="ideal"
-								className="col-span-2 w-full"
-								type="submit"
-							>
+							<button name="method" value="ideal" className="col-span-2 w-full" type="submit">
 								<Card
 									isHoverable={true}
-									className="border-2 border-transparent aria-selected:border-primary">
+									className="border-2 border-transparent aria-selected:border-primary"
+								>
 									<CardBody>
 										<div className="mx-auto w-48 h-32 relative mb-2">
 											<Image
@@ -216,15 +217,11 @@ export default function CheckoutPage() {
 									<CardFooter className="text-foreground/70 justify-end">+ €0.35</CardFooter>
 								</Card>
 							</button>
-							<button
-								name="method"
-								value="banktransfer"
-								className="sm:col-span-2 w-full"
-								type="submit"
-							>
+							<button name="method" value="banktransfer" className="sm:col-span-2 w-full" type="submit">
 								<Card
 									isHoverable={true}
-									className="border-2 border-transparent aria-selected:border-primary">
+									className="border-2 border-transparent aria-selected:border-primary"
+								>
 									<CardBody>
 										<div className="mx-auto w-48 h-32 relative mb-2">
 											<Image
@@ -240,15 +237,11 @@ export default function CheckoutPage() {
 								</Card>
 							</button>
 
-							<button
-								name="method"
-								value="bancontact"
-								className="sm:col-span-2 w-full"
-								type="submit"
-							>
+							<button name="method" value="bancontact" className="sm:col-span-2 w-full" type="submit">
 								<Card
 									isHoverable={true}
-									className="border-2 border-transparent aria-selected:border-primary">
+									className="border-2 border-transparent aria-selected:border-primary"
+								>
 									<CardBody>
 										<div className="mx-auto w-48 h-32 relative mb-2">
 											<Image

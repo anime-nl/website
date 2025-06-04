@@ -44,8 +44,7 @@ export default function InfiniteScroller(props: {
 		<>
 			{props.items.map((itemCol, iCol) => {
 				return (
-					<div key={iCol}
-					     className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
+					<div key={iCol} className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
 						{itemCol.map((item, i) => {
 							return (
 								<div key={item.name} className="w-full">

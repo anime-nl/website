@@ -10,8 +10,8 @@ import { Key, useCallback, useRef, useState } from 'react';
 export default function ItemSearch(props: {
 	series: string[];
 	categories: string[];
-	manufacturers: string[],
-	characters: string[]
+	manufacturers: string[];
+	characters: string[];
 }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
