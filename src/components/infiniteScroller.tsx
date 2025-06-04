@@ -1,61 +1,92 @@
 'use client';
-
-import ItemCard from '@/components/itemCard';
-import Item from '@/types/item';
+import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
-import { useInView } from 'react-intersection-observer';
+import * as React from 'react';
 
-export default function InfiniteScroller(props: {
-	items: Item[][];
-	filter: {
-		key: string;
-		operator: string;
-		value: string;
-	}[];
-}) {
-	const router = useRouter();
-	const searchParams = useSearchParams();
+type loadMoreAction<T extends string | number = any> = T extends number
+	? (offset: T) => Promise<readonly [React.JSX.Element, number | null]>
+	: T extends string
+		? (offset: T) => Promise<readonly [React.JSX.Element, string | null]>
+		: any;
 
-	const currentParams = useMemo(() => {
-		return new URLSearchParams(searchParams.toString());
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
-	const currentPage = Number(currentParams.get('page') ?? 1);
-	const {ref, inView} = useInView();
+const LoadMore = <T extends string | number = any>({
+	                                                   children,
+	                                                   initialOffset,
+	                                                   loadMoreAction
+                                                   }: React.PropsWithChildren<{
+	initialOffset: T;
+	loadMoreAction: loadMoreAction<T>;
+}>) => {
+	const ref = React.useRef<HTMLButtonElement>(null);
+	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[]>([]);
 
-	useEffect(() => {
-		const scroll = Number(sessionStorage.getItem('scroll') ?? 0);
+	const [disabled, setDisabled] = React.useState(false);
+	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
+	const [scrollLoad] = React.useState(true);
+	const [loading, setLoading] = React.useState(false);
 
-		window.scroll(0, scroll);
-	}, [currentPage]);
+	const loadMore = React.useCallback(
+		async (abortController?: AbortController) => {
+			setLoading(true);
 
-	useEffect(() => {
-		if (inView && currentPage * 25 <= props.items[4].length * 5) {
-			currentParams.set('page', (currentPage + 1).toFixed(0));
-			sessionStorage.setItem('scroll', window.scrollY.toString());
+			// @ts-expect-error Can't yet figure out how to type this
+			loadMoreAction(currentOffsetRef.current)
+				.then(([node, next]) => {
+					if (abortController?.signal.aborted) return;
 
-			// window.location.href = `/?${currentParams.toString()}`;
-			router.push(`?${currentParams.toString()}`);
+					setLoadMoreNodes(() => {
+						return [node];
+					});
+
+					if (next === null) {
+						currentOffsetRef.current ??= undefined;
+						setDisabled(true);
+						return;
+					}
+
+					currentOffsetRef.current = next;
+				})
+				.catch(() => {
+				})
+				.finally(() => setLoading(false));
+		},
+		[loadMoreAction]
+	);
+
+	React.useEffect(() => {
+		const signal = new AbortController();
+
+		const element = ref.current;
+
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting && element?.disabled === false) {
+				loadMore(signal);
+			}
+		});
+
+		if (element && scrollLoad) {
+			observer.observe(element);
 		}
-	}, [inView, currentPage, props.items, currentParams, router]);
+
+		return () => {
+			signal.abort();
+			if (element) {
+				observer.unobserve(element);
+			}
+		};
+	}, [loadMore, scrollLoad]);
 
 	return (
 		<>
-			{props.items.map((itemCol, iCol) => {
-				return (
-					<div key={iCol} className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
-						{itemCol.map((item, i) => {
-							return (
-								<div key={item.name} className="w-full">
-									{itemCol.length - 2 == i && iCol == 0 ? <div ref={ref}></div> : undefined}
-									<ItemCard item={item}/>
-								</div>
-							);
-						})}
-					</div>
-				);
-			})}
+			<div id="item-cols" className="grid grid-cols-1 sm:grid-cols-5 gap-0 sm:gap-8 w-full">
+				{loadMoreNodes}
+			</div>
+			<div className="relative overflow-hidden">
+				<Button variant="bordered" size="lg" ref={ref} disabled={disabled || loading} onPress={() => loadMore()}
+				        className="absolute h-[200vh]">
+					{loading ? 'Loading...' : 'Load More'}
+				</Button>
+			</div>
 			<div className="sm:col-span-5 flex flex-col gap-4 w-full mt-4 sm:mt-0">
 				<h1 className="text-center text-2xl w-fit mx-auto font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
 					Niet gevonden waar je naar zocht?
@@ -70,4 +101,6 @@ export default function InfiniteScroller(props: {
 			</div>
 		</>
 	);
-}
+};
+
+export default LoadMore;

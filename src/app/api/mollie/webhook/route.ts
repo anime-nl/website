@@ -59,7 +59,10 @@ export async function POST(req: Request) {
 	const emailTemplate = Handlebars.compile(email);
 
 	// Calculate total item cost
-	const itemCost = orderData.items?.map((item) => item.item.standard_rate * (1 - item.item.max_discount) * item.qty).reduce((prev, cur) => prev + cur) ?? Number(data._embedded['payment-link'].amount.value);
+	const itemCost =
+		orderData.items
+			?.map((item) => item.item.standard_rate * (1 - item.item.max_discount) * item.qty)
+			.reduce((prev, cur) => prev + cur) ?? Number(data._embedded['payment-link'].amount.value);
 
 	// Fill out template
 	const completeEmail = emailTemplate({
