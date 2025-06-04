@@ -3,24 +3,18 @@ import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
 import * as React from 'react';
 
-type loadMoreAction<T extends string | number = any> = T extends number
-	? (offset: T) => Promise<readonly [React.JSX.Element, number | null]>
-	: T extends string
-		? (offset: T) => Promise<readonly [React.JSX.Element, string | null]>
-		: any;
+type loadMoreAction = (offset: string | number | undefined) => Promise<readonly [React.JSX.Element, number | null]>
 
-const LoadMore = <T extends string | number = any>({
-	                                                   children,
-	                                                   initialOffset,
-	                                                   loadMoreAction
-                                                   }: React.PropsWithChildren<{
-	initialOffset: T;
-	loadMoreAction: loadMoreAction<T>;
+const LoadMore = ({
+	                  initialOffset,
+	                  loadMoreAction
+                  }: React.PropsWithChildren<{
+	initialOffset: number;
+	loadMoreAction: loadMoreAction;
 }>) => {
 	const ref = React.useRef<HTMLButtonElement>(null);
 	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[]>([]);
 
-	const [disabled, setDisabled] = React.useState(false);
 	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
 	const [scrollLoad] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -29,7 +23,6 @@ const LoadMore = <T extends string | number = any>({
 		async (abortController?: AbortController) => {
 			setLoading(true);
 
-			// @ts-expect-error Can't yet figure out how to type this
 			loadMoreAction(currentOffsetRef.current)
 				.then(([node, next]) => {
 					if (abortController?.signal.aborted) return;
@@ -40,7 +33,6 @@ const LoadMore = <T extends string | number = any>({
 
 					if (next === null) {
 						currentOffsetRef.current ??= undefined;
-						setDisabled(true);
 						return;
 					}
 
@@ -78,12 +70,12 @@ const LoadMore = <T extends string | number = any>({
 
 	return (
 		<>
-			<div id="item-cols" className="grid grid-cols-1 sm:grid-cols-5 gap-0 sm:gap-8 w-full">
+			<div id="item-cols" className="grid grid-cols-5 gap-0 sm:gap-8 w-full">
 				{loadMoreNodes}
 			</div>
-			<div className="relative overflow-hidden">
-				<Button variant="bordered" size="lg" ref={ref} disabled={disabled || loading} onPress={() => loadMore()}
-				        className="absolute h-[200vh]">
+			<div className="overflow-hidden relative">
+				<Button ref={ref}
+				        className="absolute w-screen h-screen bottom-0 invisible">
 					{loading ? 'Loading...' : 'Load More'}
 				</Button>
 			</div>

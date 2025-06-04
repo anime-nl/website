@@ -6,6 +6,12 @@ import Item from '@/types/item';
 
 const cols = 5;
 
+const filter: {
+	key: string;
+	operator: string;
+	value: string;
+}[] = [];
+
 export default async function Home({
 	                                   searchParams
                                    }: {
@@ -20,18 +26,11 @@ export default async function Home({
 	}>;
 }) {
 	const query = await searchParams;
-	const page = query.page ? query.page : 1;
 
 	const series = (await ErpNextHelper.getSources()) ?? [];
 	const categories = (await ErpNextHelper.getItemGroups()) ?? [];
 	const manufacturers = (await ErpNextHelper.getItemBrands()) ?? [];
 	const characters = (await ErpNextHelper.getCharacters()) ?? [];
-
-	const filter: {
-		key: string;
-		operator: string;
-		value: string;
-	}[] = [];
 
 	if (query.search) {
 		filter.push({
@@ -90,15 +89,10 @@ export default async function Home({
 	}
 
 	const getGridItems = async (
-		offset: number = 0,
-		filter: {
-			key: string;
-			operator: string;
-			value: string;
-		}[] = []
+		offset: string | number | undefined
 	): Promise<[React.JSX.Element, number]> => {
 		'use server';
-		const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 + offset, 0);
+		const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 + Number(offset), 0);
 
 		const gridItems: Item[][] = Array.from({length: cols}, () => []);
 		items.forEach((item, i) => {
@@ -109,7 +103,8 @@ export default async function Home({
 			<>
 				{gridItems.map((itemCol, iCol) => {
 					return (
-						<div key={iCol} className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
+						<div key={iCol}
+						     className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}>
 							{itemCol.map((item) => {
 								return (
 									<div key={item.name} className="w-full">
@@ -121,7 +116,7 @@ export default async function Home({
 					);
 				})}
 			</>,
-			offset + 25
+			Number(offset) + 25
 		];
 	};
 
@@ -145,8 +140,7 @@ export default async function Home({
 					</div>
 					<hr className="block sm:hidden text-foreground/20"/>
 					<div className="w-full">
-						<LoadMore loadMoreAction={getGridItems} initialOffset={25}>
-						</LoadMore>
+						<LoadMore loadMoreAction={getGridItems} initialOffset={25}/>
 					</div>
 				</div>
 			</main>
