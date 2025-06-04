@@ -10,5 +10,5 @@ export default function NotFoundNotif() {
 		variant: 'solid',
 		timeout: 3000
 	});
-	return (<></>);
+	return <></>;
 }

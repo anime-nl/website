@@ -16,12 +16,14 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 	const router = useRouter();
 
 	const onAddToCart = () => {
-
 		if (!localStorage.getItem('cart'))
-			localStorage.setItem('cart', JSON.stringify({
-				items: [],
-				shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
-			}));
+			localStorage.setItem(
+				'cart',
+				JSON.stringify({
+					items: [],
+					shipping: {method: 1, carrier: 'PostNL Afhaalpunt', price: 9.85}
+				})
+			);
 		const cart = JSON.parse(localStorage.getItem('cart')!) as Cart;
 
 		let cartItem: number = -1;
@@ -82,9 +84,12 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 				<Card className="h-[50vh] sm:h-full">
 					<CardBody className="w-full h-full sm:w-2/3 mx-auto flex flex-col gap-4">
 						<div className="mx-auto flex gap-4">
-							<Button onPress={() => switchImage(-1)} variant="bordered"
-							        className="my-auto">&lt;</Button>
-							<Button onPress={() => switchImage(1)} variant="bordered" className="my-auto">&gt;</Button>
+							<Button onPress={() => switchImage(-1)} variant="bordered" className="my-auto">
+								&lt;
+							</Button>
+							<Button onPress={() => switchImage(1)} variant="bordered" className="my-auto">
+								&gt;
+							</Button>
 						</div>
 						<div className="mx-auto relative h-full w-full">
 							<Image
@@ -136,34 +141,51 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 				<div className="flex flex-col gap-4 w-full h-full py-8 sm:p-16">
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Categorie</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-							router.push(`/?categories=${props.item.item_group}`);
-						}}>
+						<Button
+							variant="bordered"
+							className="w-fit h-fit my-auto mx-auto"
+							onPress={() => {
+								router.push(`/?categories=${props.item.item_group}`);
+							}}
+						>
 							<p className="text-wrap py-2">{props.item.item_group}</p>
 						</Button>
 					</div>
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Character</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-							router.push(`/?characters=${props.item.custom_source}`);
-						}}><p
-							className="text-wrap py-2">
-							{props.item.custom_character}</p></Button>
+						<Button
+							variant="bordered"
+							className="w-fit h-fit my-auto mx-auto"
+							onPress={() => {
+								router.push(`/?characters=${props.item.custom_source}`);
+							}}
+						>
+							<p className="text-wrap py-2">{props.item.custom_character}</p>
+						</Button>
 					</div>
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Serie</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-							router.push(`/?series=${props.item.custom_source}`);
-						}}><p
-							className="text-wrap py-2">
-							{props.item.custom_source}</p></Button>
+						<Button
+							variant="bordered"
+							className="w-fit h-fit my-auto mx-auto"
+							onPress={() => {
+								router.push(`/?series=${props.item.custom_source}`);
+							}}
+						>
+							<p className="text-wrap py-2">{props.item.custom_source}</p>
+						</Button>
 					</div>
 					<div className="flex gap-4">
 						<p className="my-auto w-1/2 text-center">Fabrikant</p>
-						<Button variant="bordered" className="w-fit h-fit my-auto mx-auto" onPress={() => {
-							router.push(`/?manufacturers=${props.item.brand}`);
-						}}><p
-							className="text-wrap py-2">{props.item.brand}</p></Button>
+						<Button
+							variant="bordered"
+							className="w-fit h-fit my-auto mx-auto"
+							onPress={() => {
+								router.push(`/?manufacturers=${props.item.brand}`);
+							}}
+						>
+							<p className="text-wrap py-2">{props.item.brand}</p>
+						</Button>
 					</div>
 				</div>
 			</div>

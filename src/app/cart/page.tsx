@@ -15,8 +15,7 @@ export default function CartPage() {
 	});
 
 	useEffect(() => {
-		if (localStorage.getItem('cart'))
-			setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
+		if (localStorage.getItem('cart')) setCart(JSON.parse(localStorage.getItem('cart')!) as Cart);
 	}, []);
 
 	const updateCart = (id: string, value: number) => {
@@ -64,15 +63,16 @@ export default function CartPage() {
 		cartValue = {
 			total: total,
 			btw: total * 0.21,
-			shipping: cart.shipping?.method == 0
-				? 10.35
-				: cart.shipping?.method == 1
-					? 9.85
-					: cart.shipping?.method == 2
-						? 6.45
-						: cart.shipping?.method == 3
-							? 5.45
-							: 0
+			shipping:
+				cart.shipping?.method == 0
+					? 10.35
+					: cart.shipping?.method == 1
+						? 9.85
+						: cart.shipping?.method == 2
+							? 6.45
+							: cart.shipping?.method == 3
+								? 5.45
+								: 0
 		};
 	}
 
@@ -103,18 +103,18 @@ export default function CartPage() {
 											</Link>
 											{item.max_discount != 0 ? (
 												<span className="flex gap-4">
-														<p className="font-thin text-xl line-through">
-															€{(item.standard_rate * item.quantity).toFixed(2)}
-														</p>
-														<p className="font-thin text-xl text-red-500">
-															€
-															{(
-																item.standard_rate *
-																(1 - item.max_discount / 100) *
-																item.quantity
-															).toFixed(2)}
-														</p>
-													</span>
+													<p className="font-thin text-xl line-through">
+														€{(item.standard_rate * item.quantity).toFixed(2)}
+													</p>
+													<p className="font-thin text-xl text-red-500">
+														€
+														{(
+															item.standard_rate *
+															(1 - item.max_discount / 100) *
+															item.quantity
+														).toFixed(2)}
+													</p>
+												</span>
 											) : (
 												<p className="font-thin text-xl">
 													€{(item.standard_rate * item.quantity).toFixed(2)}
@@ -123,26 +123,26 @@ export default function CartPage() {
 											<div
 												className="my-2 mr-2 h-0.5 w-full bg-gradient-to-r from-foreground to-90% to-transparent"/>
 											<span className="flex gap-4">
-													{item.custom_is_preorder ? (
-														<Chip color="primary">
-															<p className="font-bold">Pre-order</p>
-														</Chip>
-													) : item.custom_current_stock > 0 ? (
-														<Chip color="success">
-															<p className="font-bold">Op Voorraad</p>
-														</Chip>
-													) : <Chip color="warning">
+												{item.custom_is_preorder ? (
+													<Chip color="primary">
+														<p className="font-bold">Pre-order</p>
+													</Chip>
+												) : item.custom_current_stock > 0 ? (
+													<Chip color="success">
+														<p className="font-bold">Op Voorraad</p>
+													</Chip>
+												) : (
+													<Chip color="warning">
 														<p className="font-bold">Binnen 7 dagen op voorraad</p>
-													</Chip>}
-												</span>
+													</Chip>
+												)}
+											</span>
 										</div>
 										<div className="h-fit my-auto">
 											<NumberInput
 												className="w-32"
 												minValue={0}
-												maxValue={
-													item.custom_is_preorder ? 1 : 50
-												}
+												maxValue={item.custom_is_preorder ? 1 : 50}
 												defaultValue={item.quantity}
 												onValueChange={(value) => updateCart(item.name, value)}
 											/>
@@ -155,11 +155,11 @@ export default function CartPage() {
 					<hr/>
 					<div
 						className="grid grid-rows-4 sm:grid-rows-1 sm:grid-cols-4 justify-between w-full text-center mx-auto gap-4">
-						<button
-							onClick={() => updateShippingMethod(0, 'PostNL Huisadres', 10.35)}
-						>
-							<Card aria-selected={cart.shipping.method == 0}
-							      className="border-2 border-transparent aria-selected:border-primary">
+						<button onClick={() => updateShippingMethod(0, 'PostNL Huisadres', 10.35)}>
+							<Card
+								aria-selected={cart.shipping.method == 0}
+								className="border-2 border-transparent aria-selected:border-primary"
+							>
 								<CardBody>
 									<div className="mx-auto w-32 h-32 relative mb-2">
 										<Image
@@ -176,11 +176,11 @@ export default function CartPage() {
 							</Card>
 						</button>
 
-						<button
-							onClick={() => updateShippingMethod(1, 'PostNL Afhaalpunt', 9.85)}
-						>
-							<Card aria-selected={cart.shipping.method == 1}
-							      className="border-2 border-transparent aria-selected:border-primary">
+						<button onClick={() => updateShippingMethod(1, 'PostNL Afhaalpunt', 9.85)}>
+							<Card
+								aria-selected={cart.shipping.method == 1}
+								className="border-2 border-transparent aria-selected:border-primary"
+							>
 								<CardBody>
 									<div className="mx-auto w-32 h-32 relative mb-2">
 										<Image
@@ -198,8 +198,10 @@ export default function CartPage() {
 						</button>
 
 						<button onClick={() => updateShippingMethod(2, 'DHL Huisadres', 6.45)}>
-							<Card aria-selected={cart.shipping.method == 2}
-							      className="border-2 border-transparent aria-selected:border-primary">
+							<Card
+								aria-selected={cart.shipping.method == 2}
+								className="border-2 border-transparent aria-selected:border-primary"
+							>
 								<CardBody>
 									<div className="mx-auto w-48 h-32 relative mb-2">
 										<Image
@@ -216,11 +218,11 @@ export default function CartPage() {
 							</Card>
 						</button>
 
-						<button
-							onClick={() => updateShippingMethod(3, 'DHL Afhaalpunt', 5.45)}
-						>
-							<Card aria-selected={cart.shipping.method == 3}
-							      className="border-2 border-transparent aria-selected:border-primary">
+						<button onClick={() => updateShippingMethod(3, 'DHL Afhaalpunt', 5.45)}>
+							<Card
+								aria-selected={cart.shipping.method == 3}
+								className="border-2 border-transparent aria-selected:border-primary"
+							>
 								<CardBody>
 									<div className="mx-auto w-48 h-32 relative mb-2">
 										<Image
@@ -248,10 +250,13 @@ export default function CartPage() {
 						<hr/>
 						<hr/>
 						<h2 className="row-span-2 text-xl font-bold">Totaal:</h2>
-						<h2 className="row-span-2 text-xl font-bold">€{(cartValue.total + cartValue.shipping).toFixed(2)}</h2>
+						<h2 className="row-span-2 text-xl font-bold">
+							€{(cartValue.total + cartValue.shipping).toFixed(2)}
+						</h2>
 						<Link href="/checkout" className="w-full col-span-2 my-2 mt-2">
-							<Button color="primary" className="w-full"><p
-								className="text-3xl">Betalen</p></Button>
+							<Button color="primary" className="w-full">
+								<p className="text-3xl">Betalen</p>
+							</Button>
 						</Link>
 					</div>
 				</div>

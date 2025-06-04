@@ -1,3 +1,5 @@
+import Item from '@/types/item';
+
 export default interface OrderData {
 	form: {
 		firstName: string;
@@ -18,4 +20,9 @@ export default interface OrderData {
 	}[];
 	shipping: number;
 	method: string;
+	orderId?: string;
+	items?: {
+		item: Item;
+		qty: number;
+	}[];
 }

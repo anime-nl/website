@@ -25,7 +25,9 @@ export default function OrderPage() {
 					</h1>
 					<Form onSubmit={onSubmit} className="sm:flex-row">
 						<Input name="orderId" type="text" placeholder="Order Nummer"/>
-						<Button className="w-full sm:w-fit" type="submit">Zoek</Button>
+						<Button className="w-full sm:w-fit" type="submit">
+							Zoek
+						</Button>
 					</Form>
 				</div>
 			</main>

@@ -24,7 +24,8 @@ const crashbow = localFont({
 
 export const metadata: Metadata = {
 	title: 'Anime NL',
-	description: 'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
+	description:
+		'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
 	icons: {
 		icon: 'https://animenl.nl/android-chrome-512x512.png',
 		apple: 'https://animenl.nl/apple-touch-icon.png'
@@ -109,9 +110,11 @@ export default async function RootLayout({
 							Over ons
 						</Link>
 					</p>
-					<p><Link href="/sitemap.xml" className="text-foreground">
-						Sitemap
-					</Link></p>
+					<p>
+						<Link href="/sitemap.xml" className="text-foreground">
+							Sitemap
+						</Link>
+					</p>
 				</div>
 			</div>
 		</Providers>

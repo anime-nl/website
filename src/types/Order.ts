@@ -22,33 +22,33 @@ export interface Order {
 	payment_id: string;
 	doctype: string;
 	items: {
-		name: string
-		owner: string
-		creation: string
-		modified: string
-		modified_by: string
-		docstatus: number
-		idx: number
-		item_code: string
-		schedule_date: string
-		image: string
-		qty: number
-		stock_uom: string
-		uom: string
-		conversion_factor: number
-		stock_qty: number
-		min_order_qty: number
-		projected_qty: number
-		actual_qty: number
-		ordered_qty: number
-		received_qty: number
-		rate: number
-		price_list_rate: number
-		amount: number
-		page_break: number
-		parent: string
-		parentfield: string
-		parenttype: string
-		doctype: string
+		name: string;
+		owner: string;
+		creation: string;
+		modified: string;
+		modified_by: string;
+		docstatus: number;
+		idx: number;
+		item_code: string;
+		schedule_date: string;
+		image: string;
+		qty: number;
+		stock_uom: string;
+		uom: string;
+		conversion_factor: number;
+		stock_qty: number;
+		min_order_qty: number;
+		projected_qty: number;
+		actual_qty: number;
+		ordered_qty: number;
+		received_qty: number;
+		rate: number;
+		price_list_rate: number;
+		amount: number;
+		page_break: number;
+		parent: string;
+		parentfield: string;
+		parenttype: string;
+		doctype: string;
 	}[];
 }

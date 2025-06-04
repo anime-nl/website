@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
 				hostname: 'www.dhlexpress.nl'
 			}
 		]
+	},
+	webpack: config => {
+		// Fix webpack errors with handlebar
+		config.resolve.alias = {
+			...config.resolve.alias,
+			'handlebars/runtime': 'handlebars/dist/cjs/handlebars.runtime',
+			'handlebars': 'handlebars/dist/cjs/handlebars.runtime'
+		};
+		return config;
 	}
 };
 
