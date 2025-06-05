@@ -6,15 +6,9 @@ import Item from '@/types/item';
 
 const cols = 5;
 
-const filter: {
-	key: string;
-	operator: string;
-	value: string;
-}[] = [];
-
 export default async function Home({
-	                                   searchParams
-                                   }: {
+	searchParams,
+}: {
 	searchParams: Promise<{
 		search?: string;
 		series?: string;
@@ -32,11 +26,17 @@ export default async function Home({
 	const manufacturers = (await ErpNextHelper.getItemBrands()) ?? [];
 	const characters = (await ErpNextHelper.getCharacters()) ?? [];
 
+	const filter: {
+		key: string;
+		operator: string;
+		value: string;
+	}[] = [];
+
 	if (query.search) {
 		filter.push({
 			key: 'item_name',
 			operator: 'like',
-			value: `%${query.search}%`
+			value: `%${query.search}%`,
 		});
 	}
 
@@ -44,7 +44,7 @@ export default async function Home({
 		filter.push({
 			key: 'custom_source',
 			operator: 'in',
-			value: query.series
+			value: query.series,
 		});
 	}
 
@@ -52,7 +52,7 @@ export default async function Home({
 		filter.push({
 			key: 'item_group',
 			operator: 'in',
-			value: query.categories
+			value: query.categories,
 		});
 	}
 
@@ -60,7 +60,7 @@ export default async function Home({
 		filter.push({
 			key: 'brand',
 			operator: 'in',
-			value: query.manufacturers
+			value: query.manufacturers,
 		});
 	}
 
@@ -68,7 +68,7 @@ export default async function Home({
 		filter.push({
 			key: 'custom_character',
 			operator: 'in',
-			value: query.characters
+			value: query.characters,
 		});
 	}
 
@@ -78,23 +78,24 @@ export default async function Home({
 			{
 				key: 'standard_rate',
 				operator: '>=',
-				value: priceRange[0]
+				value: priceRange[0],
 			},
 			{
 				key: 'standard_rate',
 				operator: '<=',
-				value: priceRange[1]
-			}
+				value: priceRange[1],
+			},
 		);
 	}
 
-	const getGridItems = async (
-		offset: string | number | undefined
-	): Promise<[React.JSX.Element, number]> => {
+	async function getGridItems(
+		offset: string | number | undefined,
+		currentFilter: typeof filter,
+	): Promise<[React.JSX.Element, number]> {
 		'use server';
-		const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 + Number(offset), 0);
+		const items: Item[] = await ErpNextHelper.getItemsByQuery(currentFilter, 25 + Number(offset), 0);
 
-		const gridItems: Item[][] = Array.from({length: cols}, () => []);
+		const gridItems: Item[][] = Array.from({ length: cols }, () => []);
 		items.forEach((item, i) => {
 			gridItems[i % cols].push(item);
 		});
@@ -103,12 +104,14 @@ export default async function Home({
 			<>
 				{gridItems.map((itemCol, iCol) => {
 					return (
-						<div key={iCol}
-						     className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}>
+						<div
+							key={iCol}
+							className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}
+						>
 							{itemCol.map((item) => {
 								return (
 									<div key={item.name} className="w-full">
-										<ItemCard item={item}/>
+										<ItemCard item={item} />
 									</div>
 								);
 							})}
@@ -116,9 +119,9 @@ export default async function Home({
 					);
 				})}
 			</>,
-			Number(offset) + 25
+			Number(offset) + 25,
 		];
-	};
+	}
 
 	return (
 		<div className="dark mx-8 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
@@ -128,7 +131,7 @@ export default async function Home({
 				>
 					Anime NL
 				</h1>
-				<hr className="text-white/15 w-full"/>
+				<hr className="text-white/15 w-full" />
 				<div className="flex flex-col sm:flex-row w-full gap-4">
 					<div className="w-fit mx-auto">
 						<ItemSearch
@@ -138,9 +141,9 @@ export default async function Home({
 							characters={characters}
 						/>
 					</div>
-					<hr className="block sm:hidden text-foreground/20"/>
+					<hr className="block sm:hidden text-foreground/20" />
 					<div className="w-full">
-						<LoadMore loadMoreAction={getGridItems} initialOffset={25}/>
+						<LoadMore loadMoreAction={getGridItems} initialOffset={25} filter={filter} />
 					</div>
 				</div>
 			</main>

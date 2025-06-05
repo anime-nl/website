@@ -1,29 +1,44 @@
 'use client';
 import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
+import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
-type loadMoreAction = (offset: string | number | undefined) => Promise<readonly [React.JSX.Element, number | null]>
+type Filter = {
+	key: string;
+	operator: string;
+	value: string;
+}[];
+
+type loadMoreAction = (
+	offset: string | number | undefined,
+	filter: Filter
+) => Promise<readonly [React.JSX.Element, number | null]>;
 
 const LoadMore = ({
 	                  initialOffset,
-	                  loadMoreAction
+	                  loadMoreAction,
+	                  filter
                   }: React.PropsWithChildren<{
 	initialOffset: number;
 	loadMoreAction: loadMoreAction;
+	filter: Filter;
 }>) => {
 	const ref = React.useRef<HTMLButtonElement>(null);
 	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[]>([]);
+	const searchParams = useSearchParams();
 
 	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
 	const [scrollLoad] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
 
+	console.log(currentOffsetRef);
+
 	const loadMore = React.useCallback(
 		async (abortController?: AbortController) => {
 			setLoading(true);
 
-			loadMoreAction(currentOffsetRef.current)
+			loadMoreAction(currentOffsetRef.current, filter)
 				.then(([node, next]) => {
 					if (abortController?.signal.aborted) return;
 
@@ -42,8 +57,14 @@ const LoadMore = ({
 				})
 				.finally(() => setLoading(false));
 		},
-		[loadMoreAction]
+		[loadMoreAction, filter]
 	);
+
+	// Reset and reload when search parameters change
+	React.useEffect(() => {
+		currentOffsetRef.current = initialOffset;
+		loadMore();
+	}, [searchParams, initialOffset, loadMore]);
 
 	React.useEffect(() => {
 		const signal = new AbortController();
@@ -74,8 +95,7 @@ const LoadMore = ({
 				{loadMoreNodes}
 			</div>
 			<div className="overflow-hidden relative">
-				<Button ref={ref}
-				        className="absolute w-screen h-screen bottom-0 invisible">
+				<Button ref={ref} className="absolute w-screen h-screen bottom-0 invisible">
 					{loading ? 'Loading...' : 'Load More'}
 				</Button>
 			</div>
