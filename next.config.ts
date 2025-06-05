@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
 			}
 		]
 	},
-	webpack: config => {
+	webpack: (config) => {
 		// Fix webpack errors with handlebar
 		config.resolve.alias = {
 			...config.resolve.alias,

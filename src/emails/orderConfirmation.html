@@ -1,267 +1,266 @@
 <!doctype html>
 <html lang="nl">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Orderbevestiging</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            font-family: "Roboto Light", sans-serif;
-            color: #ffffff;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Orderbevestiging</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #121212;
+				font-family: 'Roboto Light', sans-serif;
+				color: #ffffff;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
+			.container {
+				width: 100%;
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 20px;
+				background-color: #1e1e1e;
+				border-radius: 8px;
+				box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+			}
 
-        .header {
-            text-align: center;
-            padding-bottom: 20px;
-        }
+			.header {
+				text-align: center;
+				padding-bottom: 20px;
+			}
 
-        .header h1 {
-            color: #0ff;
-            margin: 0;
-            font-size: 28px;
-        }
+			.header h1 {
+				color: #0ff;
+				margin: 0;
+				font-size: 28px;
+			}
 
-        .content {
-            color: #ededed;
-            padding: 20px;
-            border-top: 1px solid #333;
-            border-bottom: 1px solid #333;
-        }
+			.content {
+				color: #ededed;
+				padding: 20px;
+				border-top: 1px solid #333;
+				border-bottom: 1px solid #333;
+			}
 
-        .content h2 {
-            color: #c0f;
-            font-size: 22px;
-            margin-top: 0;
-        }
+			.content h2 {
+				color: #c0f;
+				font-size: 22px;
+				margin-top: 0;
+			}
 
-        .content p {
-            line-height: 1.6;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
+			.content p {
+				line-height: 1.6;
+				font-size: 16px;
+				margin-bottom: 15px;
+			}
 
-        .order-details {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-        }
+			.order-details {
+				width: 100%;
+				margin-bottom: 20px;
+				border-collapse: collapse;
+			}
 
-        .order-details th,
-        .order-details td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #444;
-        }
+			.order-details th,
+			.order-details td {
+				padding: 12px;
+				text-align: left;
+				border-bottom: 1px solid #444;
+			}
 
-        .order-details th {
-            color: #0ff;
-            font-weight: bold;
-            background-color: #2a2a2a;
-        }
+			.order-details th {
+				color: #0ff;
+				font-weight: bold;
+				background-color: #2a2a2a;
+			}
 
-        .order-details td {
-            color: #ffffff;
-        }
+			.order-details td {
+				color: #ffffff;
+			}
 
-        .order-details .total-row td {
-            font-weight: bold;
-            font-size: 18px;
-            color: #c0f;
-        }
+			.order-details .total-row td {
+				font-weight: bold;
+				font-size: 18px;
+				color: #c0f;
+			}
 
-        .item-list {
-            list-style: none;
-            padding: 0;
-        }
+			.item-list {
+				list-style: none;
+				padding: 0;
+			}
 
-        .item-list li {
-            padding: 8px 0;
-            border-bottom: 1px dashed #444;
-        }
+			.item-list li {
+				padding: 8px 0;
+				border-bottom: 1px dashed #444;
+			}
 
-        .item-list li:last-child {
-            border-bottom: none;
-        }
+			.item-list li:last-child {
+				border-bottom: none;
+			}
 
-        .footer {
-            text-align: center;
-            padding-top: 20px;
-            font-size: 12px;
-            color: #777;
-        }
+			.footer {
+				text-align: center;
+				padding-top: 20px;
+				font-size: 12px;
+				color: #777;
+			}
 
-        .footer a {
-            color: #0ff;
-            text-decoration: none;
-        }
+			.footer a {
+				color: #0ff;
+				text-decoration: none;
+			}
 
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 20px;
-            background-color: #0ff;
-            color: #121212;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-        }
+			.button {
+				display: inline-block;
+				padding: 12px 25px;
+				margin-top: 20px;
+				background-color: #0ff;
+				color: #121212;
+				text-decoration: none;
+				border-radius: 5px;
+				font-weight: bold;
+				font-size: 16px;
+			}
 
-        .button-alt {
-            background-color: #c0f;
-        }
+			.button-alt {
+				background-color: #c0f;
+			}
 
-        /* Responsive stijlen */
-        @media screen and (max-width: 600px) {
-            .container {
-                width: 100% !important;
-                padding: 10px !important;
-                border-radius: 0 !important;
-            }
+			/* Responsive stijlen */
+			@media screen and (max-width: 600px) {
+				.container {
+					width: 100% !important;
+					padding: 10px !important;
+					border-radius: 0 !important;
+				}
 
-            .content {
-                padding: 15px !important;
-            }
+				.content {
+					padding: 15px !important;
+				}
 
-            .header h1 {
-                font-size: 24px !important;
-            }
+				.header h1 {
+					font-size: 24px !important;
+				}
 
-            .content h2 {
-                font-size: 20px !important;
-            }
+				.content h2 {
+					font-size: 20px !important;
+				}
 
-            .content p {
-                font-size: 14px !important;
-            }
+				.content p {
+					font-size: 14px !important;
+				}
 
-            .order-details th,
-            .order-details td {
-                padding: 8px !important;
-                font-size: 14px !important;
-            }
+				.order-details th,
+				.order-details td {
+					padding: 8px !important;
+					font-size: 14px !important;
+				}
 
-            .button {
-                padding: 10px 20px !important;
-                font-size: 14px !important;
-            }
+				.button {
+					padding: 10px 20px !important;
+					font-size: 14px !important;
+				}
 
-            .logo {
-                font-size: 72px;
-                background: -webkit-linear-gradient(0deg, #cc00ff, #00ffff);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-        }
-    </style>
-</head>
-<body>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #121212">
-    <tr>
-        <td align="center" valign="top">
-            <table class="container" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td class="header">
-                        <h1>Bedankt voor je bestelling!</h1>
-                    </td>
-                </tr>
-                <!-- Content -->
-                <tr>
-                    <td class="content">
-                        <h2>Hallo {{klantnaam}},</h2>
-                        <p>
-                            We hebben je bestelling met ordernummer <strong>#{{ordernummer}}</strong> succesvol
-                            ontvangen en zijn deze nu aan het verwerken. Hieronder vind je een overzicht van je
-                            bestelling:
-                        </p>
+				.logo {
+					font-size: 72px;
+					background: -webkit-linear-gradient(0deg, #cc00ff, #00ffff);
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #121212">
+			<tr>
+				<td align="center" valign="top">
+					<table class="container" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td class="header">
+								<h1>Bedankt voor je bestelling!</h1>
+							</td>
+						</tr>
+						<!-- Content -->
+						<tr>
+							<td class="content">
+								<h2>Hallo {{klantnaam}},</h2>
+								<p>
+									We hebben je bestelling met ordernummer <strong>#{{ordernummer}}</strong> succesvol
+									ontvangen en zijn deze nu aan het verwerken. Hieronder vind je een overzicht van je
+									bestelling:
+								</p>
 
-                        <h3>Bestelgegevens:</h3>
-                        <table class="order-details" width="100%">
-                            <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Aantal</th>
-                                <th class="product-price">Prijs per stuk</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{#each producten}}
-                            <tr>
-                                <td>{{this.item.item_name}}</td>
-                                <td>{{this.qty}}</td>
-                                <td class="product-price">€{{this.item.standard_rate}}</td>
-                            </tr>
-                            {{/each}}
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="2" style="text-align: right;"><strong>Bijkomende kosten (zoals
-                                    verzendkosten):</strong></td>
-                                <td class="product-price"><strong>€{{bijkomende_kosten}}</strong></td>
-                            </tr>
-                            <tr class="total-row">
-                                <td colspan="2" style="text-align: right;"><strong>Totaal:</strong></td>
-                                <td class="product-price"><strong>€{{totaalbedrag}}</strong></td>
-                            </tr>
-                            </tfoot>
-                        </table>
+								<h3>Bestelgegevens:</h3>
+								<table class="order-details" width="100%">
+									<thead>
+										<tr>
+											<th>Product</th>
+											<th>Aantal</th>
+											<th class="product-price">Prijs per stuk</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#each producten}}
+										<tr>
+											<td>{{this.item.item_name}}</td>
+											<td>{{this.qty}}</td>
+											<td class="product-price">€{{this.item.standard_rate}}</td>
+										</tr>
+										{{/each}}
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2" style="text-align: right">
+												<strong>Bijkomende kosten (zoals verzendkosten):</strong>
+											</td>
+											<td class="product-price"><strong>€{{bijkomende_kosten}}</strong></td>
+										</tr>
+										<tr class="total-row">
+											<td colspan="2" style="text-align: right"><strong>Totaal:</strong></td>
+											<td class="product-price"><strong>€{{totaalbedrag}}</strong></td>
+										</tr>
+									</tfoot>
+								</table>
 
-                        <h3>Verzendadres:</h3>
-                        <p>
-                            {{verzendnaam}}<br/>
-                            {{verzendadres}}<br/>
-                            {{postcode}} {{plaats}}
-                        </p>
+								<h3>Verzendadres:</h3>
+								<p>
+									{{verzendnaam}}<br />
+									{{verzendadres}}<br />
+									{{postcode}} {{plaats}}
+								</p>
 
-                        <hr/>
+								<hr />
 
-                        <p>
-                            We streven ernaar je bestelling zo snel mogelijk te verzenden. Je ontvangt een
-                            aparte e-mail zodra je pakket onderweg is.
-                        </p>
-                        <p>
-                            Mocht je vragen hebben over je bestelling, neem dan gerust contact met ons op via
-                            <a href="mailto:info@animenl.nl" style="color: #0ff"
-                            >info@animenl.nl</a
-                            >
-                            of antwoord op deze e-mail.
-                        </p>
+								<p>
+									We streven ernaar je bestelling zo snel mogelijk te verzenden. Je ontvangt een
+									aparte e-mail zodra je pakket onderweg is.
+								</p>
+								<p>
+									Mocht je vragen hebben over je bestelling, neem dan gerust contact met ons op via
+									<a href="mailto:info@animenl.nl" style="color: #0ff">info@animenl.nl</a>
+									of antwoord op deze e-mail.
+								</p>
 
-                        <div style="text-align: center">
-                            <a href="{{webshop_url}}/order/{{ordernummer}}" class="button"
-                            >Bekijk je bestelling online</a
-                            >
-                        </div>
-                    </td>
-                </tr>
-                <!-- Footer -->
-                <tr>
-                    <td class="footer">
-                        <p>&copy; {{JAAR}} {{BEDRIJFSNAAM}}. Alle rechten voorbehouden.</p>
-                        <p>
-                            <a href="{{webshop_url}}">Bezoek onze webshop</a> |
-                            <a href="{{retour_url}}">Retourbeleid</a>
-                        </p>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-</body>
+								<div style="text-align: center">
+									<a href="{{webshop_url}}/order/{{ordernummer}}" class="button"
+										>Bekijk je bestelling online</a
+									>
+								</div>
+							</td>
+						</tr>
+						<!-- Footer -->
+						<tr>
+							<td class="footer">
+								<p>&copy; {{JAAR}} {{BEDRIJFSNAAM}}. Alle rechten voorbehouden.</p>
+								<p>
+									<a href="{{webshop_url}}">Bezoek onze webshop</a> |
+									<a href="{{retour_url}}">Retourbeleid</a>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
 </html>

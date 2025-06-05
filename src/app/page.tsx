@@ -1,5 +1,6 @@
 import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
-import InfiniteScroller from '@/components/infiniteScroller';
+import LoadMore from '@/components/infiniteScroller';
+import ItemCard from '@/components/itemCard';
 import ItemSearch from '@/components/itemSearch';
 import Item from '@/types/item';
 
@@ -87,12 +88,40 @@ export default async function Home({
 		);
 	}
 
-	const items: Item[] = await ErpNextHelper.getItemsByQuery(filter, 25 * Number(query.page ?? 1), 0);
+	async function getGridItems(
+		offset: string | number | undefined,
+		currentFilter: typeof filter,
+	): Promise<[React.JSX.Element, number]> {
+		'use server';
+		const items: Item[] = await ErpNextHelper.getItemsByQuery(currentFilter, 25 + Number(offset), 0);
 
-	const gridItems: Item[][] = Array.from({ length: cols }, () => []);
-	items.forEach((item, i) => {
-		gridItems[i % cols].push(item);
-	});
+		const gridItems: Item[][] = Array.from({ length: cols }, () => []);
+		items.forEach((item, i) => {
+			gridItems[i % cols].push(item);
+		});
+
+		return [
+			<>
+				{gridItems.map((itemCol, iCol) => {
+					return (
+						<div
+							key={iCol}
+							className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}
+						>
+							{itemCol.map((item) => {
+								return (
+									<div key={item.name} className="w-full">
+										<ItemCard item={item} />
+									</div>
+								);
+							})}
+						</div>
+					);
+				})}
+			</>,
+			Number(offset) + 25,
+		];
+	}
 
 	return (
 		<div className="dark mx-8 sm:mx-16 pt-16 min-h-screen font-[family-name:var(--font-geist-sans)]">
@@ -114,9 +143,7 @@ export default async function Home({
 					</div>
 					<hr className="block sm:hidden text-foreground/20" />
 					<div className="w-full">
-						<div id="item-cols" className="grid grid-cols-1 sm:grid-cols-5 gap-0 sm:gap-8 w-full">
-							<InfiniteScroller items={gridItems} filter={filter} />
-						</div>
+						<LoadMore loadMoreAction={getGridItems} initialOffset={25} filter={filter} />
 					</div>
 				</div>
 			</main>

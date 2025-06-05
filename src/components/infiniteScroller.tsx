@@ -1,61 +1,104 @@
 'use client';
-
-import ItemCard from '@/components/itemCard';
-import Item from '@/types/item';
+import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useSearchParams } from 'next/navigation';
+import * as React from 'react';
 
-export default function InfiniteScroller(props: {
-	items: Item[][];
-	filter: {
-		key: string;
-		operator: string;
-		value: string;
-	}[];
-}) {
-	const router = useRouter();
+type Filter = {
+	key: string;
+	operator: string;
+	value: string;
+}[];
+
+type loadMoreAction = (
+	offset: string | number | undefined,
+	filter: Filter
+) => Promise<readonly [React.JSX.Element, number | null]>;
+
+const LoadMore = ({
+	                  initialOffset,
+	                  loadMoreAction,
+	                  filter
+                  }: React.PropsWithChildren<{
+	initialOffset: number;
+	loadMoreAction: loadMoreAction;
+	filter: Filter;
+}>) => {
+	const ref = React.useRef<HTMLButtonElement>(null);
+	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[]>([]);
 	const searchParams = useSearchParams();
 
-	const currentParams = useMemo(() => {
-		return new URLSearchParams(searchParams.toString());
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
-	const currentPage = Number(currentParams.get('page') ?? 1);
-	const {ref, inView} = useInView();
+	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
+	const [scrollLoad] = React.useState(true);
+	const [loading, setLoading] = React.useState(false);
 
-	useEffect(() => {
-		const scroll = Number(sessionStorage.getItem('scroll') ?? 0);
+	console.log(currentOffsetRef);
 
-		window.scroll(0, scroll);
-	}, [currentPage]);
+	const loadMore = React.useCallback(
+		async (abortController?: AbortController) => {
+			setLoading(true);
 
-	useEffect(() => {
-		if (inView && currentPage * 25 <= props.items[4].length * 5) {
-			currentParams.set('page', (currentPage + 1).toFixed(0));
-			sessionStorage.setItem('scroll', window.scrollY.toString());
+			loadMoreAction(currentOffsetRef.current, filter)
+				.then(([node, next]) => {
+					if (abortController?.signal.aborted) return;
 
-			// window.location.href = `/?${currentParams.toString()}`;
-			router.push(`?${currentParams.toString()}`);
+					setLoadMoreNodes(() => {
+						return [node];
+					});
+
+					if (next === null) {
+						currentOffsetRef.current ??= undefined;
+						return;
+					}
+
+					currentOffsetRef.current = next;
+				})
+				.catch(() => {
+				})
+				.finally(() => setLoading(false));
+		},
+		[loadMoreAction, filter]
+	);
+
+	// Reset and reload when search parameters change
+	React.useEffect(() => {
+		currentOffsetRef.current = initialOffset;
+		loadMore();
+	}, [searchParams, initialOffset, loadMore]);
+
+	React.useEffect(() => {
+		const signal = new AbortController();
+
+		const element = ref.current;
+
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting && element?.disabled === false) {
+				loadMore(signal);
+			}
+		});
+
+		if (element && scrollLoad) {
+			observer.observe(element);
 		}
-	}, [inView, currentPage, props.items, currentParams, router]);
+
+		return () => {
+			signal.abort();
+			if (element) {
+				observer.unobserve(element);
+			}
+		};
+	}, [loadMore, scrollLoad]);
 
 	return (
 		<>
-			{props.items.map((itemCol, iCol) => {
-				return (
-					<div key={iCol} className={`flex flex-col gap-4 w-full col-start-1 sm:col-start-${iCol + 1}`}>
-						{itemCol.map((item, i) => {
-							return (
-								<div key={item.name} className="w-full">
-									{itemCol.length - 2 == i && iCol == 0 ? <div ref={ref}></div> : undefined}
-									<ItemCard item={item}/>
-								</div>
-							);
-						})}
-					</div>
-				);
-			})}
+			<div id="item-cols" className="grid grid-cols-5 gap-0 sm:gap-8 w-full">
+				{loadMoreNodes}
+			</div>
+			<div className="overflow-hidden relative">
+				<Button ref={ref} className="absolute w-screen h-screen bottom-0 invisible">
+					{loading ? 'Loading...' : 'Load More'}
+				</Button>
+			</div>
 			<div className="sm:col-span-5 flex flex-col gap-4 w-full mt-4 sm:mt-0">
 				<h1 className="text-center text-2xl w-fit mx-auto font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
 					Niet gevonden waar je naar zocht?
@@ -70,4 +113,6 @@ export default function InfiniteScroller(props: {
 			</div>
 		</>
 	);
-}
+};
+
+export default LoadMore;
