@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
 			}
 		]
 	},
+	experimental: {
+		serverActions: {
+			allowedOrigins: ['https://animenl.nl', '0.0.0.0:8652'],
+		},
+	},
 	webpack: (config) => {
 		// Fix webpack errors with handlebar
 		config.resolve.alias = {
