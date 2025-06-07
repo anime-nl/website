@@ -2,7 +2,7 @@ import { Providers } from '@/app/providers';
 import Nav from '@/components/nav';
 import { Link } from '@heroui/link';
 import './globals.css';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
 import React from 'react';
@@ -23,12 +23,43 @@ const crashbow = localFont({
 });
 
 export const metadata: Metadata = {
-	title: 'Anime NL',
+	metadataBase: new URL('https://animenl.nl'),
+	title: {
+		default: 'Anime NL',
+		template: 'Anime NL | %s'
+	},
 	description:
 		'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
 	icons: {
 		icon: 'https://animenl.nl/android-chrome-512x512.png',
 		apple: 'https://animenl.nl/apple-touch-icon.png'
+	},
+	keywords: ['anime', 'manga', 'cute', 'merch', 'kawaii', 'anime merch', 'keychains', 'plushies', 'otaku', 'anime figures', 'figures'],
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			noimageindex: false,
+			'max-video-preview': -1,
+			'max-image-preview': 'large',
+			'max-snippet': -1
+		}
+	},
+	openGraph: {
+		title: {
+			default: 'Anime NL',
+			template: 'Anime NL | %s'
+		},
+		description:
+			'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
+		url: new URL('https://animenl.nl'),
+		siteName: 'Anime NL',
+		images: 'og-image.png',
+		locale: 'nl-NL',
+		type: 'website'
 	}
 };
 

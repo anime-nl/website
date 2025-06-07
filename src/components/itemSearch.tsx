@@ -17,26 +17,29 @@ export default function ItemSearch(props: {
 	const searchParams = useSearchParams();
 
 	const [selectedProductStatus, setSelectedProductStatus] = useState<SharedSelection>(
-		new Set(['Pre-order', 'Op voorraad'])
+		searchParams.has('status') ? new Set(searchParams.get('status')?.split(',') ?? new Set()) : new Set()
 	);
 	const [selectedSeries, setSelectedSeries] = useState<SharedSelection>(
-		new Set(searchParams.get('series')?.split(',')) ?? new Set()
+		searchParams.has('series') ? new Set(searchParams.get('series')?.split(',') ?? new Set()) : new Set()
 	);
 	const [selectedCategories, setSelectedCategories] = useState<SharedSelection>(
-		new Set(searchParams.get('categories')?.split(',')) ?? new Set()
+		searchParams.has('categories') ? new Set(searchParams.get('categories')?.split(',') ?? new Set()) : new Set()
 	);
 	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(
-		new Set(searchParams.get('manufacturers')?.split(',')) ?? new Set()
+		searchParams.has('manufacturers') ? new Set(searchParams.get('manufacturers')?.split(',') ?? new Set()) : new Set()
 	);
 	const [selectedCharacters, setSelectedCharacters] = useState<SharedSelection>(
-		new Set(searchParams.get('characters')?.split(',')) ?? new Set()
+		searchParams.has('characters') ? new Set(searchParams.get('characters')?.split(',') ?? new Set()) : new Set()
 	);
-	const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') ?? '');
+	const [searchTerm, setSearchTerm] = useState<string>(
+		searchParams.has('search') ? searchParams.get('search') ?? '' : ''
+	);
 	const [priceRange, setPriceRange] = useState<number[]>(
-		searchParams
-			.get('priceRange')
-			?.split(',')
-			.map((_) => Number(_)) ?? [0, 500]
+		searchParams.has('priceRange') ?
+			searchParams
+				.get('priceRange')
+				?.split(',')
+				.map((_) => Number(_)) ?? [0, 500] : [0, 500]
 	);
 	const queryTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
@@ -101,6 +104,14 @@ export default function ItemSearch(props: {
 		[updateQueryParam]
 	);
 
+	const onSelectedProductStatusChanged = useCallback(
+		(keys: SharedSelection) => {
+			updateQueryParam('status', Array.from(keys));
+			setSelectedProductStatus(keys);
+		},
+		[updateQueryParam]
+	);
+
 	const onCategoryChanged = useCallback(
 		(keys: SharedSelection) => {
 			updateQueryParam('categories', Array.from(keys));
@@ -135,7 +146,7 @@ export default function ItemSearch(props: {
 					selectedKeys={selectedProductStatus}
 					selectionMode="multiple"
 					variant="flat"
-					onSelectionChange={setSelectedProductStatus}
+					onSelectionChange={onSelectedProductStatusChanged}
 				>
 					<ListboxItem key="Pre-order">Pre-order</ListboxItem>
 					<ListboxItem key="Op voorraad">Op voorraad</ListboxItem>

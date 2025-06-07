@@ -4,14 +4,26 @@ import ItemTable from '@/components/ItemTable';
 import { Card, CardBody } from '@heroui/card';
 import { Link } from '@heroui/link';
 import createMollieClient from '@mollie/api-client';
+import { Metadata } from 'next';
 
-export default async function PaymentSuccessPage({
-	                                                 params,
-	                                                 searchParams
-                                                 }: {
+type Props = {
 	params: Promise<{ orderId: string }>;
 	searchParams: Promise<{ clear?: boolean }>;
-}) {
+};
+
+export async function generateMetadata(
+	{params}: Props
+): Promise<Metadata> {
+	const {orderId} = await params;
+
+	return {
+		title: `Order ${orderId}`,
+		description: `Order ${orderId}`
+	};
+
+}
+
+export default async function PaymentSuccessPage({params, searchParams}: Props) {
 	const {orderId} = await params;
 	const {clear} = await searchParams;
 
