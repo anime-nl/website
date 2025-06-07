@@ -2,6 +2,7 @@ import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
 import OrderData from '@/types/orderData';
 import { Link } from '@heroui/link';
 import createMollieClient, { Locale, PaymentMethod } from '@mollie/api-client';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 const errorHTML = () => {
@@ -18,7 +19,14 @@ const errorHTML = () => {
 	);
 };
 
-export default async function PaymentPage({searchParams}: { searchParams: Promise<{ data: string }> }) {
+type Props = { searchParams: Promise<{ data: string }> }
+
+export const metadata: Metadata = {
+	title: 'Betaalen',
+	description: 'Betalingen op Anime NL worden verzorgd door Mollie'
+};
+
+export default async function PaymentPage({searchParams}: Props) {
 	const {data} = await searchParams;
 	const mollieClient = createMollieClient({apiKey: process.env.MOLLIE_KEY as string});
 
