@@ -7,8 +7,8 @@ import Item from '@/types/item';
 const cols = 5;
 
 export default async function Home({
-	searchParams,
-}: {
+	                                   searchParams
+                                   }: {
 	searchParams: Promise<{
 		search?: string;
 		series?: string;
@@ -17,6 +17,7 @@ export default async function Home({
 		characters?: string;
 		priceRange?: string;
 		page?: string;
+		status?: string;
 	}>;
 }) {
 	const query = await searchParams;
@@ -36,7 +37,7 @@ export default async function Home({
 		filter.push({
 			key: 'item_name',
 			operator: 'like',
-			value: `%${query.search}%`,
+			value: `%${query.search}%`
 		});
 	}
 
@@ -44,7 +45,7 @@ export default async function Home({
 		filter.push({
 			key: 'custom_source',
 			operator: 'in',
-			value: query.series,
+			value: query.series
 		});
 	}
 
@@ -52,7 +53,7 @@ export default async function Home({
 		filter.push({
 			key: 'item_group',
 			operator: 'in',
-			value: query.categories,
+			value: query.categories
 		});
 	}
 
@@ -60,7 +61,7 @@ export default async function Home({
 		filter.push({
 			key: 'brand',
 			operator: 'in',
-			value: query.manufacturers,
+			value: query.manufacturers
 		});
 	}
 
@@ -68,7 +69,7 @@ export default async function Home({
 		filter.push({
 			key: 'custom_character',
 			operator: 'in',
-			value: query.characters,
+			value: query.characters
 		});
 	}
 
@@ -78,24 +79,48 @@ export default async function Home({
 			{
 				key: 'standard_rate',
 				operator: '>=',
-				value: priceRange[0],
+				value: priceRange[0]
 			},
 			{
 				key: 'standard_rate',
 				operator: '<=',
-				value: priceRange[1],
-			},
+				value: priceRange[1]
+			}
 		);
+	}
+
+	if (query.status) {
+		if (!query.status.includes('Pre-order')) {
+			filter.push({
+				key: 'custom_is_pre_order',
+				operator: '=',
+				value: '0'
+			});
+		}
+		if (!query.status.includes('Op voorraad')) {
+			filter.push({
+				key: 'custom_current_stock',
+				operator: '=',
+				value: '0'
+			});
+		}
+		if (!query.status.includes('Uitverkocht')) {
+			filter.push({
+				key: 'custom_current_stock',
+				operator: '>=',
+				value: '1'
+			});
+		}
 	}
 
 	async function getGridItems(
 		offset: string | number | undefined,
-		currentFilter: typeof filter,
+		currentFilter: typeof filter
 	): Promise<[React.JSX.Element, number]> {
 		'use server';
 		const items: Item[] = await ErpNextHelper.getItemsByQuery(currentFilter, 25 + Number(offset), 0);
 
-		const gridItems: Item[][] = Array.from({ length: cols }, () => []);
+		const gridItems: Item[][] = Array.from({length: cols}, () => []);
 		items.forEach((item, i) => {
 			gridItems[i % cols].push(item);
 		});
@@ -111,7 +136,7 @@ export default async function Home({
 							{itemCol.map((item) => {
 								return (
 									<div key={item.name} className="w-full">
-										<ItemCard item={item} />
+										<ItemCard item={item}/>
 									</div>
 								);
 							})}
@@ -119,7 +144,7 @@ export default async function Home({
 					);
 				})}
 			</>,
-			Number(offset) + 25,
+			Number(offset) + 25
 		];
 	}
 
@@ -131,7 +156,7 @@ export default async function Home({
 				>
 					Anime NL
 				</h1>
-				<hr className="text-white/15 w-full" />
+				<hr className="text-white/15 w-full"/>
 				<div className="flex flex-col sm:flex-row w-full gap-4">
 					<div className="w-fit mx-auto">
 						<ItemSearch
@@ -141,9 +166,9 @@ export default async function Home({
 							characters={characters}
 						/>
 					</div>
-					<hr className="block sm:hidden text-foreground/20" />
+					<hr className="block sm:hidden text-foreground/20"/>
 					<div className="w-full">
-						<LoadMore loadMoreAction={getGridItems} initialOffset={25} filter={filter} />
+						<LoadMore loadMoreAction={getGridItems} initialOffset={25} filter={filter}/>
 					</div>
 				</div>
 			</main>
