@@ -31,6 +31,7 @@ const LoadMore = ({
 	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
 	const [scrollLoad] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
+	const [disabled, setDisabled] = React.useState(false);
 
 	console.log(currentOffsetRef);
 
@@ -48,6 +49,7 @@ const LoadMore = ({
 
 					if (next === null) {
 						currentOffsetRef.current ??= undefined;
+						setDisabled(true);
 						return;
 					}
 
@@ -94,9 +96,10 @@ const LoadMore = ({
 			<div id="item-cols" className="grid grid-cols-5 gap-0 sm:gap-8 w-full">
 				{loadMoreNodes}
 			</div>
-			<div className="overflow-hidden relative">
-				<Button ref={ref} className="absolute w-screen h-screen bottom-0 invisible">
-					{loading ? 'Loading...' : 'Load More'}
+			<div className="w-fit mx-auto my-4">
+				<Button variant="flat" ref={ref} onPress={() => loadMore()} className="w-fit mx-auto enabled:invisible"
+				        disabled={disabled || loading}>
+					{loading ? 'Aan het zoeken...' : 'Laad meer'}
 				</Button>
 			</div>
 			<div className="sm:col-span-5 flex flex-col gap-4 w-full mt-4 sm:mt-0">
