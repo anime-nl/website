@@ -157,7 +157,7 @@ export default function ItemInfo(props: { item: Item; images: string[] }) {
 							variant="bordered"
 							className="w-fit h-fit my-auto mx-auto"
 							onPress={() => {
-								router.push(`/?characters=${props.item.custom_source}`);
+								router.push(`/?characters=${props.item.custom_character}`);
 							}}
 						>
 							<p className="text-wrap py-2">{props.item.custom_character}</p>
