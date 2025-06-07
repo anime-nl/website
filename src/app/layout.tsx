@@ -23,7 +23,6 @@ const crashbow = localFont({
 });
 
 export const metadata: Metadata = {
-	metadataBase: new URL('https://animenl.nl'),
 	title: {
 		default: 'Anime NL',
 		template: 'Anime NL | %s'
@@ -57,7 +56,7 @@ export const metadata: Metadata = {
 			'De webwinkel voor al jouw anime spullen! · Goedkope Figures · Plushies · Sleutelhangers · En nog veel meer! · Jouw one-stop shop voor alle Japanse Otaku Merchandise · Niet gevonden wat je zocht? Wij importeren het voor je!',
 		url: new URL('https://animenl.nl'),
 		siteName: 'Anime NL',
-		images: 'og-image.png',
+		images: 'https://animenl.nl/og-image.png',
 		locale: 'nl-NL',
 		type: 'website'
 	}

@@ -19,7 +19,7 @@ export async function generateMetadata(
 		title: item?.item_name ?? 'Niet Gevonden',
 		description: item?.description,
 		openGraph: {
-			images: item?.image
+			images: `https://erpnext.animenl.nl${item?.image}`
 		}
 	};
 
