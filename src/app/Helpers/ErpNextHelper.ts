@@ -12,7 +12,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getCharacters(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character?order_by=name%20asc`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character?order_by=name%20asc&limit_page_length=99999`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});
@@ -28,7 +28,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getSources(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source?order_by=name%20asc`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source?order_by=name%20asc&limit_page_length=99999`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});
@@ -78,7 +78,7 @@ export default class ErpNextHelper {
 
 	static async getImagesForItem(id: string): Promise<string[] | undefined> {
 		const data = await fetch(
-			`${process.env.ERPNEXT_URL}/resource/File?fields=["file_url"]&filters=[["attached_to_name", "=", "${id}"]]`,
+			`${process.env.ERPNEXT_URL}/resource/File?fields=["file_url"]&filters=[["attached_to_name", "=", "${id}"]]&limit_page_length=99999`,
 			{
 				method: 'GET',
 				headers: this.getHeaders()
@@ -98,7 +98,7 @@ export default class ErpNextHelper {
 
 	static async getItemGroups(): Promise<string[] | undefined> {
 		const data = await fetch(
-			`${process.env.ERPNEXT_URL}/resource/Item Group?filters=[["parent_item_group", "=", "products"]]&order_by=name%20asc`,
+			`${process.env.ERPNEXT_URL}/resource/Item Group?filters=[["parent_item_group", "=", "products"]]&order_by=name%20asc&limit_page_length=99999`,
 			{
 				method: 'GET',
 				headers: this.getHeaders()
@@ -117,7 +117,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getItemBrands(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Brand?order_by=name%20asc`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Brand?order_by=name%20asc&limit_page_length=99999`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});
