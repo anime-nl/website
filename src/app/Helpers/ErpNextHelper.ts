@@ -12,7 +12,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getCharacters(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Character?order_by=name%20asc`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});
@@ -28,7 +28,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getSources(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Source?order_by=name%20asc`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});
@@ -98,7 +98,7 @@ export default class ErpNextHelper {
 
 	static async getItemGroups(): Promise<string[] | undefined> {
 		const data = await fetch(
-			`${process.env.ERPNEXT_URL}/resource/Item Group?filters=[["parent_item_group", "=", "products"]]`,
+			`${process.env.ERPNEXT_URL}/resource/Item Group?filters=[["parent_item_group", "=", "products"]]&order_by=name%20asc`,
 			{
 				method: 'GET',
 				headers: this.getHeaders()
@@ -117,7 +117,7 @@ export default class ErpNextHelper {
 	}
 
 	static async getItemBrands(): Promise<string[] | undefined> {
-		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Brand`, {
+		const data = await fetch(`${process.env.ERPNEXT_URL}/resource/Brand?order_by=name%20asc`, {
 			method: 'GET',
 			headers: this.getHeaders()
 		});

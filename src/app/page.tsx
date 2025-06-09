@@ -158,7 +158,7 @@ export default async function Home({
 				</h1>
 				<hr className="text-white/15 w-full"/>
 				<div className="flex flex-col sm:flex-row w-full gap-4">
-					<div className="w-fit mx-auto">
+					<div className="w-fit mx-auto sm:sticky top-20 h-fit">
 						<ItemSearch
 							series={series}
 							categories={categories}

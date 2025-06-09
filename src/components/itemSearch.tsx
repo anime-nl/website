@@ -179,10 +179,10 @@ export default function ItemSearch(props: {
 					})}
 				</Listbox>
 			</AccordionItem>
-			<AccordionItem key="Series" aria-label="Serie" title="Serie">
+			<AccordionItem key="Series" aria-label="Source" title="Source">
 				<Listbox
 					isVirtualized
-					aria-label="Serie"
+					aria-label="Source"
 					selectedKeys={selectedSeries}
 					selectionMode="multiple"
 					variant="flat"
