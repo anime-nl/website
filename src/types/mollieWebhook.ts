@@ -1,5 +1,3 @@
-import OrderData from '@/types/orderData';
-
 export default interface MollieWebhook {
 	resource: string;
 	id: string;
@@ -27,7 +25,9 @@ export interface PaymentLink {
 	expiresAt: string;
 	reusable: boolean;
 	_links: Links;
-	metadata: OrderData;
+	metadata: {
+		orderId: string;
+	};
 }
 
 export interface Amount {

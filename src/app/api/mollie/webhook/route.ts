@@ -1,3 +1,4 @@
+import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
 import MollieWebhook from '@/types/mollieWebhook';
 import Handlebars from 'handlebars';
 import * as crypto from 'node:crypto';
@@ -34,14 +35,27 @@ export async function POST(req: Request) {
 		});*/
 	}
 
+	// Get metdata
 	const data: MollieWebhook = JSON.parse(new TextDecoder().decode(body?.value));
-	const orderData = data._embedded['payment-link'].metadata;
+	const metadata = data._embedded['payment-link'].metadata;
 
 	// Check if orderData metadata is present
-	if (!orderData)
+	if (!metadata)
 		return new Response('No metadata', {
 			status: 500
 		});
+
+	// Get order data
+	const order = await ErpNextHelper.getOrderById(metadata.orderId);
+
+	// Check if order exists
+	if (!order)
+		return new Response('Order not found', {
+			status: 500
+		});
+
+	// Get all items
+	const items = await Promise.all(order.items.map(async (item) => await ErpNextHelper.getItemById(item.item_code)));
 
 	// Create email client
 	const transporter = createTransport({
@@ -60,22 +74,40 @@ export async function POST(req: Request) {
 
 	// Calculate total item cost
 	const itemCost =
-		orderData.items
-			?.map((item) => item.item.standard_rate * (1 - item.item.max_discount) * item.qty)
-			.reduce((prev, cur) => prev + cur) ?? Number(data._embedded['payment-link'].amount.value);
+		order.items.map((orderItem) => {
+			const item = items.find((item) => item?.item_code == orderItem.item_code);
+
+			if (!item) return 0;
+
+			return item.standard_rate * (1 - item.max_discount) * orderItem.qty;
+		}).reduce((prev, cur) => prev + cur);
 
 	// Fill out template
 	const completeEmail = emailTemplate({
 		bedrijfnaam: 'AnimeNL',
-		klantnaam: orderData.form.firstName,
-		ordernummer: orderData.orderId,
-		producten: orderData.items,
+		klantnaam: order.first_name,
+		ordernummer: order.name,
+		producten: order.items.map((orderItem) => {
+			const item = items.find((item) => item?.item_code == orderItem.item_code);
+
+			if (!item) return {
+				item_name: 'Onbekend Item',
+				qty: -1,
+				standard_rate: 0
+			};
+
+			return {
+				item_name: item.item_name,
+				qty: orderItem.qty,
+				standard_rate: item.standard_rate
+			};
+		}),
 		bijkomende_kosten: (Number(data._embedded['payment-link'].amount.value) - itemCost).toFixed(2),
 		totaalbedrag: data._embedded['payment-link'].amount.value,
-		verzendnaam: `${orderData.form.firstName} ${orderData.form.middleName} ${orderData.form.lastName}`,
-		verzendadres: `${orderData.form.street} ${orderData.form.houseNumber}`,
-		postcode: orderData.form.postalCode,
-		plaats: orderData.form.city,
+		verzendnaam: `${order.first_name} ${order.middle_name} ${order.last_name}`,
+		verzendadres: `${order.street_name} ${order.street_number}`,
+		postcode: order.postal_code,
+		plaats: order.city,
 		webshop_url: 'https://animenl.nl',
 		retour_url: 'https://animenl.nl/about?default=5',
 		jaar: new Date().getFullYear()
@@ -83,7 +115,7 @@ export async function POST(req: Request) {
 
 	// Send email
 	await transporter.sendMail({
-		to: orderData.form.email,
+		to: order.email,
 		subject: 'Bedankt voor je bestelling!',
 		html: completeEmail
 	});

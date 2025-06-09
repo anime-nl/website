@@ -72,6 +72,7 @@ export default async function PaymentPage({searchParams}: Props) {
 	cartData.orderId = id;
 	cartData.items = items;
 
+
 	const payment = await mollieClient.payments.create({
 		amount: {
 			value: amount,
@@ -99,7 +100,9 @@ export default async function PaymentPage({searchParams}: Props) {
 		},
 		locale: 'nl_NL' as Locale,
 		method: [cartData.method as PaymentMethod],
-		metadata: cartData
+		metadata: {
+			orderId: id
+		}
 	});
 
 	await ErpNextHelper.updatePaymentId(id, payment.id);
