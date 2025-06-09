@@ -116,7 +116,7 @@ export default async function Home({
 	async function getGridItems(
 		offset: string | number | undefined,
 		currentFilter: typeof filter
-	): Promise<[React.JSX.Element, number]> {
+	): Promise<[React.JSX.Element[], number]> {
 		'use server';
 		const items: Item[] = await ErpNextHelper.getItemsByQuery(currentFilter, 25 + Number(offset), 0);
 
@@ -126,24 +126,22 @@ export default async function Home({
 		});
 
 		return [
-			<>
-				{gridItems.map((itemCol, iCol) => {
-					return (
-						<div
-							key={iCol}
-							className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}
-						>
-							{itemCol.map((item) => {
-								return (
-									<div key={item.name} className="w-full">
-										<ItemCard item={item}/>
-									</div>
-								);
-							})}
-						</div>
-					);
-				})}
-			</>,
+			gridItems.map((itemCol, iCol) => {
+				return (
+					<div
+						key={iCol}
+						className={`flex flex-col gap-4 w-full col-span-5 sm:col-span-1 col-start-1 sm:col-start-${iCol + 1}`}
+					>
+						{itemCol.map((item) => {
+							return (
+								<div key={item.name} className="w-full">
+									<ItemCard item={item}/>
+								</div>
+							);
+						})}
+					</div>
+				);
+			}),
 			Number(offset) + 25
 		];
 	}

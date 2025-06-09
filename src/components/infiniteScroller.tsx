@@ -3,6 +3,7 @@ import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
 import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
+import { createElement } from 'react';
 
 type Filter = {
 	key: string;
@@ -13,7 +14,7 @@ type Filter = {
 type loadMoreAction = (
 	offset: string | number | undefined,
 	filter: Filter
-) => Promise<readonly [React.JSX.Element, number | null]>;
+) => Promise<readonly [React.JSX.Element[], number | null]>;
 
 const LoadMore = ({
 	                  initialOffset,
@@ -25,7 +26,7 @@ const LoadMore = ({
 	filter: Filter;
 }>) => {
 	const ref = React.useRef<HTMLButtonElement>(null);
-	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[]>([]);
+	const [loadMoreNodes, setLoadMoreNodes] = React.useState<React.JSX.Element[] | React.JSX.Element[][]>([]);
 	const searchParams = useSearchParams();
 
 	const currentOffsetRef = React.useRef<number | string | undefined>(initialOffset);
@@ -33,18 +34,50 @@ const LoadMore = ({
 	const [loading, setLoading] = React.useState(false);
 	const [disabled, setDisabled] = React.useState(false);
 
-	console.log(currentOffsetRef);
-
 	const loadMore = React.useCallback(
 		async (abortController?: AbortController) => {
 			setLoading(true);
 
 			loadMoreAction(currentOffsetRef.current, filter)
-				.then(([node, next]) => {
+				.then(([nodes, next]) => {
 					if (abortController?.signal.aborted) return;
 
 					setLoadMoreNodes(() => {
-						return [node];
+						if (window.innerWidth <= 640) {
+							const result: React.JSX.Element[] = [];
+
+							const maxRow = Math.max(...nodes.map((el) =>
+								el.props.children.length
+							));
+
+							let isFinished = false;
+							let columnCounter = 0;
+							let rowCounter = 0;
+							while (!isFinished) {
+
+								const node: React.JSX.Element = nodes[columnCounter].props.children[rowCounter];
+								if (rowCounter >= maxRow && !node) {
+									isFinished = true;
+									continue;
+								}
+								result.push(node);
+								columnCounter++;
+
+								if (columnCounter == 5) {
+									columnCounter = 0;
+									rowCounter++;
+								}
+							}
+
+							const el = createElement('div', {
+								className: 'flex flex-col gap-4 w-full col-span-5 col-start-1'
+							}, ...result);
+
+							console.log(result);
+
+							return [el];
+						}
+						return [nodes];
 					});
 
 					if (next === null) {

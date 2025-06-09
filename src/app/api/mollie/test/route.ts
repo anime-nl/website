@@ -32,7 +32,6 @@ export async function POST(req: Request) {
 	}
 
 	const data = new TextDecoder().decode(body?.value);
-	console.log(data);
 
 	return new Response('', {
 		status: 200
