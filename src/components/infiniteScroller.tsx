@@ -46,15 +46,12 @@ const LoadMore = ({
 						if (window.innerWidth <= 640) {
 							const result: React.JSX.Element[] = [];
 
-							const maxRow = Math.max(...nodes.map((el) =>
-								el.props.children.length
-							));
+							const maxRow = Math.max(...nodes.map((el) => el.props.children.length));
 
 							let isFinished = false;
 							let columnCounter = 0;
 							let rowCounter = 0;
 							while (!isFinished) {
-
 								const node: React.JSX.Element = nodes[columnCounter].props.children[rowCounter];
 								if (rowCounter >= maxRow && !node) {
 									isFinished = true;
@@ -69,9 +66,13 @@ const LoadMore = ({
 								}
 							}
 
-							const el = createElement('div', {
-								className: 'flex flex-col gap-4 w-full col-span-5 col-start-1'
-							}, ...result);
+							const el = createElement(
+								'div',
+								{
+									className: 'flex flex-col gap-4 w-full col-span-5 col-start-1'
+								},
+								...result
+							);
 
 							console.log(result);
 
@@ -130,8 +131,13 @@ const LoadMore = ({
 				{loadMoreNodes}
 			</div>
 			<div className="w-fit mx-auto my-4">
-				<Button variant="flat" ref={ref} onPress={() => loadMore()} className="w-fit mx-auto enabled:invisible"
-				        disabled={disabled || loading}>
+				<Button
+					variant="flat"
+					ref={ref}
+					onPress={() => loadMore()}
+					className="w-fit mx-auto enabled:invisible"
+					disabled={disabled || loading}
+				>
 					{loading ? 'Aan het zoeken...' : 'Laad meer'}
 				</Button>
 			</div>

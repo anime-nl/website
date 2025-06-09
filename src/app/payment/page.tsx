@@ -19,7 +19,7 @@ const errorHTML = () => {
 	);
 };
 
-type Props = { searchParams: Promise<{ data: string }> }
+type Props = { searchParams: Promise<{ data: string }> };
 
 export const metadata: Metadata = {
 	title: 'Betaalen',

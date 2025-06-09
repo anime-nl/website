@@ -11,16 +11,13 @@ type Props = {
 	searchParams: Promise<{ clear?: boolean }>;
 };
 
-export async function generateMetadata(
-	{params}: Props
-): Promise<Metadata> {
+export async function generateMetadata({params}: Props): Promise<Metadata> {
 	const {orderId} = await params;
 
 	return {
 		title: `Order ${orderId}`,
 		description: `Order ${orderId}`
 	};
-
 }
 
 export default async function PaymentSuccessPage({params, searchParams}: Props) {

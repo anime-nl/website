@@ -33,15 +33,27 @@ export const metadata: Metadata = {
 		icon: 'https://animenl.nl/android-chrome-512x512.png',
 		apple: 'https://animenl.nl/apple-touch-icon.png'
 	},
-	keywords: ['anime', 'manga', 'cute', 'merch', 'kawaii', 'anime merch', 'keychains', 'plushies', 'otaku', 'anime figures', 'figures'],
+	keywords: [
+		'anime',
+		'manga',
+		'cute',
+		'merch',
+		'kawaii',
+		'anime merch',
+		'keychains',
+		'plushies',
+		'otaku',
+		'anime figures',
+		'figures'
+	],
 	robots: {
 		index: true,
 		follow: true,
 		nocache: false,
 		googleBot: {
-			index: true,
-			follow: true,
-			noimageindex: false,
+			'index': true,
+			'follow': true,
+			'noimageindex': false,
 			'max-video-preview': -1,
 			'max-image-preview': 'large',
 			'max-snippet': -1

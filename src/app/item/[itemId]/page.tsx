@@ -6,11 +6,9 @@ import { Metadata } from 'next';
 
 type Props = {
 	params: Promise<{ itemId: string }>;
-}
+};
 
-export async function generateMetadata(
-	{params}: Props
-): Promise<Metadata> {
+export async function generateMetadata({params}: Props): Promise<Metadata> {
 	const {itemId} = await params;
 
 	const item = await ErpNextHelper.getItemById(itemId);
@@ -22,7 +20,6 @@ export async function generateMetadata(
 			images: `https://erpnext.animenl.nl${item?.image}`
 		}
 	};
-
 }
 
 export default async function ItemPage({params}: Props) {

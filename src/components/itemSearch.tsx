@@ -26,20 +26,23 @@ export default function ItemSearch(props: {
 		searchParams.has('categories') ? new Set(searchParams.get('categories')?.split(',') ?? new Set()) : new Set()
 	);
 	const [selectedManufacturers, setSelectedManufacturers] = useState<SharedSelection>(
-		searchParams.has('manufacturers') ? new Set(searchParams.get('manufacturers')?.split(',') ?? new Set()) : new Set()
+		searchParams.has('manufacturers')
+			? new Set(searchParams.get('manufacturers')?.split(',') ?? new Set())
+			: new Set()
 	);
 	const [selectedCharacters, setSelectedCharacters] = useState<SharedSelection>(
 		searchParams.has('characters') ? new Set(searchParams.get('characters')?.split(',') ?? new Set()) : new Set()
 	);
 	const [searchTerm, setSearchTerm] = useState<string>(
-		searchParams.has('search') ? searchParams.get('search') ?? '' : ''
+		searchParams.has('search') ? (searchParams.get('search') ?? '') : ''
 	);
 	const [priceRange, setPriceRange] = useState<number[]>(
-		searchParams.has('priceRange') ?
-			searchParams
+		searchParams.has('priceRange')
+			? (searchParams
 				.get('priceRange')
 				?.split(',')
-				.map((_) => Number(_)) ?? [0, 500] : [0, 500]
+				.map((_) => Number(_)) ?? [0, 500])
+			: [0, 500]
 	);
 	const queryTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
