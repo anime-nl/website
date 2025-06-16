@@ -214,7 +214,7 @@ export default function CheckoutPage() {
 										</div>
 										<h1 className="font-bold text-3xl">iDEAL</h1>
 									</CardBody>
-									<CardFooter className="text-foreground/70 justify-end">+ €0.35</CardFooter>
+									<CardFooter className="text-foreground/70 justify-end"></CardFooter>
 								</Card>
 							</button>
 							<button name="method" value="banktransfer" className="sm:col-span-2 w-full" type="submit">
@@ -233,7 +233,7 @@ export default function CheckoutPage() {
 										</div>
 										<h1 className="font-bold text-3xl">Bank Overboeking</h1>
 									</CardBody>
-									<CardFooter className="text-foreground/70 justify-end">+ €0.25</CardFooter>
+									<CardFooter className="text-foreground/70 justify-end"></CardFooter>
 								</Card>
 							</button>
 
@@ -253,7 +253,7 @@ export default function CheckoutPage() {
 										</div>
 										<h1 className="font-bold text-3xl">Bancontact</h1>
 									</CardBody>
-									<CardFooter className="text-foreground/70 justify-end">+ €0.39</CardFooter>
+									<CardFooter className="text-foreground/70 justify-end"></CardFooter>
 								</Card>
 							</button>
 						</Form>

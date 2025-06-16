@@ -62,9 +62,8 @@ export default async function PaymentPage({searchParams}: Props) {
 	const itemCost = items
 		.map((item) => item.item.standard_rate * (1 - item.item.max_discount) * item.qty)
 		.reduce((prev, cur) => prev + cur);
-	const paymentCost = cartData.method == 'ideal' ? 0.35 : cartData.method == 'banktransfer' ? 0.25 : 0;
 
-	const amount = (itemCost + shippingCost + paymentCost).toFixed(2);
+	const amount = (itemCost + shippingCost).toFixed(2);
 
 	const id = await ErpNextHelper.createOrder(cartData);
 	if (!id) return errorHTML();
@@ -80,6 +79,7 @@ export default async function PaymentPage({searchParams}: Props) {
 		},
 		description: `Order ${id}`,
 		redirectUrl: `${process.env.MOLLIE_REDIRECT_URL}/${id}?clear=true`,
+		webhookUrl: 'https://animenl.nl/api/mollie/webhook',
 		billingAddress: {
 			givenName: cartData.form.firstName,
 			familyName: `${cartData.form.middleName} ${cartData.form.lastName}`,

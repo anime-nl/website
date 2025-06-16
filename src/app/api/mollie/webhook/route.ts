@@ -1,7 +1,6 @@
 import ErpNextHelper from '@/app/Helpers/ErpNextHelper';
-import MollieWebhook from '@/types/mollieWebhook';
+import createMollieClient, { Payment, PaymentStatus } from '@mollie/api-client';
 import Handlebars from 'handlebars';
-import * as crypto from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import { createTransport } from 'nodemailer';
 
@@ -18,35 +17,45 @@ export async function POST(req: Request) {
 			status: 500
 		});
 
+	/*
 	// Generate hashing object
 	const hmac = crypto.createHmac('sha256', process.env.MOLLIE_WEBHOOK_SECRET);
+	*/
 
 	// Read JSON body
 	const bodyReader = req.body?.getReader();
 	const body = await bodyReader?.read();
 
+	/*
 	// Generate hash
 	hmac.update(body?.value ?? '');
 
 	// Check if hex values match
 	if (req.headers.get('X-Mollie-Signature')!.replace('sha256=', '') != hmac.digest('hex')) {
-		/*return new Response('', {
+		return new Response('', {
 			status: 401
-		});*/
+		});
 	}
+	*/
 
 	// Get metdata
-	const data: MollieWebhook = JSON.parse(new TextDecoder().decode(body?.value));
-	const metadata = data._embedded['payment-link'].metadata;
+	const data = new TextDecoder().decode(body?.value).split('=')[1];
+	const payment: Payment = await createMollieClient({apiKey: process.env.MOLLIE_KEY as string}).payments.get(data);
 
 	// Check if orderData metadata is present
-	if (!metadata)
+	if (!payment)
 		return new Response('No metadata', {
 			status: 500
 		});
 
+	if (payment.status != PaymentStatus.paid) {
+		return new Response('Payment status failed', {
+			status: 402
+		});
+	}
+
 	// Get order data
-	const order = await ErpNextHelper.getOrderById(metadata.orderId);
+	const order = await ErpNextHelper.getOrderById((payment.metadata as { orderId: string }).orderId);
 
 	// Check if order exists
 	if (!order)
@@ -102,8 +111,8 @@ export async function POST(req: Request) {
 				standard_rate: item.standard_rate
 			};
 		}),
-		bijkomende_kosten: (Number(data._embedded['payment-link'].amount.value) - itemCost).toFixed(2),
-		totaalbedrag: data._embedded['payment-link'].amount.value,
+		bijkomende_kosten: (Number(payment.amount.value) - itemCost).toFixed(2),
+		totaalbedrag: payment.amount.value,
 		verzendnaam: `${order.first_name} ${order.middle_name} ${order.last_name}`,
 		verzendadres: `${order.street_name} ${order.street_number}`,
 		postcode: order.postal_code,
