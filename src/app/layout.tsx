@@ -2,6 +2,7 @@ import { Providers } from '@/app/providers';
 import Nav from '@/components/nav';
 import { Link } from '@heroui/link';
 import './globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
@@ -100,6 +101,7 @@ export default async function RootLayout({
 			className="scrollbar-thin scrollbar-thumb-secondary scrollbar-track-background scrollbar-thumb-rounded-full"
 		>
 		<body className={`${geistSans.variable} ${geistMono.variable} ${crashbow.variable} antialiased`}>
+		<GoogleAnalytics gaId={process.env.G_TAG as string}/>
 		<Providers>
 			<Nav nav={nav}/>
 			{children}
