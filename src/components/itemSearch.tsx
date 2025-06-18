@@ -133,7 +133,7 @@ export default function ItemSearch(props: {
 
 	return (
 		<div className="w-full">
-			<Accordion variant="light">
+			<Accordion variant="bordered" className="py-4">
 				<AccordionItem key="filters" aria-label="filters" title="filters">
 					<Accordion variant="splitted" defaultExpandedKeys={['Search']} selectionMode="multiple">
 						<AccordionItem key="Search" aria-label="Zoeken" title="Zoeken">
