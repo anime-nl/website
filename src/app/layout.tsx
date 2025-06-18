@@ -102,6 +102,7 @@ export default async function RootLayout({
 		>
 		<body className={`${geistSans.variable} ${geistMono.variable} ${crashbow.variable} antialiased`}>
 		<GoogleAnalytics gaId={process.env.G_TAG as string}/>
+		<GoogleAnalytics gaId={process.env.G_TAG_ADS as string}/>
 		<Providers>
 			<Nav nav={nav}/>
 			{children}

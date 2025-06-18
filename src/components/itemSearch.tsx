@@ -132,110 +132,116 @@ export default function ItemSearch(props: {
 	);
 
 	return (
-		<Accordion variant="splitted" defaultExpandedKeys={['Search']} selectionMode="multiple">
-			<AccordionItem key="Search" aria-label="Zoeken" title="Zoeken">
-				<Input
-					isClearable={true}
-					placeholder="Zoekterm"
-					type="search"
-					value={searchTerm}
-					onValueChange={onSearchTermChanged}
-				/>
-			</AccordionItem>
-			<AccordionItem key="Product Status" aria-label="Product Status" title="Product status">
-				<Listbox
-					disallowEmptySelection
-					aria-label="Product Status"
-					selectedKeys={selectedProductStatus}
-					selectionMode="multiple"
-					variant="flat"
-					onSelectionChange={onSelectedProductStatusChanged}
-				>
-					<ListboxItem key="Pre-order">Pre-order</ListboxItem>
-					<ListboxItem key="Op voorraad">Op voorraad</ListboxItem>
-					<ListboxItem key="Uitverkocht">Uitverkocht</ListboxItem>
-				</Listbox>
-			</AccordionItem>
-			<AccordionItem key="Price" aria-label="Prijs" title="Prijs">
-				<Slider
-					className="max-w-md"
-					defaultValue={[0, 500]}
-					formatOptions={{style: 'currency', currency: 'EUR'}}
-					label=" "
-					maxValue={500}
-					minValue={0}
-					step={10}
-					value={priceRange}
-					onChange={(_) => onPriceRangeChanged(_ as number[])}
-				/>
-			</AccordionItem>
-			<AccordionItem key="Categories" aria-label="Categorie" title="Categorie">
-				<Listbox
-					aria-label="Categorie"
-					selectedKeys={selectedCategories}
-					selectionMode="multiple"
-					variant="flat"
-					onSelectionChange={onCategoryChanged}
-				>
-					{props.categories.map((category) => {
-						return <ListboxItem key={category}>{category}</ListboxItem>;
-					})}
-				</Listbox>
-			</AccordionItem>
-			<AccordionItem key="Series" aria-label="Source" title="Source">
-				<Listbox
-					isVirtualized
-					aria-label="Source"
-					selectedKeys={selectedSeries}
-					selectionMode="multiple"
-					variant="flat"
-					onSelectionChange={onSeriesChanged}
-					virtualization={{
-						maxListboxHeight: 400,
-						itemHeight: 40
-					}}
-				>
-					{props.series.map((serie) => {
-						return <ListboxItem key={serie}>{serie}</ListboxItem>;
-					})}
-				</Listbox>
-			</AccordionItem>
-			<AccordionItem key="Characters" aria-label="Character" title="Character">
-				<Listbox
-					isVirtualized
-					aria-label="Character"
-					selectedKeys={selectedCharacters}
-					selectionMode="multiple"
-					variant="flat"
-					onSelectionChange={onCharactersChanged}
-					virtualization={{
-						maxListboxHeight: 400,
-						itemHeight: 40
-					}}
-				>
-					{props.characters.map((character) => {
-						return <ListboxItem key={character}>{character}</ListboxItem>;
-					})}
-				</Listbox>
-			</AccordionItem>
-			<AccordionItem key="Manufacturers" aria-label="Fabrikant" title="Fabrikant">
-				<Listbox
-					isVirtualized
-					aria-label="Fabrikant"
-					selectedKeys={selectedManufacturers}
-					selectionMode="multiple"
-					variant="flat"
-					onSelectionChange={onManufacturerChanged}
-					virtualization={{
-						maxListboxHeight: 400,
-						itemHeight: 40
-					}}
-				>
-					{props.manufacturers.map((manufacturer) => {
-						return <ListboxItem key={manufacturer}>{manufacturer}</ListboxItem>;
-					})}
-				</Listbox>
-			</AccordionItem>
-		</Accordion>
+		<div className="w-full">
+			<Accordion variant="light">
+				<AccordionItem key="filters" aria-label="filters" title="filters">
+					<Accordion variant="splitted" defaultExpandedKeys={['Search']} selectionMode="multiple">
+						<AccordionItem key="Search" aria-label="Zoeken" title="Zoeken">
+							<Input
+								isClearable={true}
+								placeholder="Zoekterm"
+								type="search"
+								value={searchTerm}
+								onValueChange={onSearchTermChanged}
+							/>
+						</AccordionItem>
+						<AccordionItem key="Product Status" aria-label="Product Status" title="Product status">
+							<Listbox
+								disallowEmptySelection
+								aria-label="Product Status"
+								selectedKeys={selectedProductStatus}
+								selectionMode="multiple"
+								variant="flat"
+								onSelectionChange={onSelectedProductStatusChanged}
+							>
+								<ListboxItem key="Pre-order">Pre-order</ListboxItem>
+								<ListboxItem key="Op voorraad">Op voorraad</ListboxItem>
+								<ListboxItem key="Uitverkocht">Uitverkocht</ListboxItem>
+							</Listbox>
+						</AccordionItem>
+						<AccordionItem key="Price" aria-label="Prijs" title="Prijs">
+							<Slider
+								className="max-w-md"
+								defaultValue={[0, 500]}
+								formatOptions={{style: 'currency', currency: 'EUR'}}
+								label=" "
+								maxValue={500}
+								minValue={0}
+								step={10}
+								value={priceRange}
+								onChange={(_) => onPriceRangeChanged(_ as number[])}
+							/>
+						</AccordionItem>
+						<AccordionItem key="Categories" aria-label="Categorie" title="Categorie">
+							<Listbox
+								aria-label="Categorie"
+								selectedKeys={selectedCategories}
+								selectionMode="multiple"
+								variant="flat"
+								onSelectionChange={onCategoryChanged}
+							>
+								{props.categories.map((category) => {
+									return <ListboxItem key={category}>{category}</ListboxItem>;
+								})}
+							</Listbox>
+						</AccordionItem>
+						<AccordionItem key="Series" aria-label="Source" title="Source">
+							<Listbox
+								isVirtualized
+								aria-label="Source"
+								selectedKeys={selectedSeries}
+								selectionMode="multiple"
+								variant="flat"
+								onSelectionChange={onSeriesChanged}
+								virtualization={{
+									maxListboxHeight: 400,
+									itemHeight: 40
+								}}
+							>
+								{props.series.map((serie) => {
+									return <ListboxItem key={serie}>{serie}</ListboxItem>;
+								})}
+							</Listbox>
+						</AccordionItem>
+						<AccordionItem key="Characters" aria-label="Character" title="Character">
+							<Listbox
+								isVirtualized
+								aria-label="Character"
+								selectedKeys={selectedCharacters}
+								selectionMode="multiple"
+								variant="flat"
+								onSelectionChange={onCharactersChanged}
+								virtualization={{
+									maxListboxHeight: 400,
+									itemHeight: 40
+								}}
+							>
+								{props.characters.map((character) => {
+									return <ListboxItem key={character}>{character}</ListboxItem>;
+								})}
+							</Listbox>
+						</AccordionItem>
+						<AccordionItem key="Manufacturers" aria-label="Fabrikant" title="Fabrikant">
+							<Listbox
+								isVirtualized
+								aria-label="Fabrikant"
+								selectedKeys={selectedManufacturers}
+								selectionMode="multiple"
+								variant="flat"
+								onSelectionChange={onManufacturerChanged}
+								virtualization={{
+									maxListboxHeight: 400,
+									itemHeight: 40
+								}}
+							>
+								{props.manufacturers.map((manufacturer) => {
+									return <ListboxItem key={manufacturer}>{manufacturer}</ListboxItem>;
+								})}
+							</Listbox>
+						</AccordionItem>
+					</Accordion>
+				</AccordionItem>
+			</Accordion>
+		</div>
 	);
 }
