@@ -5,6 +5,7 @@ import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table';
 import { addToast } from '@heroui/toast';
+import { sendGAEvent } from '@next/third-parties/google';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
@@ -24,6 +25,13 @@ export default function CheckoutPage() {
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const form = Object.fromEntries(new FormData(e.currentTarget).entries());
+
+		sendGAEvent({
+			event: 'conversion',
+			value: {
+				'send_to': `${process.env.G_TAG_ADS as string}/jMUZCMXlytUaEPGv3vY_`
+			}
+		});
 
 		if (cart.items.length == 0) {
 			addToast({
