@@ -3,6 +3,9 @@ import LoadMore from '@/components/infiniteScroller';
 import ItemCard from '@/components/itemCard';
 import ItemSearch from '@/components/itemSearch';
 import Item from '@/types/item';
+import { Alert } from '@heroui/alert';
+import { Card, CardBody } from '@heroui/card';
+import { Link } from '@heroui/link';
 
 const cols = 5;
 
@@ -154,7 +157,50 @@ export default async function Home({
 				>
 					Anime NL
 				</h1>
+				<Alert variant="faded" color="primary"
+				       title="RECENT TOEGEVOEGD! Nieuwe Plushies, Figures en Keychains!" hideIcon={true}
+				       className="w-1/2 text-center"/>
 				<hr className="text-white/15 w-full"/>
+				<div>
+					<h2 className="text-2xl font-bold text-center">Populaire zoektermen</h2>
+					<div className="md:flex md:flex-row md:gap-8 grid grid-cols-2 gap-2 md:mx-16 mx-4 mt-8">
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white" href="/?series=Blue+Archive">Blue
+										Archive</Link>
+								</p>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white"
+									      href="/?categories=Keychains">Keychains</Link>
+								</p>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white" href="/?characters=Hatsune+Miku">Hatsune
+										Miku</Link>
+								</p>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white"
+									      href="/?categories=Plushies">Plushies</Link>
+								</p>
+							</CardBody>
+						</Card>
+					</div>
+				</div>
 				<div className="flex flex-col sm:flex-row w-full gap-4">
 					<div className="md:w-1/8 w-full mx-auto sm:sticky top-20 h-fit">
 						<ItemSearch
