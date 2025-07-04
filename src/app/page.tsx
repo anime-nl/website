@@ -199,6 +199,25 @@ export default async function Home({
 								</p>
 							</CardBody>
 						</Card>
+
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white"
+									      href="/?manufacturers=Good+Smile+Company%2CGood+Smile+Racing">Good Smile
+										Company</Link>
+								</p>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardBody>
+								<p className="my-auto h-fit text-center">
+									<Link className="text-white"
+									      href="/?priceRange=0%2C70">Prijs &lt; €70</Link>
+								</p>
+							</CardBody>
+						</Card>
 					</div>
 				</div>
 				<div className="flex flex-col sm:flex-row w-full gap-4">
