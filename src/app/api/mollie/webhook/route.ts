@@ -6,10 +6,10 @@ import { createTransport } from 'nodemailer';
 
 export async function POST(req: Request) {
 	// Request has X-Mollie-Signature header
-	if (!req.headers.has('X-Mollie-Signature'))
-		return new Response('', {
-			status: 401
-		});
+	// if (!req.headers.has('X-Mollie-Signature'))
+	// 	return new Response('', {
+	// 		status: 401
+	// 	});
 
 	// MOLLIE_WEBHOOK_SECRET is set
 	if (!process.env.MOLLIE_WEBHOOK_SECRET)

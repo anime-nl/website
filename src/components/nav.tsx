@@ -41,14 +41,36 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 					);
 				})}
 			</NavbarContent>
-			<NavbarContent justify="end">
-				<NavbarItem className="hidden lg:flex">
+			<NavbarContent className="hidden lg:flex gap-8" justify="end">
+				<NavbarItem>
 					<Link href="/cart" className="text-foreground relative h-8 w-8">
 						<Image alt="cart" className="invert" src="./cart.svg" fill={true}/>
 					</Link>
 				</NavbarItem>
+				<NavbarItem>
+					<Link href="https://nl.trustpilot.com/review/animenl.nl"
+					      className="text-foreground relative h-8 w-32">
+						<Image alt="stars"
+						       src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-3.5.svg"
+						       width={128} height={64}/>
+						<p className="my-auto text-lg ml-6"><span className="font-bold text-2xl">3.6</span> via
+							TrustPilot
+						</p>
+					</Link>
+				</NavbarItem>
 			</NavbarContent>
 			<NavbarMenu className="pt-4">
+				<NavbarMenuItem key="reviews" className="w-full my-6">
+					<Link href="https://nl.trustpilot.com/review/animenl.nl"
+					      className="text-foreground relative h-8 w-full justify-center">
+						<Image alt="stars"
+						       src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-3.5.svg"
+						       width={128} height={64}/>
+						<p className="my-auto text-lg ml-6"><span className="font-bold text-2xl">3.6</span> via
+							TrustPilot
+						</p>
+					</Link>
+				</NavbarMenuItem>
 				{props.nav.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>
 						<Link className="w-full" color={'foreground'} href={item.route} size="lg">

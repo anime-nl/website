@@ -31,7 +31,7 @@ export default function ItemTable(props: { items: Item[]; order: Order }) {
 									</p>
 								</TableCell>
 								<TableCell>
-									<p className="text-nowrap">€{item.standard_rate}</p>
+									<p className="text-nowrap">€{item.standard_rate.toFixed(2)}</p>
 								</TableCell>
 								<TableCell>
 									<p className="text-nowrap">
