@@ -53,7 +53,8 @@ export default function Nav(props: { nav: { name: string; route: string }[] }) {
 						<Image alt="stars"
 						       src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-3.5.svg"
 						       width={128} height={64}/>
-						<p className="my-auto text-lg ml-6"><span className="font-bold text-2xl">3.6</span> via
+						<p className="my-auto text-lg ml-6"><span
+							className="font-bold text-2xl">3.7 / 5</span> via
 							TrustPilot
 						</p>
 					</Link>
